@@ -1,0 +1,1358 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>★ 51单片机学园 ☆ - 零基础也能学会！</title>
+<style>
+/* ========== 幸运星风 主题色 ========== */
+:root{
+  --pink:#ffb6d9;
+  --pink-deep:#ff7eb3;
+  --sky:#a8d8ff;
+  --sky-deep:#6fb3ff;
+  --lemon:#fff3a8;
+  --mint:#b8f0c8;
+  --lilac:#d9b8ff;
+  --cream:#fff8ee;
+  --ink:#4a4a6a;
+  --ink-light:#7a7a9a;
+  --star:#ffd93d;
+  --shadow:0 4px 0 rgba(255,126,179,.25), 0 8px 20px rgba(0,0,0,.08);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;font-family:"Comic Sans MS","Marker Felt","Microsoft YaHei","微软雅黑",sans-serif;color:var(--ink);background:
+  radial-gradient(ellipse at 10% 10%, #ffe5f1 0%, transparent 40%),
+  radial-gradient(ellipse at 90% 20%, #e0f0ff 0%, transparent 40%),
+  radial-gradient(ellipse at 50% 90%, #fff9d9 0%, transparent 50%),
+  #fffaf2;
+  background-attachment:fixed;line-height:1.7;overflow-x:hidden;
+}
+
+/* 背景装饰星星 */
+body::before{
+  content:"★ ☆ ✦ ✧ ★ ☆ ✦ ★ ✧ ☆";
+  position:fixed;inset:0;pointer-events:none;
+  font-size:24px;color:rgba(255,217,61,.25);
+  padding:5%;letter-spacing:60px;
+  animation:twinkle 6s ease-in-out infinite alternate;
+  z-index:0;
+}
+@keyframes twinkle{from{opacity:.4}to{opacity:.9}}
+
+.app{position:relative;z-index:1;min-height:100%;padding-bottom:80px}
+
+/* ========== 顶部导航 ========== */
+header{
+  background:linear-gradient(135deg,var(--pink) 0%,var(--sky) 100%);
+  padding:18px 16px;border-bottom:4px dashed #fff;
+  box-shadow:var(--shadow);position:sticky;top:0;z-index:50;
+}
+.header-inner{max-width:960px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px}
+.logo{font-size:24px;font-weight:700;color:#fff;text-shadow:2px 2px 0 var(--pink-deep),3px 3px 0 rgba(0,0,0,.15);display:flex;align-items:center;gap:8px}
+.logo .chip{display:inline-block;background:#fff;border-radius:8px;padding:2px 8px;font-size:14px;color:var(--pink-deep);box-shadow:2px 2px 0 var(--pink-deep)}
+nav{display:flex;gap:8px;flex-wrap:wrap}
+nav button{
+  background:#fff;border:3px solid var(--pink-deep);color:var(--pink-deep);
+  padding:8px 16px;border-radius:20px;font-weight:700;cursor:pointer;
+  font-size:14px;transition:transform .15s,box-shadow .15s;
+  box-shadow:3px 3px 0 var(--pink-deep);
+}
+nav button:hover{transform:translate(-1px,-1px);box-shadow:4px 4px 0 var(--pink-deep)}
+nav button:active{transform:translate(2px,2px);box-shadow:1px 1px 0 var(--pink-deep)}
+nav button.active{background:var(--pink-deep);color:#fff}
+
+/* ========== 主容器 ========== */
+main{max-width:960px;margin:20px auto;padding:0 16px}
+.page{display:none;animation:pop .3s ease-out}
+.page.active{display:block}
+@keyframes pop{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+
+/* ========== 卡片通用 ========== */
+.card{
+  background:#fff;border:3px solid var(--sky);border-radius:20px;
+  padding:20px;margin-bottom:18px;box-shadow:var(--shadow);
+  position:relative;
+}
+.card.pink{border-color:var(--pink);background:linear-gradient(135deg,#fff 0%,#fff0f7 100%)}
+.card.lemon{border-color:#ffcc4d;background:linear-gradient(135deg,#fff 0%,#fffbe8 100%)}
+.card.mint{border-color:#7dd89a;background:linear-gradient(135deg,#fff 0%,#f0fff4 100%)}
+.card.lilac{border-color:#b89fff;background:linear-gradient(135deg,#fff 0%,#f7f0ff 100%)}
+
+.card h2{font-size:22px;margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.card h3{font-size:17px;margin:16px 0 8px;color:var(--pink-deep)}
+.card h4{font-size:15px;margin:12px 0 6px;color:var(--sky-deep)}
+.card p,.card li{font-size:15px}
+.card ul,.card ol{padding-left:22px;margin:8px 0}
+.card li{margin:4px 0}
+
+/* ========== 首页 ========== */
+.hero{
+  background:linear-gradient(135deg,#fff0f7 0%,#e0f0ff 100%);
+  border:3px solid var(--pink);border-radius:24px;padding:28px;text-align:center;
+  box-shadow:var(--shadow);margin-bottom:20px;position:relative;overflow:hidden;
+}
+.hero::before{content:"✨";position:absolute;top:12px;left:16px;font-size:28px;animation:twinkle 2s infinite}
+.hero::after{content:"🌟";position:absolute;bottom:12px;right:16px;font-size:28px;animation:twinkle 2.5s infinite}
+.hero h1{font-size:28px;color:var(--pink-deep);margin-bottom:10px;text-shadow:2px 2px 0 #fff}
+.hero p{font-size:16px;color:var(--ink-light)}
+.mascot{font-size:64px;margin:8px 0;filter:drop-shadow(2px 4px 0 rgba(255,126,179,.3))}
+
+.stat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin-bottom:20px}
+.stat{background:#fff;border:3px solid var(--lemon);border-radius:16px;padding:14px;text-align:center;box-shadow:3px 3px 0 #ffcc4d}
+.stat .num{font-size:28px;font-weight:700;color:var(--pink-deep)}
+.stat .label{font-size:13px;color:var(--ink-light)}
+
+.chapter-list{display:grid;gap:12px}
+.chapter-item{
+  display:flex;align-items:center;gap:14px;
+  background:#fff;border:3px solid var(--sky);border-radius:16px;
+  padding:14px 16px;cursor:pointer;transition:transform .15s,box-shadow .15s;
+  box-shadow:3px 3px 0 var(--sky-deep);
+}
+.chapter-item:hover{transform:translate(-1px,-2px);box-shadow:5px 5px 0 var(--sky-deep)}
+.chapter-item.done{background:#f0fff4;border-color:var(--mint);box-shadow:3px 3px 0 #7dd89a}
+.chapter-item .num{
+  flex-shrink:0;width:40px;height:40px;border-radius:50%;
+  background:linear-gradient(135deg,var(--pink),var(--sky));
+  color:#fff;display:flex;align-items:center;justify-content:center;
+  font-weight:700;font-size:18px;box-shadow:2px 2px 0 rgba(0,0,0,.1);
+}
+.chapter-item.done .num{background:linear-gradient(135deg,#7dd89a,#5ec67e)}
+.chapter-item .info{flex:1;min-width:0}
+.chapter-item .title{font-weight:700;font-size:16px}
+.chapter-item .desc{font-size:13px;color:var(--ink-light)}
+.chapter-item .badge{flex-shrink:0;font-size:12px;background:#fff3a8;border:2px solid #ffcc4d;border-radius:10px;padding:3px 8px;color:#b8860b}
+.chapter-item.done .badge{background:#b8f0c8;border-color:#7dd89a;color:#2d7a4d}
+.progress-bar{width:100%;height:8px;background:#eee;border-radius:4px;margin-top:6px;overflow:hidden}
+.progress-bar > div{height:100%;background:linear-gradient(90deg,var(--pink),var(--sky));border-radius:4px;transition:width .4s}
+
+/* ========== 课程详情 ========== */
+.chapter-nav{display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap}
+.chapter-nav button{
+  background:#fff;border:3px solid var(--sky);border-radius:12px;
+  padding:6px 12px;font-size:13px;cursor:pointer;box-shadow:2px 2px 0 var(--sky-deep);
+}
+.chapter-nav button:hover{transform:translate(-1px,-1px);box-shadow:3px 3px 0 var(--sky-deep)}
+.chapter-nav button.active{background:var(--sky-deep);color:#fff}
+
+.content img{max-width:100%;border-radius:12px;margin:10px 0;border:2px dashed var(--pink)}
+.content .tip{background:#fffbe8;border:2px dashed #ffcc4d;border-radius:12px;padding:12px 14px;margin:12px 0}
+.content .tip::before{content:"💡 ";font-size:16px}
+.content .warn{background:#fff0f7;border:2px dashed var(--pink-deep);border-radius:12px;padding:12px 14px;margin:12px 0}
+.content .warn::before{content:"⚠️ ";font-size:16px}
+.content code{background:#f0f0f0;border-radius:4px;padding:1px 5px;color:var(--pink-deep);font-family:Consolas,monospace;font-size:.95em}
+.content pre{
+  background:#2d2d44;color:#e0e0ff;border-radius:14px;padding:14px 16px;
+  overflow-x:auto;font-family:Consolas,"Courier New",monospace;font-size:13px;
+  border:3px solid var(--lilac);box-shadow:3px 3px 0 rgba(184,159,255,.4);
+  margin:12px 0;line-height:1.6;
+}
+.content pre .kw{color:#ff7eb3}
+.content pre .str{color:#ffd93d}
+.content pre .cm{color:#7aa2f7;font-style:italic}
+.content pre .fn{color:#7dd89a}
+
+.fav-btn{float:right;background:var(--lemon);border:2px solid #ffcc4d;border-radius:12px;padding:4px 10px;cursor:pointer;font-size:13px}
+.fav-btn.faved{background:#ff7eb3;color:#fff;border-color:#d45a91}
+
+/* ========== 测验 ========== */
+.quiz-block{margin-top:24px;padding-top:18px;border-top:3px dashed var(--sky)}
+.quiz-block h3{text-align:center;color:var(--pink-deep);font-size:19px;margin-bottom:14px}
+.q-item{
+  background:#fff;border:3px solid var(--cream);border-radius:14px;padding:14px 16px;
+  margin-bottom:14px;box-shadow:2px 2px 0 #e0d0b0;
+}
+.q-item .q-num{display:inline-block;background:var(--pink-deep);color:#fff;border-radius:10px;padding:2px 10px;font-size:13px;margin-right:6px}
+.q-item .q-text{font-weight:600;margin-bottom:10px}
+.q-item .q-type{font-size:12px;background:var(--sky);color:var(--sky-deep);padding:2px 8px;border-radius:8px;margin-left:6px;font-weight:400}
+.q-item .opt{display:block;margin:6px 0;padding:8px 12px;border:2px solid #ddd;border-radius:10px;cursor:pointer;background:#fafafa;transition:all .15s}
+.q-item .opt:hover{background:#fff0f7;border-color:var(--pink)}
+.q-item .opt.selected{background:#e0f0ff;border-color:var(--sky-deep)}
+.q-item .opt.correct{background:#b8f0c8;border-color:#7dd89a}
+.q-item .opt.wrong{background:#ffcccc;border-color:#ff7e7e}
+.q-item input[type=text]{
+  width:100%;padding:8px 12px;border:2px solid #ccc;border-radius:10px;
+  font-size:14px;font-family:Consolas,monospace;
+}
+.q-item input[type=text]:focus{outline:none;border-color:var(--pink)}
+.q-item input[type=text].correct{background:#d4ffd4;border-color:#7dd89a}
+.q-item input[type=text].wrong{background:#ffd4d4;border-color:#ff7e7e}
+.q-item .ans-hint{font-size:12px;color:var(--ink-light);margin-top:6px}
+.q-feedback{margin-top:8px;font-weight:600;font-size:14px}
+.q-feedback.ok{color:#2d7a4d}
+.q-feedback.no{color:#d45a5a}
+
+.quiz-controls{text-align:center;margin-top:18px}
+.btn-primary{
+  background:linear-gradient(135deg,var(--pink-deep),#ff5a9a);
+  color:#fff;border:none;border-radius:22px;padding:12px 32px;font-size:16px;font-weight:700;
+  cursor:pointer;box-shadow:0 4px 0 #d45a91;transition:transform .1s,box-shadow .1s;
+}
+.btn-primary:hover{transform:translateY(-1px);box-shadow:0 5px 0 #d45a91}
+.btn-primary:active{transform:translateY(2px);box-shadow:0 2px 0 #d45a91}
+.btn-secondary{
+  background:#fff;color:var(--sky-deep);border:3px solid var(--sky);border-radius:22px;padding:10px 24px;font-size:15px;font-weight:700;cursor:pointer;box-shadow:0 4px 0 var(--sky-deep);margin:0 6px;
+}
+.btn-secondary:hover{transform:translateY(-1px)}
+.btn-secondary:active{transform:translateY(2px);box-shadow:0 2px 0 var(--sky-deep)}
+
+.score-box{text-align:center;padding:16px;background:linear-gradient(135deg,#fff0f7,#e0f0ff);border-radius:16px;margin:12px 0}
+.score-box .big{font-size:48px;font-weight:700;color:var(--pink-deep);line-height:1}
+.score-box .label{font-size:14px;color:var(--ink-light);margin-top:4px}
+.score-box .msg{font-size:16px;margin-top:8px;font-weight:600}
+
+/* ========== 个人中心 ========== */
+.center-tabs{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap}
+.center-tabs button{flex:1;min-width:100px;background:#fff;border:3px solid var(--sky);border-radius:14px;padding:10px;font-weight:700;cursor:pointer;box-shadow:3px 3px 0 var(--sky-deep)}
+.center-tabs button.active{background:var(--sky-deep);color:#fff}
+.empty{text-align:center;padding:40px;color:var(--ink-light);font-size:15px}
+.empty .emoji{font-size:48px;margin-bottom:12px;display:block}
+
+.wrong-item,.fav-item{
+  background:#fff;border:3px solid var(--pink);border-radius:14px;padding:12px 16px;
+  margin-bottom:10px;box-shadow:2px 2px 0 var(--pink-deep);
+}
+.wrong-item .q,.fav-item .title{font-weight:600}
+.wrong-item .meta,.fav-item .meta{font-size:12px;color:var(--ink-light);margin-top:4px}
+.wrong-item .del,.fav-item .del{
+  float:right;background:#ffcccc;border:2px solid #ff7e7e;color:#d45a5a;
+  border-radius:10px;padding:2px 10px;cursor:pointer;font-size:12px;font-weight:700;
+}
+.wrong-item .ans{margin-top:8px;font-size:13px;background:#fffbe8;border-radius:8px;padding:6px 10px}
+
+/* ========== 响应式 ========== */
+@media(max-width:640px){
+  header{padding:14px 12px}
+  .logo{font-size:20px}
+  main{padding:0 10px;margin-top:12px}
+  .hero h1{font-size:22px}
+  .mascot{font-size:48px}
+  .card{padding:16px}
+  .chapter-item{padding:12px}
+  .chapter-item .num{width:36px;height:36px;font-size:16px}
+  .btn-primary{padding:10px 22px;font-size:15px}
+  .score-box .big{font-size:38px}
+  body::before{font-size:16px;letter-spacing:30px}
+}
+
+/* 浮动爱心小装饰 */
+.heart{position:fixed;font-size:20px;pointer-events:none;animation:floatUp 1.5s ease-out forwards;z-index:100}
+@keyframes floatUp{0%{opacity:1;transform:translateY(0) scale(1)}100%{opacity:0;transform:translateY(-120px) scale(1.4)}}
+
+/* 进度完成动画 */
+@keyframes celebrate{0%,100%{transform:rotate(0)}25%{transform:rotate(-6deg)}75%{transform:rotate(6deg)}}
+.celebrate{animation:celebrate .6s ease-in-out}
+</style>
+</head>
+<body>
+<div class="app">
+<header>
+  <div class="header-inner">
+    <div class="logo">🌸 51单片机学园 <span class="chip">51</span></div>
+    <nav>
+      <button data-nav="home" class="active">🏠 首页</button>
+      <button data-nav="course">📖 课程</button>
+      <button data-nav="quiz">✏️ 练习</button>
+      <button data-nav="center">💖 我的</button>
+    </nav>
+  </div>
+</header>
+
+<main>
+
+<!-- ============ 首页 ============ -->
+<section id="page-home" class="page active">
+  <div class="hero">
+    <div class="mascot">🤖💕</div>
+    <h1>欢迎来到 51 单片机学园！</h1>
+    <p>零基础也不怕～ 我们一起把单片机学会，顺利通过考试吧！<br>共 11 个章节，每章都有练习题，加油！</p>
+  </div>
+
+  <div class="stat-grid">
+    <div class="stat"><div class="num" id="stat-done">0</div><div class="label">已学章节</div></div>
+    <div class="stat"><div class="num" id="stat-score">-</div><div class="label">最近得分</div></div>
+    <div class="stat"><div class="num" id="stat-wrong">0</div><div class="label">错题本</div></div>
+    <div class="stat"><div class="num" id="stat-fav">0</div><div class="label">收藏</div></div>
+  </div>
+
+  <div class="card pink">
+    <h2>📚 课程目录</h2>
+    <div class="chapter-list" id="chapter-list-home"></div>
+  </div>
+</section>
+
+<!-- ============ 课程详情 ============ -->
+<section id="page-course" class="page">
+  <div class="chapter-nav" id="chapter-nav"></div>
+  <div class="card" id="chapter-content-wrap">
+    <button class="fav-btn" id="fav-btn">⭐ 收藏</button>
+    <div class="content" id="chapter-content"></div>
+    <div class="quiz-block" id="quiz-block"></div>
+    <div class="quiz-controls" id="quiz-controls" style="display:none">
+      <button class="btn-primary" id="submit-quiz">提交答案</button>
+      <button class="btn-secondary" id="reset-quiz">重做</button>
+    </div>
+    <div id="score-result"></div>
+  </div>
+</section>
+
+<!-- ============ 练习 ============ -->
+<section id="page-quiz" class="page">
+  <div class="card lemon">
+    <h2>📝 章节练习</h2>
+    <p>选择一个章节开始刷题吧！所有练习题都是从备考资料里整理出来的哦～</p>
+    <div class="chapter-nav" id="quiz-nav" style="margin-top:14px"></div>
+  </div>
+  <div id="quiz-page-area"></div>
+</section>
+
+<!-- ============ 个人中心 ============ -->
+<section id="page-center" class="page">
+  <div class="card lilac">
+    <h2>💖 我的学习空间</h2>
+    <div class="center-tabs">
+      <button data-tab="progress" class="active">📈 学习进度</button>
+      <button data-tab="wrong">❌ 错题本</button>
+      <button data-tab="fav">⭐ 收藏夹</button>
+    </div>
+    <div id="tab-progress"></div>
+    <div id="tab-wrong" style="display:none"></div>
+    <div id="tab-fav" style="display:none"></div>
+  </div>
+  <div class="card pink" style="text-align:center">
+    <button class="btn-secondary" id="reset-all">🔄 重置所有数据</button>
+    <p style="font-size:12px;color:var(--ink-light);margin-top:6px">清除本地所有学习记录</p>
+  </div>
+</section>
+
+</main>
+</div>
+
+<!-- ============ 章节数据 ============ -->
+<script>
+const CHAPTERS = [
+{
+  id:1, title:"什么是单片机 & 标号信息", short:"单片机是什么？芯片上印的数字啥意思？",
+  emoji:"🌸", color:"pink",
+  content:`
+<h3>🤔 什么是单片机？</h3>
+<p>用专业语言讲，<b>单片机</b>就是在一块硅片上集成了<b>微处理器、存储器、各种输入/输出接口</b>的芯片，这样一块芯片就具有了计算机的属性，因而被称为<b>单片微型计算机</b>，简称单片机。</p>
+
+<div class="tip">通俗来说：单片机就是一台超小型的"电脑"，能干活、能控制，广泛用在各种电子设备里。</div>
+
+<h3>🏷️ 芯片标号怎么读？</h3>
+<p>示例标号：<code>STC 89C51RC 40C-PDIP 0707CU8138.00D</code></p>
+<ul>
+  <li><b>STC</b> — 前缀，表示 STC 公司生产（其他厂商还有 AT、Intel、Winbond、SST 等）</li>
+  <li><b>89C51</b> — 8051 兼容系列；其中 89 通常表示 Flash 程序存储器，C 表示 CMOS 器件</li>
+  <li><b>RC</b> — 片内 RAM 512B（同系列 RD+ 为 1280B）</li>
+  <li><b>40</b> — 通常与速度等级有关</li>
+  <li><b>C</b> — 商业级温度范围 0℃～+75℃（I 工业级 -40℃～+85℃）</li>
+  <li><b>PDIP</b> — 双列直插式封装（DIP）</li>
+</ul>
+
+<h3>📦 常见封装类型</h3>
+<ol>
+  <li><b>DIP</b>（双列直插式）：引脚从芯片两侧引出，适合手工焊接</li>
+  <li><b>PLCC</b>（带引线塑料封装）：J 形引脚，正方形</li>
+  <li><b>QFP</b>（四边引脚扁平式）：表面贴装（SMT），引脚四周引出</li>
+  <li><b>BGA</b>（球栅阵列）：高密度多引脚，球在底部</li>
+</ol>
+
+<h3>🌍 单片机能做什么？</h3>
+<ul>
+  <li>🏭 工业自动化：数据采集、测控</li>
+  <li>📟 智能仪器：示波器、万用表、信号源</li>
+  <li>🏠 消费电子：洗衣机、空调、电视、微波炉、汽车电子</li>
+  <li>📡 通信：调制解调器、程控交换</li>
+  <li>🚀 武器装备：飞机、军舰、导弹制导</li>
+</ul>
+  `,
+  quiz:[
+    {type:"single", text:"单片机集成了哪些基本模块？", opts:["仅微处理器","微处理器、存储器、输入/输出接口","仅存储器","仅输入/输出接口"], ans:1},
+    {type:"single", text:"标号 STC89C51 中的 '89' 通常表示？", opts:["8KB 存储器","采用 Flash 程序存储器","8MHz 频率","8 位处理器"], ans:1},
+    {type:"fill", text:"DIP 封装的全称是______。", ans:"双列直插式封装", hint:"四个字开头"},
+    {type:"judge", text:"AT89C51 中的 'C' 表示陶瓷封装。", ans:false, reason:"'C' 表示 CMOS 器件，不是陶瓷封装。"},
+  ]
+},
+{
+  id:2, title:"51 单片机外部引脚介绍", short:"40 个脚各有什么用？电源、时钟、复位、IO",
+  emoji:"🔌", color:"sky",
+  content:`
+<h3>🧷 引脚怎么数？</h3>
+<p>芯片上有一个<b>小圆点或凹口</b>，正对着左上角时，<b>从左上角那个脚开始，逆时针数</b>就是 1、2、3…… 脚。最后一个（40脚）在 1 脚的正对面。</p>
+
+<h3>⚡ 电源和时钟引脚（必掌握）</h3>
+<ul>
+  <li><b>Vcc（40脚）</b> — 电源正极，通常 +5V</li>
+  <li><b>GND（20脚）</b> — 电源地</li>
+  <li><b>XTAL1（19脚）</b> — 片内振荡电路输入端，外接晶振的一脚</li>
+  <li><b>XTAL2（18脚）</b> — 振荡电路输出端，外接晶振的另一脚</li>
+</ul>
+<div class="tip">晶振接法：XTAL1 和 XTAL2 之间接石英晶体，各接一个 10~30pF 小电容到 GND。</div>
+
+<h3>🔄 复位引脚</h3>
+<ul>
+  <li><b>RST（9脚）</b> — 复位引脚。输入连续<b>两个机器周期以上的高电平</b>有效。复位后 PC=0000H，单片机从程序存储器的 0000H 单元开始执行。</li>
+</ul>
+
+<h3>💾 外部存储器控制（了解即可）</h3>
+<ul>
+  <li><b>PSEN（29脚）</b> — 外部程序存储器读选通。内部 ROM 读取时不动作。</li>
+  <li><b>ALE/PROG（30脚）</b> — 扩展外部 RAM 时锁存低 8 位地址。</li>
+  <li><b>EA/VPP（31脚）</b> — 使用<b>片内程序存储器时 EA 接高电平（接 VCC）</b>。现在基本都用片内 Flash，所以 EA 一律接高。</li>
+</ul>
+
+<h3>🎛️ 四组 IO 口（必掌握）</h3>
+<ul>
+  <li><b>P0 口（39~32脚）</b> — 8位，传统 51 作为普通 IO 时为<b>开漏结构</b>，输出高电平时需<b>外接上拉电阻（通常 10kΩ）</b></li>
+  <li><b>P1 口（1~8脚）</b> — 准双向 8位 IO，<b>内带上拉电阻</b>。52 的 P1.0 是 T2 定时器外部输入</li>
+  <li><b>P2 口（21~28脚）</b> — 准双向 8位 IO，内带上拉电阻</li>
+  <li><b>P3 口（10~17脚）</b> — 准双向 8位 IO，内带上拉电阻，且每脚有<b>第二功能</b>（串口、中断、定时器）</li>
+</ul>
+
+<div class="warn">"准双向"的意思：作为输入前，要先向该口<b>写 1</b>，单片机内部才能正确读出外部信号。</div>
+  `,
+  quiz:[
+    {type:"single", text:"使用片内程序存储器时，EA 引脚应该接？", opts:["低电平（GND）","高电平（VCC）","悬空","接晶振"], ans:1},
+    {type:"single", text:"传统 51 的 P0 口作为普通 IO 输出高电平时需要？", opts:["外接下拉电阻","外接上拉电阻（通常10kΩ）","不需要任何电阻","直接接电源"], ans:1},
+    {type:"fill", text:"复位后程序计数器 PC = ______ H。", ans:"0000", hint:"四位十六进制"},
+    {type:"single", text:"RST 引脚需要输入多长时间的高电平才能触发复位？", opts:["1 个机器周期","连续 2 个机器周期以上","0.5 个机器周期","只需一个脉冲"], ans:1},
+  ]
+},
+{
+  id:3, title:"进制转换基础", short:"二进制、十进制、十六进制互转",
+  emoji:"🔢", color:"lemon",
+  content:`
+<h3>📊 二进制 ↔ 十进制</h3>
+<p><b>二进制转十进制</b>：按位权展开相加。</p>
+<p>例：<code>1010₂ = 0×2⁰ + 1×2¹ + 0×2² + 1×2³ = 0 + 2 + 0 + 8 = 10</code></p>
+
+<p><b>十进制转二进制</b>：除 2 取余，从下往上排。</p>
+<p>例：10 ÷ 2 = 5 余 0；5 ÷ 2 = 2 余 1；2 ÷ 2 = 1 余 0；1 ÷ 2 = 0 余 1 → 1010</p>
+
+<h3>🔵 十六进制 ↔ 十进制</h3>
+<p><b>十六进制</b>用 0~9 和 A~F 表示，逢 16 进 1。</p>
+<ul>
+  <li>二进制 → 十六进制：从右往左每 4 位一组，不足补 0</li>
+  <li>十六进制 → 二进制：每 1 位展开成 4 位二进制</li>
+</ul>
+<p>例：<code>1010 1100₂ = AC₁₆</code>；<code>3F₁₆ = 0011 1111₂</code></p>
+
+<h3>💻 C51 中的进制写法</h3>
+<pre><span class="cm">// 十进制：直接写</span>
+<span class="kw">int</span> a = <span class="str">255</span>;
+
+<span class="cm">// 十六进制：0x 开头</span>
+<span class="kw">int</span> b = <span class="str">0xFF</span>;
+
+<span class="cm">// 二进制：C51 不直接支持，通常用十六进制代替</span></pre>
+
+<div class="tip">记一下：<b>0</b>=0000, <b>1</b>=0001, <b>2</b>=0010, <b>3</b>=0011, <b>4</b>=0100, <b>5</b>=0101, <b>6</b>=0110, <b>7</b>=0111, <b>8</b>=1000, <b>9</b>=1001, <b>A</b>=1010, <b>B</b>=1011, <b>C</b>=1100, <b>D</b>=1101, <b>E</b>=1110, <b>F</b>=1111</div>
+  `,
+  quiz:[
+    {type:"single", text:"二进制 1101 转换为十进制是？", opts:["11","12","13","14"], ans:2},
+    {type:"single", text:"十六进制 0x3C 转换为二进制是？", opts:["0011 1100","0011 1010","0100 1100","0010 1100"], ans:0},
+    {type:"fill", text:"十进制 255 写成十六进制是 0x______。", ans:"FF", hint:"两位大写字母或数字"},
+    {type:"judge", text:"C 语言中 10/3 和 10/3.0 的结果相同。", ans:false, reason:"10/3 是整数除法结果为 3；10/3.0 是浮点除法结果约 3.333。"},
+  ]
+},
+{
+  id:4, title:"二进制逻辑运算", short:"与或非异或，C 语言怎么写？",
+  emoji:"⚙️", color:"mint",
+  content:`
+<h3>🔗 与运算（AND）</h3>
+<p>规则：<b>都有则有</b>。0&0=0, 0&1=0, 1&0=0, 1&1=1</p>
+<p>C 语言：<code>&</code> 按位与；<code>&&</code> 逻辑与</p>
+<pre><span class="cm">// 按位与：逐位运算</span>
+<span class="kw">unsigned char</span> x = <span class="str">0x55</span> &amp; <span class="str">0xAA</span>;  <span class="cm">// 结果 0x00</span>
+
+<span class="cm">// 逻辑与：整体判断</span>
+<span class="kw">int</span> y = <span class="str">0x55</span> &amp;&amp; <span class="str">0xAA</span>;   <span class="cm">// 结果 1（真）</span></pre>
+
+<h3>🔗 或运算（OR）</h3>
+<p>规则：<b>有一则有</b>。0|0=0, 0|1=1, 1|0=1, 1|1=1</p>
+<p>C 语言：<code>|</code> 按位或；<code>||</code> 逻辑或</p>
+
+<h3>🔗 非运算（NOT）</h3>
+<p>规则：<b>求反</b>。!0=1, !1=0</p>
+<p>C 语言：<code>~</code> 按位取反；<code>!</code> 逻辑非</p>
+
+<h3>🔗 异或运算（XOR）</h3>
+<p>规则：<b>不同则有，相同则无</b>。0⊕0=0, 0⊕1=1, 1⊕0=1, 1⊕1=0</p>
+<p>C 语言：<code>^</code> 按位异或。常用技巧：<b>异或自身=0</b>，<b>异或 1=取反</b></p>
+
+<div class="tip">考试重点区分：<b>& 是按位与</b>，<b>&& 是逻辑与</b>；<b>| 是按位或</b>，<b>|| 是逻辑或</b>。别搞混了！</div>
+  `,
+  quiz:[
+    {type:"single", text:"0x55 & 0xAA 的结果是？", opts:["0xFF","0x00","0x55","0xAA"], ans:1},
+    {type:"single", text:"0x55 | 0xAA 的结果是？", opts:["0xFF","0x00","0x55","0xAA"], ans:0},
+    {type:"fill", text:"C 语言中逻辑非的运算符是 ______。", ans:"!", hint:"一个感叹号"},
+    {type:"single", text:"异或运算的规则是？", opts:["相同为1，不同为0","相同为0，不同为1","有1为1","有0为0"], ans:1},
+  ]
+},
+{
+  id:5, title:"C51 数据类型与运算符", short:"单片机 C 语言和普通 C 有什么不同？",
+  emoji:"💾", color:"sky",
+  content:`
+<h3>📏 C51 常用数据类型</h3>
+<table style="border-collapse:collapse;width:100%;margin:10px 0;font-size:14px">
+<tr style="background:var(--pink);color:#fff"><th style="padding:6px;border:2px solid var(--pink-deep)">类型</th><th style="padding:6px;border:2px solid var(--pink-deep)">位数</th><th style="padding:6px;border:2px solid var(--pink-deep)">范围</th></tr>
+<tr><td style="padding:6px;border:1px solid #ddd">unsigned char</td><td style="text-align:center;border:1px solid #ddd">8</td><td style="text-align:center;border:1px solid #ddd">0 ~ 255</td></tr>
+<tr style="background:#fafafa"><td style="padding:6px;border:1px solid #ddd">unsigned int</td><td style="text-align:center;border:1px solid #ddd">16</td><td style="text-align:center;border:1px solid #ddd">0 ~ 65535</td></tr>
+<tr><td style="padding:6px;border:1px solid #ddd">int</td><td style="text-align:center;border:1px solid #ddd">16</td><td style="text-align:center;border:1px solid #ddd">-32768 ~ 32767</td></tr>
+<tr style="background:#fafafa"><td style="padding:6px;border:1px solid #ddd">unsigned long</td><td style="text-align:center;border:1px solid #ddd">32</td><td style="text-align:center;border:1px solid #ddd">0 ~ 2³²-1</td></tr>
+<tr><td style="padding:6px;border:1px solid #ddd">bit</td><td style="text-align:center;border:1px solid #ddd">1</td><td style="text-align:center;border:1px solid #ddd">0 或 1</td></tr>
+<tr style="background:#fafafa"><td style="padding:6px;border:1px solid #ddd">float</td><td style="text-align:center;border:1px solid #ddd">32</td><td style="text-align:center;border:1px solid #ddd">±1.17e-38 ~ ±3.4e38</td></tr>
+</table>
+
+<div class="tip">初学时用得最多的是 <code>unsigned char</code>（简称 uchar，8位，0~255），占用空间小，运算快。</div>
+
+<h3>📚 常用头文件</h3>
+<ul>
+  <li><code>&lt;reg51.h&gt;</code> / <code>&lt;reg52.h&gt;</code> — <b>必引</b>！定义了 51/52 的特殊功能寄存器（P0~P3、TMOD、TCON 等）</li>
+  <li><code>&lt;math.h&gt;</code> — 数学函数（sqrt、sin、fabs）</li>
+  <li><code>&lt;intrins.h&gt;</code> — 内部函数（_nop_() 空操作）</li>
+</ul>
+
+<h3>🧮 运算符速查</h3>
+<ul>
+  <li>算术：<code>+ - * / ++ -- %</code>（整数除法 10/3=3，取余 10%3=1）</li>
+  <li>关系/逻辑：<code>> >= < <= == != && || !</code></li>
+  <li>位：<code>& | ^ ~ >> <<</code></li>
+</ul>
+
+<div class="warn">注意区分：<b>=</b> 是赋值，<b>==</b> 是比较相等！写错会出大 bug。</div>
+  `,
+  quiz:[
+    {type:"single", text:"C51 中 unsigned char 的位数和范围是？", opts:["8位，0~127","8位，0~255","16位，0~255","8位，-128~127"], ans:1},
+    {type:"single", text:"C51 中 10 / 3 的结果是？", opts:["3.333","3","1","3.0"], ans:1},
+    {type:"fill", text:"要使用 51 单片机特殊功能寄存器，需要引用的头文件是______。", ans:"reg51.h", hint:"reg开头，.h结尾；reg52.h也对"},
+    {type:"judge", text:"C51 中 = 和 == 的作用相同。", ans:false, reason:"= 是赋值，== 是比较相等，千万不能写错。"},
+  ]
+},
+{
+  id:6, title:"C51 基础语句", short:"while、for、main 函数怎么写？",
+  emoji:"✍️", color:"pink",
+  content:`
+<h3>🏠 main() 函数</h3>
+<p>每个 C 程序都必须有一个 <code>main()</code> 函数，程序从这里开始执行。</p>
+<pre><span class="kw">void</span> <span class="fn">main</span>(<span class="kw">void</span>){
+    <span class="cm">// 初始化代码写在这里</span>
+    
+    <span class="kw">while</span>(<span class="str">1</span>){
+        <span class="cm">// 主循环里放你的功能</span>
+    }
+}</pre>
+
+<div class="tip">单片机程序通常用 <code>while(1){}</code> 做无限循环，因为 main 执行完后不能像 PC 程序那样"退出"，必须一直循环检测和响应。</div>
+
+<h3>🔄 while 语句</h3>
+<p>格式：<code>while(表达式) { 语句 }</code></p>
+<ul>
+  <li><b>先判断表达式</b>，非 0（真）就执行循环体，为 0（假）就跳出</li>
+  <li>表达式可以是常量、运算、函数返回值</li>
+  <li>循环体可以为空：<code>while(1);</code></li>
+</ul>
+
+<h3>🔁 for 语句</h3>
+<p>格式：<code>for(表达式1; 表达式2; 表达式3) { 语句 }</code></p>
+<p>执行过程：①执行表达式1 → ②判断表达式2，真则执行循环体 → ③执行表达式3 → 回到②</p>
+
+<pre><span class="kw">unsigned char</span> i;
+<span class="kw">for</span>(i=<span class="str">0</span>; i&lt;<span class="str">10</span>; i++){
+    P1 = i;   <span class="cm">// P1 口依次输出 0~9</span>
+}</pre>
+
+<h3>⏱️ 软件延时示例</h3>
+<pre><span class="cm">// 简单的空循环延时（不精确！）</span>
+<span class="kw">void</span> <span class="fn">delay</span>(<span class="kw">void</span>){
+    <span class="kw">unsigned char</span> i, j;
+    <span class="kw">for</span>(i=<span class="str">200</span>; i&gt;<span class="str">0</span>; i--)
+        <span class="kw">for</span>(j=<span class="str">200</span>; j&gt;<span class="str">0</span>; j--);
+}</pre>
+
+<div class="warn">软件延时<b>不精确</b>，时间取决于晶振频率和编译器优化。精确延时必须用硬件<b>定时器</b>（后面章节讲）。</div>
+
+<h3>💬 注释</h3>
+<ul>
+  <li><code>//</code> — 单行注释</li>
+  <li><code>/* ... */</code> — 多行注释，注意<b>不能嵌套</b></li>
+</ul>
+  `,
+  quiz:[
+    {type:"single", text:"单片机 main 函数通常以什么形式结尾？", opts:["直接 return","用 while(1) 无限循环","用 for(;;) 结束","不需要结尾"], ans:1},
+    {type:"single", text:"while(0) 会执行几次循环体？", opts:["无限次","1次","0次","255次"], ans:2},
+    {type:"fill", text:"for 循环的三个表达式之间用 ______ 分隔。", ans:"分号", hint:"; 叫什么"},
+    {type:"judge", text:"/* 注释 */ 可以嵌套使用。", ans:false, reason:"多行注释 /* */ 不能嵌套。"},
+  ]
+},
+{
+  id:7, title:"单片机最小系统", short:"让单片机跑起来需要哪些东西？",
+  emoji:"🔧", color:"lemon",
+  content:`
+<h3>✨ 最小系统 = 让单片机工作的最少电路</h3>
+<p>要让 51 单片机跑起来，至少需要这三样：</p>
+<ul>
+  <li>⚡ <b>电源</b> — 稳定的 +5V（或对应型号电压）</li>
+  <li>🕐 <b>时钟</b> — 晶振 + 负载电容，或外部有源时钟</li>
+  <li>🔄 <b>复位电路</b> — 上电复位 + 手动复位</li>
+</ul>
+
+<h3>⚡ 电源电路</h3>
+<p>Vcc 接 +5V，GND 接地。通常在 Vcc 和 GND 之间就近接一个 <b>0.1μF 电容</b>去耦，滤除高频噪声。</p>
+
+<h3>🕐 时钟电路</h3>
+<p>内部时钟方式（最常用）：</p>
+<ul>
+  <li>在 XTAL1（19脚）和 XTAL2（18脚）之间接一颗<b>石英晶体</b>（常见 11.0592MHz 或 12MHz）</li>
+  <li>XTAL1 接一个 <b>10~30pF 电容</b> 到 GND</li>
+  <li>XTAL2 接一个 <b>10~30pF 电容</b> 到 GND</li>
+</ul>
+<div class="tip">为什么常用 11.0592MHz？因为它能让串口波特率更准确（能整除常用波特率）。如果不做串口，12MHz 也很常用。</div>
+
+<h3>🔄 复位电路</h3>
+<p><b>上电复位</b>：RST 脚通过一个大电容（通常 10μF）接 Vcc，通过一个小电阻（通常 10kΩ）接 GND。上电瞬间电容充电让 RST 保持高电平一段时间。</p>
+<p><b>手动复位</b>：RST 和 Vcc 之间加一个轻触按键，按下时 RST 直接接高电平。</p>
+
+<h3>🎯 EA 引脚别忘了！</h3>
+<p><b>使用片内程序存储器时 EA 必须接高电平（VCC）</b>，否则单片机会从外部读程序，而你又没接外部 ROM，结果就乱了。</p>
+  `,
+  quiz:[
+    {type:"single", text:"单片机最小系统不包括？", opts:["电源","时钟晶振","复位电路","显示屏幕"], ans:3},
+    {type:"single", text:"晶振电路中与 XTAL1、XTAL2 配合的电容通常是？", opts:["100μF 电解电容","10~30pF 小电容","10μF 电容","100nF 电容"], ans:1},
+    {type:"fill", text:"上电复位时，RST 脚通过大电容接 ______。", ans:"VCC", hint:"电源正极"},
+    {type:"judge", text:"EA 引脚悬空时单片机会正常工作。", ans:false, reason:"使用片内程序存储器时 EA 必须接高电平。"},
+  ]
+},
+{
+  id:8, title:"IO 口操作", short:"怎么让灯亮？怎么读按键？",
+  emoji:"💡", color:"mint",
+  content:`
+<h3>📤 输出：让 LED 亮起来</h3>
+<p>假设 LED 正极接 VCC，负极通过限流电阻（通常 1kΩ）接 P1.0。写 <code>P1_0 = 0;</code> 时，P1.0 输出低电平，LED 亮起。</p>
+
+<pre><span class="kw">#include</span> <span class="str">&lt;reg52.h&gt;</span>
+
+sbit LED = P1^<span class="str">0</span>;   <span class="cm">// 定义 LED 在 P1.0 脚</span>
+
+<span class="kw">void</span> <span class="fn">main</span>(<span class="kw">void</span>){
+    LED = <span class="str">0</span>;       <span class="cm">// LED 亮（低电平点亮）</span>
+    <span class="kw">while</span>(<span class="str">1</span>);  <span class="cm">// 停在这里，保持亮</span>
+}</pre>
+
+<div class="tip">P1~P3 内带上拉电阻，写 0 输出低，写 1 输出高。P0 口作为普通 IO 时要外接上拉电阻！</div>
+
+<h3>📥 输入：读按键状态</h3>
+<p>按键一端接 P1.0，另一端接 GND。按键没按下时 P1.0 被内部上拉电阻拉高（读 1）；按下时 P1.0 被拉低（读 0）。</p>
+
+<pre><span class="kw">#include</span> <span class="str">&lt;reg52.h&gt;</span>
+
+sbit KEY = P1^<span class="str">0</span>;
+sbit LED = P1^<span class="str">1</span>;
+
+<span class="kw">void</span> <span class="fn">main</span>(<span class="kw">void</span>){
+    <span class="kw">while</span>(<span class="str">1</span>){
+        <span class="kw">if</span>(KEY == <span class="str">0</span>){     <span class="cm">// 按键按下</span>
+            LED = <span class="str">0</span>;       <span class="cm">// 灯亮</span>
+        } <span class="kw">else</span> {
+            LED = <span class="str">1</span>;       <span class="cm">// 灯灭</span>
+        }
+    }
+}</pre>
+
+<div class="warn">"准双向口"要点：P1~P3 作为输入前，要先向该口<b>写 1</b>。复位后默认就是 0xFF（全 1），所以通常不用特意写，但如果你之前写过 0，读之前记得写回 1。</div>
+
+<h3>🎲 流水灯示例</h3>
+<pre><span class="kw">#include</span> <span class="str">&lt;reg52.h&gt;</span>
+<span class="kw">#include</span> <span class="str">&lt;intrins.h&gt;</span>
+
+<span class="kw">void</span> <span class="fn">delay</span>(<span class="kw">void</span>){
+    <span class="kw">unsigned char</span> i, j;
+    <span class="kw">for</span>(i=<span class="str">200</span>; i&gt;<span class="str">0</span>; i--)
+        <span class="kw">for</span>(j=<span class="str">200</span>; j&gt;<span class="str">0</span>; j--);
+}
+
+<span class="kw">void</span> <span class="fn">main</span>(<span class="kw">void</span>){
+    P1 = <span class="str">0xFE</span>;  <span class="cm">// 二进制 1111 1110，最低位亮</span>
+    <span class="kw">while</span>(<span class="str">1</span>){
+        delay();
+        P1 = _crol_(P1, <span class="str">1</span>);  <span class="cm">// 循环左移 1 位</span>
+    }
+}</pre>
+  `,
+  quiz:[
+    {type:"single", text:"LED 低电平点亮时，正确的操作是？", opts:["P1_0 = 1","P1_0 = 0","P1 = 0xFF","P1 = 0"], ans:1},
+    {type:"single", text:"P1~P3 口作为输入前要先做什么？", opts:["写 0","写 1","写 0xFF","不需要任何操作"], ans:1},
+    {type:"fill", text:"定义 sbit KEY = P1^0 中，符号 ^ 后面的数字 0 表示 ______。", ans:"第0位", hint:"P1口的某一位"},
+    {type:"judge", text:"P0 口作为普通 IO 使用时必须外接上拉电阻。", ans:true, reason:"P0 是开漏结构，输出高电平呈高阻态，需要外接上拉。"},
+  ]
+},
+{
+  id:9, title:"定时器", short:"精确计时的核心，考试重点！",
+  emoji:"⏰", color:"pink",
+  content:`
+<h3>🧠 定时器是什么？</h3>
+<p>单片机内部有"计数器"硬件，每来一个脉冲就 +1，加到溢出时触发中断。51 通常有两个定时器：<b>T0</b> 和 <b>T1</b>（52 还有 T2）。</p>
+<ul>
+  <li><b>定时模式</b>：内部时钟脉冲计数（机器周期的 1/12，12MHz 晶振时是 1μs 一次）</li>
+  <li><b>计数模式</b>：从 T0/T1 引脚输入外部脉冲计数</li>
+</ul>
+
+<h3>📋 相关特殊功能寄存器</h3>
+<ul>
+  <li><b>TMOD</b>（工作方式寄存器）：设置 T0/T1 的工作模式</li>
+  <li><b>TCON</b>（控制寄存器）：启动/停止、溢出标志位</li>
+  <li><b>TH0 / TL0</b>：T0 的计数初值（高 8 位 / 低 8 位）</li>
+</ul>
+
+<h3>⚙️ 四种工作方式</h3>
+<ul>
+  <li><b>方式 0</b>：13 位定时器（基本不用）</li>
+  <li><b>方式 1</b>：<b>16 位定时器</b>（最常用！范围 0~65535）</li>
+  <li><b>方式 2</b>：<b>8 位自动重装</b>（常用于串口波特率发生器）</li>
+  <li><b>方式 3</b>：T0 分成两个 8 位</li>
+</ul>
+
+<h3>🧮 初值计算（方式 1）</h3>
+<p>16 位定时器从初值 X 计到溢出需要 <b>(65536 - X)</b> 个机器周期。</p>
+<p>定时时间 t = (65536 - X) × 机器周期</p>
+<p>12MHz 晶振时机器周期 = 1μs，定时 10ms：</p>
+<p>65536 - X = 10000 → X = 55536 = 0xD8F0 → <b>TH0=0xD8, TL0=0xF0</b></p>
+
+<h3>💡 示例：定时器 0 方式 1 定时 10ms</h3>
+<pre><span class="kw">void</span> <span class="fn">Timer0_Init</span>(<span class="kw">void</span>){
+    TMOD &amp;= <span class="str">0xF0</span>;      <span class="cm">// 清 T0 的方式位</span>
+    TMOD |= <span class="str">0x01</span>;       <span class="cm">// T0 方式 1（16位）</span>
+    TH0 = <span class="str">0xD8</span>;         <span class="cm">// 初值高 8 位</span>
+    TL0 = <span class="str">0xF0</span>;         <span class="cm">// 初值低 8 位</span>
+    TR0 = <span class="str">1</span>;           <span class="cm">// 启动 T0</span>
+}
+
+<span class="cm">// 在主循环中检测溢出标志</span>
+<span class="kw">if</span>(TF0){
+    TF0 = <span class="str">0</span>;           <span class="cm">// 清溢出标志</span>
+    TH0 = <span class="str">0xD8</span>;       <span class="cm">// 重装初值</span>
+    TL0 = <span class="str">0xF0</span>;
+    <span class="cm">// 10ms 到了，写你的功能</span>
+}</pre>
+
+<div class="tip">方式 2（自动重装）只需设置 TH0 为重装值，TL0 为初始值，溢出后硬件自动重装，不用软件手动写回。</div>
+  `,
+  quiz:[
+    {type:"single", text:"51 单片机定时器方式 1 是多少位？", opts:["8位","13位","16位","8位自动重装"], ans:2},
+    {type:"single", text:"12MHz 晶振下，机器周期是多少？", opts:["12μs","1μs","2μs","10μs"], ans:1},
+    {type:"fill", text:"定时器初值 X 与定时时间 t 的关系（方式1，12MHz晶振）：t = (______ - X) × 1μs。", ans:"65536", hint:"2的几次方"},
+    {type:"judge", text:"定时器方式 2 需要在溢出后手动重装初值。", ans:false, reason:"方式 2 是 8 位自动重装，硬件自动重装初值。"},
+  ]
+},
+{
+  id:10, title:"中断系统", short:"让单片机能"同时"处理多个事件",
+  emoji:"🚨", color:"lilac",
+  content:`
+<h3>💡 什么是中断？</h3>
+<p>单片机正在执行主程序时，突然发生某个事件（按键按下、定时器溢出、串口收到数据），单片机<b>暂停当前程序</b>，跳去处理这个事件，处理完后<b>返回主程序继续</b>——这就是中断。</p>
+
+<h3>📌 51 常见的 5 个中断源</h3>
+<table style="border-collapse:collapse;width:100%;font-size:14px;margin:10px 0">
+<tr style="background:var(--pink);color:#fff"><th style="padding:6px;border:2px solid var(--pink-deep)">中断源</th><th style="padding:6px;border:2px solid var(--pink-deep)">中断号</th><th style="padding:6px;border:2px solid var(--pink-deep)">触发条件</th><th style="padding:6px;border:2px solid var(--pink-deep)">对应引脚</th></tr>
+<tr><td style="padding:6px;border:1px solid #ddd">外部中断 0</td><td style="text-align:center;border:1px solid #ddd">0</td><td style="text-align:center;border:1px solid #ddd">P3.2 电平/边沿</td><td style="text-align:center;border:1px solid #ddd">P3.2 (INT0)</td></tr>
+<tr style="background:#fafafa"><td style="padding:6px;border:1px solid #ddd">定时器 T0</td><td style="text-align:center;border:1px solid #ddd">1</td><td style="text-align:center;border:1px solid #ddd">计数溢出 TF0=1</td><td style="text-align:center;border:1px solid #ddd">内部</td></tr>
+<tr><td style="padding:6px;border:1px solid #ddd">外部中断 1</td><td style="text-align:center;border:1px solid #ddd">2</td><td style="text-align:center;border:1px solid #ddd">P3.3 电平/边沿</td><td style="text-align:center;border:1px solid #ddd">P3.3 (INT1)</td></tr>
+<tr style="background:#fafafa"><td style="padding:6px;border:1px solid #ddd">定时器 T1</td><td style="text-align:center;border:1px solid #ddd">3</td><td style="text-align:center;border:1px solid #ddd">计数溢出 TF1=1</td><td style="text-align:center;border:1px solid #ddd">内部</td></tr>
+<tr><td style="padding:6px;border:1px solid #ddd">串口</td><td style="text-align:center;border:1px solid #ddd">4</td><td style="text-align:center;border:1px solid #ddd">发送/接收完成</td><td style="text-align:center;border:1px solid #ddd">内部</td></tr>
+</table>
+
+<h3>🎛️ 中断允许寄存器 IE</h3>
+<ul>
+  <li><b>EA</b>（IE.7）— 总中断开关，<b>必须先开 EA=1</b> 才能开各个中断</li>
+  <li><b>EX0</b>（IE.0）— 外部中断 0 允许</li>
+  <li><b>ET0</b>（IE.1）— 定时器 T0 允许</li>
+  <li><b>ES</b>（IE.4）— 串口中断允许</li>
+</ul>
+
+<h3>🖊️ 中断服务函数写法</h3>
+<pre><span class="kw">#include</span> <span class="str">&lt;reg52.h&gt;</span>
+
+<span class="kw">void</span> <span class="fn">Timer0_Init</span>(<span class="kw">void</span>){
+    TMOD |= <span class="str">0x01</span>;       <span class="cm">// T0 方式 1</span>
+    TH0 = <span class="str">0xD8</span>; TL0 = <span class="str">0xF0</span>;
+    EA = <span class="str">1</span>;           <span class="cm">// 开总中断（必开！）</span>
+    ET0 = <span class="str">1</span>;          <span class="cm">// 开 T0 中断</span>
+    TR0 = <span class="str">1</span>;           <span class="cm">// 启动 T0</span>
+}
+
+<span class="cm">// 中断服务函数：函数名() interrupt 中断号</span>
+<span class="kw">void</span> <span class="fn">Timer0_ISR</span>(<span class="kw">void</span>) <span class="kw">interrupt</span> <span class="str">1</span> {
+    TH0 = <span class="str">0xD8</span>; TL0 = <span class="str">0xF0</span>;  <span class="cm">// 重装初值（方式1需手动）</span>
+    <span class="cm">// 你的功能代码写这里</span>
+}
+
+<span class="kw">void</span> <span class="fn">main</span>(<span class="kw">void</span>){
+    Timer0_Init();
+    <span class="kw">while</span>(<span class="str">1</span>){ <span class="cm">// 主循环空着也行，中断自动进来</span> }
+}</pre>
+
+<div class="warn">中断服务函数的规则：①用 <code>interrupt N</code> 声明，N 是中断号；②<b>没有返回值</b>；③<b>不能带参数</b>；④尽量简短，别在里面写太耗时的操作。</div>
+  `,
+  quiz:[
+    {type:"single", text:"开中断时必须先打开什么？", opts:["ET0","EX0","EA 总中断","ES"], ans:2},
+    {type:"single", text:"定时器 T0 的中断号是？", opts:["0","1","2","3"], ans:1},
+    {type:"fill", text:"中断服务函数声明格式：void 函数名(______) interrupt 中断号。", ans:"void", hint:"括号里写什么"},
+    {type:"judge", text:"中断服务函数可以有返回值和参数。", ans:false, reason:"中断服务函数没有返回值，也不能带参数。"},
+  ]
+},
+{
+  id:11, title:"串口通信", short:"单片机和电脑怎么对话？",
+  emoji:"📡", color:"sky",
+  content:`
+<h3>💬 串口通信是什么？</h3>
+<p>就是单片机和电脑（或另一个单片机）之间<b>一根线发数据、一根线收数据</b>的通信方式。常用格式：<b>8N1</b>（8位数据、无校验、1位停止位）。</p>
+
+<h3>🔌 引脚</h3>
+<ul>
+  <li><b>P3.0 (RXD)</b> — 接收数据</li>
+  <li><b>P3.1 (TXD)</b> — 发送数据</li>
+</ul>
+
+<h3>📋 相关寄存器</h3>
+<ul>
+  <li><b>SCON</b> — 串口控制寄存器（设置工作方式、发送/接收标志）</li>
+  <li><b>TMOD</b> — 其中 T1 需设置为方式 2（8位自动重装）做波特率发生器</li>
+  <li><b>TH1 / TL1</b> — T1 重装值，决定波特率</li>
+  <li><b>SBUF</b> — 发送/接收缓冲寄存器</li>
+</ul>
+
+<h3>📐 波特率设置（常用 9600）</h3>
+<p>11.0592MHz 晶振 + T1 方式 2 产生 9600 波特率：<b>TH1 = TL1 = 0xFD</b></p>
+
+<h3>💡 示例：串口初始化 + 发送 + 接收中断</h3>
+<pre><span class="kw">#include</span> <span class="str">&lt;reg52.h&gt;</span>
+
+<span class="kw">void</span> <span class="fn">UART_Init</span>(<span class="kw">void</span>){
+    TMOD &amp;= <span class="str">0x0F</span>;
+    TMOD |= <span class="str">0x20</span>;       <span class="cm">// T1 方式 2</span>
+    TH1 = <span class="str">0xFD</span>; TL1 = <span class="str">0xFD</span>; <span class="cm">// 9600 @ 11.0592MHz</span>
+    TR1 = <span class="str">1</span>;           <span class="cm">// 启动 T1</span>
+    
+    SCON = <span class="str">0x50</span>;       <span class="cm">// 方式 1，允许接收 REN=1</span>
+    EA = <span class="str">1</span>; ES = <span class="str">1</span>;  <span class="cm">// 开总中断、开串口中断</span>
+}
+
+<span class="kw">void</span> <span class="fn">UART_SendByte</span>(<span class="kw">unsigned char</span> b){
+    SBUF = b;
+    <span class="kw">while</span>(TI == <span class="str">0</span>);   <span class="cm">// 等发送完成</span>
+    TI = <span class="str">0</span>;           <span class="cm">// 清中断标志</span>
+}
+
+<span class="cm">// 串口接收中断服务函数（中断号 4）</span>
+<span class="kw">void</span> <span class="fn">UART_ISR</span>(<span class="kw">void</span>) <span class="kw">interrupt</span> <span class="str">4</span> {
+    <span class="kw">if</span>(RI){           <span class="cm">// 接收中断</span>
+        RI = <span class="str">0</span>;       <span class="cm">// 先清标志！</span>
+        <span class="kw">unsigned char</span> recv = SBUF;  <span class="cm">// 读走数据</span>
+        UART_SendByte(recv);  <span class="cm">// 原样回显</span>
+    }
+}</pre>
+
+<div class="warn">串口中断服务函数里要先判断是 TI（发送）还是 RI（接收）触发的，并且一定要<b>软件清零中断标志位</b>（TI=0 或 RI=0）！</div>
+
+<h3>🧠 学习单片机应该掌握的 5 点（考试必看）</h3>
+<ol>
+  <li>✅ 单片机最小系统：电源、时钟、复位、EA 接法</li>
+  <li>✅ IO 口操作：输出高低电平、输入检测（先写 1）</li>
+  <li>✅ 定时器：方式 1（16位）、方式 2（自动重装）、初值计算</li>
+  <li>✅ 中断：外部中断、定时器中断、串口中断，EA 总中断必开</li>
+  <li>✅ 串口通信：波特率设置、T1 方式 2、SCON、SBUF</li>
+</ol>
+<p>掌握这 5 点，其他都是在此基础上扩展——祝你考试顺利！ 🎉</p>
+  `,
+  quiz:[
+    {type:"single", text:"串口 9600 波特率，11.0592MHz 晶振，T1 方式 2 的重装值是？", opts:["0xFD","0xFA","0xE8","0x50"], ans:0},
+    {type:"single", text:"串口接收使用哪个引脚？", opts:["P3.1 (TXD)","P3.0 (RXD)","P1.0","P3.2"], ans:1},
+    {type:"fill", text:"串口中断服务函数要先判断是 TI 还是 ______ 触发的。", ans:"RI", hint:"接收中断标志"},
+    {type:"judge", text:"T1 做波特率发生器时通常配置为方式 1（16位）。", ans:false, reason:"T1 做波特率发生器通常用方式 2（8位自动重装），不用软件重装初值。"},
+  ]
+},
+];
+</script>
+
+<!-- ============ 应用逻辑 ============ -->
+<script>
+/* ========== 存储管理 ========== */
+const Store = {
+  get(key, def){ try{ const v = localStorage.getItem(key); return v===null?def:JSON.parse(v); }catch(e){ return def; } },
+  set(key, val){ try{ localStorage.setItem(key, JSON.stringify(val)); }catch(e){} },
+  get progress(){ return this.get('progress', {}); },
+  set progress(v){ this.set('progress', v); },
+  get favorites(){ return this.get('favorites', []); },
+  set favorites(v){ this.set('favorites', v); },
+  get wrongs(){ return this.get('wrongs', []); },
+  set wrongs(v){ this.set('wrongs', v); },
+  get scoreHistory(){ return this.get('scoreHistory', []); },
+  set scoreHistory(v){ this.set('scoreHistory', v); },
+  isDone(id){ return !!this.progress[id]; },
+  markDone(id, score){
+    const p = this.progress;
+    const old = p[id];
+    p[id] = { done:true, score: Math.max(score||0, old?.score||0), time: Date.now() };
+    this.progress = p;
+    const h = this.scoreHistory;
+    h.push({ id, score, time: Date.now() });
+    if(h.length > 50) h.shift();
+    this.scoreHistory = h;
+  },
+  toggleFav(id){
+    const f = this.favorites;
+    const i = f.indexOf(id);
+    if(i>=0) f.splice(i,1); else f.push(id);
+    this.favorites = f;
+    return i<0;
+  },
+  isFav(id){ return this.favorites.includes(id); },
+  addWrong(qid, data){
+    const w = this.wrongs;
+    const i = w.findIndex(x => x.qid===qid);
+    const entry = { qid, ...data, time: Date.now() };
+    if(i>=0) w[i] = entry; else w.push(entry);
+    this.wrongs = w;
+  },
+  removeWrong(qid){
+    this.wrongs = this.wrongs.filter(x => x.qid !== qid);
+  },
+};
+
+/* ========== 路由 ========== */
+let currentPage = 'home';
+let currentChapter = null;
+function showPage(name){
+  currentPage = name;
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById('page-'+name).classList.add('active');
+  document.querySelectorAll('nav button').forEach(b => b.classList.toggle('active', b.dataset.nav===name));
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+document.querySelectorAll('nav button').forEach(b => b.addEventListener('click', () => {
+  const name = b.dataset.nav;
+  showPage(name);
+  if(name==='home') renderHome();
+  if(name==='center') renderCenter('progress');
+}));
+
+/* ========== 首页渲染 ========== */
+function renderHome(){
+  const list = document.getElementById('chapter-list-home');
+  list.innerHTML = CHAPTERS.map(ch => `
+    <div class="chapter-item ${Store.isDone(ch.id)?'done':''}" data-id="${ch.id}">
+      <div class="num">${ch.emoji}</div>
+      <div class="info">
+        <div class="title">第 ${ch.id} 章 ${ch.title}</div>
+        <div class="desc">${ch.short}</div>
+        <div class="progress-bar"><div style="width:${Store.isDone(ch.id)?'100%':'0%'}"></div></div>
+      </div>
+      <div class="badge">${Store.isDone(ch.id)?'✅ 已学':'📖 去学习'}</div>
+    </div>
+  `).join('');
+  list.querySelectorAll('.chapter-item').forEach(el => el.addEventListener('click', () => {
+    openChapter(parseInt(el.dataset.id));
+  }));
+  // 统计
+  const p = Store.progress;
+  const doneCount = Object.values(p).filter(x => x.done).length;
+  document.getElementById('stat-done').textContent = doneCount;
+  const last = Store.scoreHistory.slice().reverse().find(s => true);
+  document.getElementById('stat-score').textContent = last ? last.score + '分' : '-';
+  document.getElementById('stat-wrong').textContent = Store.wrongs.length;
+  document.getElementById('stat-fav').textContent = Store.favorites.length;
+}
+
+/* ========== 打开章节 ========== */
+function openChapter(id){
+  currentChapter = id;
+  const ch = CHAPTERS.find(c => c.id === id);
+  showPage('course');
+  renderChapterNav();
+  document.getElementById('fav-btn').textContent = Store.isFav(id) ? '★ 已收藏' : '⭐ 收藏';
+  document.getElementById('fav-btn').classList.toggle('faved', Store.isFav(id));
+  document.getElementById('chapter-content').innerHTML = `<div style="font-size:48px;text-align:center;margin:10px 0">${ch.emoji}</div><h2 style="text-align:center;color:var(--pink-deep)">第 ${ch.id} 章 ${ch.title}</h2><p style="text-align:center;color:var(--ink-light);margin-bottom:14px">${ch.short}</p>${ch.content}`;
+  renderQuiz(ch, false);
+  document.getElementById('score-result').innerHTML = '';
+  document.getElementById('quiz-controls').style.display = 'block';
+}
+
+function renderChapterNav(){
+  const nav = document.getElementById('chapter-nav');
+  nav.innerHTML = CHAPTERS.map(c => `<button class="${c.id===currentChapter?'active':''}" data-id="${c.id}">${c.emoji} 第${c.id}章</button>`).join('');
+  nav.querySelectorAll('button').forEach(b => b.addEventListener('click', () => openChapter(parseInt(b.dataset.id))));
+}
+
+/* ========== 测验渲染 ========== */
+let quizState = { submitted:false, answers:{} };
+
+function renderQuiz(ch, showResults){
+  const block = document.getElementById('quiz-block');
+  block.innerHTML = `<h3>✏️ 本章练习 · 共 ${ch.quiz.length} 题</h3>` + ch.quiz.map((q, i) => {
+    const qid = ch.id + '_' + i;
+    const saved = quizState.answers[qid];
+    let body = '';
+    let feedback = '';
+    if(q.type==='single'){
+      body = q.opts.map((opt, oi) => {
+        let cls = '';
+        if(showResults){
+          if(oi===q.ans) cls='correct';
+          else if(saved===oi) cls='wrong';
+        } else if(saved===oi) cls='selected';
+        return `<label class="opt ${cls}" data-qid="${qid}" data-oi="${oi}">
+          <input type="radio" name="${qid}" value="${oi}" ${saved===oi?'checked':''} style="display:none">
+          ${String.fromCharCode(65+oi)}. ${opt}
+        </label>`;
+      }).join('');
+    } else if(q.type==='fill'){
+      let cls = '';
+      const userAns = saved || '';
+      if(showResults){
+        cls = (userAns.trim().toLowerCase() === q.ans.toLowerCase()) ? 'correct' : 'wrong';
+      }
+      body = `<input type="text" class="${cls}" placeholder="输入你的答案..." value="${userAns}" data-qid="${qid}">
+        ${showResults && cls==='wrong' ? `<div class="ans-hint">正确答案：<b>${q.ans}</b></div>` : ''}`;
+    } else if(q.type==='judge'){
+      body = `<label class="opt ${showResults && saved===q.ans ? 'correct' : (showResults && saved!==q.ans && saved!==undefined ? 'wrong' : (saved===true?'selected':''))}" data-qid="${qid}" data-val="true">
+        <input type="radio" name="${qid}" value="true" ${saved===true?'checked':''} style="display:none">
+        ✅ 正确
+      </label>
+      <label class="opt ${showResults && saved===q.ans ? 'correct' : (showResults && saved!==q.ans && saved!==undefined ? 'wrong' : (saved===false?'selected':''))}" data-qid="${qid}" data-val="false">
+        <input type="radio" name="${qid}" value="false" ${saved===false?'checked':''} style="display:none">
+        ❌ 错误
+      </label>`;
+    }
+    if(showResults && q.reason && ((q.type==='single' && saved!==q.ans) || (q.type==='judge' && saved!==q.ans) || (q.type==='fill' && (saved||'').trim().toLowerCase()!==q.ans.toLowerCase()))){
+      feedback = `<div class="q-feedback no">💡 ${q.reason}</div>`;
+    }
+    return `<div class="q-item">
+      <div class="q-text"><span class="q-num">${i+1}</span>${q.text}<span class="q-type">${q.type==='single'?'单选':q.type==='fill'?'填空':'判断'}</span></div>
+      ${body}${feedback}
+      ${q.hint ? `<div class="ans-hint">提示：${q.hint}</div>` : ''}
+    </div>`;
+  }).join('');
+
+  // 绑定交互
+  block.querySelectorAll('.opt').forEach(el => {
+    el.addEventListener('click', e => {
+      if(quizState.submitted) return;
+      const qid = el.dataset.qid;
+      if(q.type==='single'){
+        const oi = parseInt(el.dataset.oi);
+        quizState.answers[qid] = oi;
+        el.parentElement.querySelectorAll('.opt').forEach(o => o.classList.remove('selected'));
+        el.classList.add('selected');
+        el.querySelector('input').checked = true;
+      } else if(q.type==='judge'){
+        const val = el.dataset.val === 'true';
+        quizState.answers[qid] = val;
+        el.parentElement.querySelectorAll('.opt').forEach(o => o.classList.remove('selected'));
+        el.classList.add('selected');
+        el.querySelector('input').checked = true;
+      }
+    });
+  });
+  block.querySelectorAll('input[type=text]').forEach(inp => {
+    inp.addEventListener('input', e => {
+      if(quizState.submitted) return;
+      quizState.answers[inp.dataset.qid] = inp.value;
+    });
+  });
+}
+
+/* ========== 提交判分 ========== */
+function submitQuiz(){
+  const ch = CHAPTERS.find(c => c.id === currentChapter);
+  if(!ch) return;
+  let correct = 0;
+  const wrongList = [];
+  ch.quiz.forEach((q, i) => {
+    const qid = ch.id + '_' + i;
+    const user = quizState.answers[qid];
+    let ok = false;
+    if(q.type==='single') ok = (user === q.ans);
+    else if(q.type==='judge') ok = (user === q.ans);
+    else if(q.type==='fill') ok = ((user||'').trim().toLowerCase() === q.ans.toLowerCase());
+    if(ok) correct++;
+    else {
+      wrongList.push({ qid, text:q.text, type:q.type, myAns: user==null?'（未答）':user, rightAns:q.ans });
+      Store.addWrong(qid, { chapterId: ch.id, chapterTitle: ch.title, text:q.text, myAns: user==null?'（未答）':String(user), rightAns:String(q.ans), type:q.type });
+    }
+  });
+  quizState.submitted = true;
+  renderQuiz(ch, true);
+
+  const total = ch.quiz.length;
+  const score = Math.round(correct/total * 100);
+  Store.markDone(ch.id, score);
+  spawnHearts();
+
+  const r = document.getElementById('score-result');
+  let msg = score>=90 ? '哇！太厉害啦 🌟' : score>=70 ? '不错哦，继续加油！💪' : score>=60 ? '及格啦！再复习一下会更好～ 📚' : '别灰心，再看一遍知识点！🌸';
+  r.innerHTML = `<div class="score-box">
+    <div class="big">${score}</div>
+    <div class="label">本次得分（${correct}/${total}）</div>
+    <div class="msg">${msg}</div>
+  </div>`;
+  document.getElementById('quiz-controls').style.display = 'none';
+  document.getElementById('quiz-block').scrollIntoView({behavior:'smooth'});
+}
+
+function resetQuiz(){
+  const ch = CHAPTERS.find(c => c.id === currentChapter);
+  quizState = { submitted:false, answers:{} };
+  renderQuiz(ch, false);
+  document.getElementById('score-result').innerHTML = '';
+  document.getElementById('quiz-controls').style.display = 'block';
+}
+
+document.addEventListener('click', e => {
+  if(e.target.id === 'submit-quiz') submitQuiz();
+  if(e.target.id === 'reset-quiz') resetQuiz();
+  if(e.target.id === 'fav-btn'){
+    const ok = Store.toggleFav(currentChapter);
+    e.target.textContent = ok ? '★ 已收藏' : '⭐ 收藏';
+    e.target.classList.toggle('faved', ok);
+  }
+});
+
+function spawnHearts(){
+  const hearts = ['💕','✨','⭐','🎉','🌸'];
+  for(let i=0;i<6;i++){
+    setTimeout(() => {
+      const h = document.createElement('div');
+      h.className = 'heart';
+      h.textContent = hearts[Math.floor(Math.random()*hearts.length)];
+      h.style.left = (40 + Math.random()*20) + '%';
+      h.style.top = '40%';
+      document.body.appendChild(h);
+      setTimeout(()=>h.remove(),1500);
+    }, i*150);
+  }
+}
+
+/* ========== 练习页面 ========== */
+function renderQuizPage(){
+  const nav = document.getElementById('quiz-nav');
+  nav.innerHTML = CHAPTERS.map(c => `<button data-id="${c.id}" class="${c.id===currentChapter?'active':''}">${c.emoji} 第${c.id}章</button>`).join('');
+  nav.querySelectorAll('button').forEach(b => b.addEventListener('click', () => {
+    currentChapter = parseInt(b.dataset.id);
+    quizState = { submitted:false, answers:{} };
+    renderQuizPage();
+    const area = document.getElementById('quiz-page-area');
+    const ch = CHAPTERS.find(c => c.id===currentChapter);
+    area.innerHTML = `<div class="card pink"><div id="qp-quiz-block"></div><div class="quiz-controls">
+      <button class="btn-primary" id="qp-submit">提交答案</button>
+      <button class="btn-secondary" id="qp-reset">重做</button>
+    </div><div id="qp-result"></div></div>`;
+    renderQuizArea(ch);
+  }));
+  const area = document.getElementById('quiz-page-area');
+  const ch = CHAPTERS.find(c => c.id===currentChapter);
+  if(!ch) return;
+  area.innerHTML = `<div class="card pink"><div id="qp-quiz-block"></div><div class="quiz-controls">
+    <button class="btn-primary" id="qp-submit">提交答案</button>
+    <button class="btn-secondary" id="qp-reset">重做</button>
+  </div><div id="qp-result"></div></div>`;
+  renderQuizArea(ch);
+}
+
+function renderQuizArea(ch){
+  const block = document.getElementById('qp-quiz-block');
+  block.innerHTML = `<h3 style="text-align:center;color:var(--pink-deep);font-size:19px;margin-bottom:14px">📝 ${ch.emoji} 第${ch.id}章：${ch.title}（共 ${ch.quiz.length} 题）</h3>` + ch.quiz.map((q, i) => {
+    const qid = ch.id + '_' + i;
+    const saved = quizState.answers[qid];
+    let body = '';
+    let feedback = '';
+    if(q.type==='single'){
+      body = q.opts.map((opt, oi) => {
+        let cls = '';
+        if(quizState.submitted){
+          if(oi===q.ans) cls='correct';
+          else if(saved===oi) cls='wrong';
+        } else if(saved===oi) cls='selected';
+        return `<label class="opt ${cls}" data-qid="${qid}" data-oi="${oi}">
+          <input type="radio" name="${qid}" value="${oi}" ${saved===oi?'checked':''} style="display:none">
+          ${String.fromCharCode(65+oi)}. ${opt}
+        </label>`;
+      }).join('');
+    } else if(q.type==='fill'){
+      let cls = '';
+      const userAns = saved || '';
+      if(quizState.submitted){
+        cls = (userAns.trim().toLowerCase() === q.ans.toLowerCase()) ? 'correct' : 'wrong';
+      }
+      body = `<input type="text" class="${cls}" placeholder="输入你的答案..." value="${userAns}" data-qid="${qid}">
+        ${quizState.submitted && cls==='wrong' ? `<div class="ans-hint">正确答案：<b>${q.ans}</b></div>` : ''}`;
+    } else if(q.type==='judge'){
+      body = `<label class="opt ${quizState.submitted && saved===q.ans ? 'correct' : (quizState.submitted && saved!==q.ans && saved!==undefined ? 'wrong' : (saved===true?'selected':''))}" data-qid="${qid}" data-val="true">
+        <input type="radio" name="${qid}" value="true" ${saved===true?'checked':''} style="display:none">✅ 正确</label>
+      <label class="opt ${quizState.submitted && saved===q.ans ? 'correct' : (quizState.submitted && saved!==q.ans && saved!==undefined ? 'wrong' : (saved===false?'selected':''))}" data-qid="${qid}" data-val="false">
+        <input type="radio" name="${qid}" value="false" ${saved===false?'checked':''} style="display:none">❌ 错误</label>`;
+    }
+    if(quizState.submitted && q.reason){
+      const wrong = (q.type==='single' && saved!==q.ans) || (q.type==='judge' && saved!==q.ans) || (q.type==='fill' && (saved||'').trim().toLowerCase()!==q.ans.toLowerCase());
+      if(wrong) feedback = `<div class="q-feedback no">💡 ${q.reason}</div>`;
+    }
+    return `<div class="q-item">
+      <div class="q-text"><span class="q-num">${i+1}</span>${q.text}<span class="q-type">${q.type==='single'?'单选':q.type==='fill'?'填空':'判断'}</span></div>
+      ${body}${feedback}${q.hint ? `<div class="ans-hint">提示：${q.hint}</div>` : ''}
+    </div>`;
+  }).join('');
+
+  block.querySelectorAll('.opt').forEach(el => el.addEventListener('click', e => {
+    if(quizState.submitted) return;
+    const qid = el.dataset.qid;
+    if(q.type==='single'){
+      const oi = parseInt(el.dataset.oi);
+      quizState.answers[qid] = oi;
+      el.parentElement.querySelectorAll('.opt').forEach(o => o.classList.remove('selected'));
+      el.classList.add('selected');
+      el.querySelector('input').checked = true;
+    } else if(q.type==='judge'){
+      quizState.answers[qid] = (el.dataset.val==='true');
+      el.parentElement.querySelectorAll('.opt').forEach(o => o.classList.remove('selected'));
+      el.classList.add('selected');
+      el.querySelector('input').checked = true;
+    }
+  }));
+  block.querySelectorAll('input[type=text]').forEach(inp => inp.addEventListener('input', e => {
+    if(quizState.submitted) return;
+    quizState.answers[inp.dataset.qid] = inp.value;
+  }));
+}
+
+document.addEventListener('click', e => {
+  if(e.target.id === 'qp-submit'){
+    const ch = CHAPTERS.find(c => c.id===currentChapter);
+    let correct = 0;
+    ch.quiz.forEach((q,i) => {
+      const qid = ch.id+'_'+i;
+      const u = quizState.answers[qid];
+      let ok=false;
+      if(q.type==='single') ok=(u===q.ans);
+      else if(q.type==='judge') ok=(u===q.ans);
+      else if(q.type==='fill') ok=((u||'').trim().toLowerCase()===q.ans.toLowerCase());
+      if(ok) correct++;
+      else {
+        Store.addWrong(qid, { chapterId:ch.id, chapterTitle:ch.title, text:q.text, myAns:u==null?'（未答）':String(u), rightAns:String(q.ans), type:q.type });
+      }
+    });
+    quizState.submitted = true;
+    renderQuizArea(ch);
+    const total = ch.quiz.length;
+    const score = Math.round(correct/total*100);
+    Store.markDone(ch.id, score);
+    spawnHearts();
+    document.getElementById('qp-result').innerHTML = `<div class="score-box"><div class="big">${score}</div><div class="label">本次得分（${correct}/${total}）</div></div>`;
+    document.getElementById('qp-submit').style.display='none';
+  }
+  if(e.target.id === 'qp-reset'){
+    quizState = { submitted:false, answers:{} };
+    const ch = CHAPTERS.find(c => c.id===currentChapter);
+    renderQuizArea(ch);
+    document.getElementById('qp-result').innerHTML = '';
+    document.getElementById('qp-submit').style.display='inline-block';
+  }
+});
+
+/* ========== 个人中心 ========== */
+function renderCenter(tab){
+  document.querySelectorAll('.center-tabs button').forEach(b => b.classList.toggle('active', b.dataset.tab===tab));
+  ['progress','wrong','fav'].forEach(t => document.getElementById('tab-'+t).style.display = (t===tab?'block':'none'));
+  if(tab==='progress'){
+    const doneList = CHAPTERS.map(c => ({...c, done: Store.isDone(c.id), score: Store.progress[c.id]?.score || 0})).reverse();
+    const doneCount = doneList.filter(c => c.done).length;
+    document.getElementById('tab-progress').innerHTML = `
+      <h3>📈 学习进度</h3>
+      <p style="margin:8px 0">共 ${CHAPTERS.length} 章，已学 <b style="color:var(--pink-deep)">${doneCount}</b> 章</p>
+      ${doneList.map(c => `<div class="chapter-item ${c.done?'done':''}" data-id="${c.id}" style="cursor:pointer;margin:8px 0">
+        <div class="num">${c.emoji}</div>
+        <div class="info">
+          <div class="title">第 ${c.id} 章 ${c.title}</div>
+          <div class="desc">${c.done?`最近得分：${c.score} 分`:'未学习'}</div>
+          <div class="progress-bar"><div style="width:${c.done?'100%':'0%'}"></div></div>
+        </div>
+        <div class="badge">${c.done?'✅ 已学':'📖 去学'}</div>
+      </div>`).join('')}
+    `;
+    document.querySelectorAll('#tab-progress .chapter-item').forEach(el => el.addEventListener('click', () => openChapter(parseInt(el.dataset.id))));
+  } else if(tab==='wrong'){
+    const w = Store.wrongs;
+    const byChapter = {};
+    w.forEach(x => { byChapter[x.chapterId] = byChapter[x.chapterId] || []; byChapter[x.chapterId].push(x); });
+    let html = '<h3>❌ 错题本</h3>';
+    if(w.length === 0) html += '<div class="empty"><span class="emoji">🎉</span>太棒了，还没有错题！</div>';
+    else {
+      Object.entries(byChapter).forEach(([cid, items]) => {
+        const ch = CHAPTERS.find(c => c.id===parseInt(cid));
+        html += `<h4 style="margin-top:16px">${ch?.emoji} 第${cid}章 · ${ch?.title}（${items.length}题）</h4>`;
+        html += items.map(it => `
+          <div class="wrong-item">
+            <button class="del" data-qid="${it.qid}">删除</button>
+            <div class="q">${it.text}</div>
+            <div class="meta">题型：${it.type==='single'?'单选':it.type==='fill'?'填空':'判断'} · 你的答案：<span style="color:#d45a5a">${it.myAns}</span></div>
+            <div class="ans">✅ 正确答案：<b>${it.rightAns}</b></div>
+          </div>
+        `).join('');
+      });
+    }
+    document.getElementById('tab-wrong').innerHTML = html;
+    document.querySelectorAll('#tab-wrong .del').forEach(b => b.addEventListener('click', () => {
+      Store.removeWrong(b.dataset.qid);
+      renderCenter('wrong');
+    }));
+  } else if(tab==='fav'){
+    const favs = Store.favorites;
+    let html = '<h3>⭐ 收藏夹</h3>';
+    if(favs.length === 0) html += '<div class="empty"><span class="emoji">💭</span>还没有收藏内容哦～</div>';
+    else {
+      html += favs.map(id => {
+        const ch = CHAPTERS.find(c => c.id===id);
+        return `<div class="fav-item" data-id="${id}" style="cursor:pointer">
+          <button class="del" data-id="${id}">取消</button>
+          <div class="title">${ch?.emoji} 第${id}章 · ${ch?.title}</div>
+          <div class="meta">${ch?.short}</div>
+        </div>`;
+      }).join('');
+    }
+    document.getElementById('tab-fav').innerHTML = html;
+    document.querySelectorAll('#tab-fav .fav-item').forEach(el => el.addEventListener('click', e => {
+      if(e.target.classList.contains('del')){
+        Store.toggleFav(parseInt(e.target.dataset.id));
+        renderCenter('fav');
+      } else openChapter(parseInt(el.dataset.id));
+    }));
+  }
+}
+
+document.querySelectorAll('.center-tabs button').forEach(b => b.addEventListener('click', () => renderCenter(b.dataset.tab)));
+
+/* ========== 重置 ========== */
+document.addEventListener('click', e => {
+  if(e.target.id === 'reset-all'){
+    if(confirm('确定重置所有学习记录吗？此操作不可撤销哦～')){
+      localStorage.clear();
+      renderHome();
+      renderCenter('progress');
+      alert('已重置，祝你重新出发！🌈');
+    }
+  }
+});
+
+/* ========== 练习页面 tab 切换 ========== */
+document.querySelector('[data-nav="quiz"]').addEventListener('click', () => {
+  currentChapter = currentChapter || 1;
+  quizState = { submitted:false, answers:{} };
+  renderQuizPage();
+});
+
+/* ========== 初始化 ========== */
+renderHome();
+</script>
+</body>
+</html>
