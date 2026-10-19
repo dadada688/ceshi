@@ -1568,6 +1568,7 @@ const COURSES = {
 let currentCourse = '51';
 try{ currentCourse = JSON.parse(localStorage.getItem('currentCourse')) || '51'; }catch(e){}
 function curChapters(){ return COURSES[currentCourse].chapters; }
+const esc = s => String(s==null?'':s).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;');
 
 const Store = {
   get(key, def){ try{ const v = localStorage.getItem(key); return v===null?def:JSON.parse(v); }catch(e){ return def; } },
@@ -1668,6 +1669,7 @@ function renderHome(){
 /* ========== 打开章节 ========== */
 function openChapter(id){
   currentChapter = id;
+  quizState = { submitted:false, answers:{} };
   const ch = curChapters().find(c => c.id === id);
   showPage('course');
   renderChapterNav();
@@ -1713,17 +1715,18 @@ function renderQuiz(ch, showResults){
       if(showResults){
         cls = (userAns.trim().toLowerCase() === q.ans.toLowerCase()) ? 'correct' : 'wrong';
       }
-      body = `<input type="text" class="${cls}" placeholder="输入你的答案..." value="${userAns}" data-qid="${qid}">
+      body = `<input type="text" class="${cls}" placeholder="输入你的答案..." value="${esc(userAns)}" data-qid="${qid}">
         ${showResults && cls==='wrong' ? `<div class="ans-hint">正确答案：<b>${q.ans}</b></div>` : ''}`;
     } else if(q.type==='judge'){
-      body = `<label class="opt ${showResults && saved===q.ans ? 'correct' : (showResults && saved!==q.ans && saved!==undefined ? 'wrong' : (saved===true?'selected':''))}" data-qid="${qid}" data-val="true">
-        <input type="radio" name="${qid}" value="true" ${saved===true?'checked':''} style="display:none">
-        ✅ 正确
-      </label>
-      <label class="opt ${showResults && saved===q.ans ? 'correct' : (showResults && saved!==q.ans && saved!==undefined ? 'wrong' : (saved===false?'selected':''))}" data-qid="${qid}" data-val="false">
-        <input type="radio" name="${qid}" value="false" ${saved===false?'checked':''} style="display:none">
-        ❌ 错误
-      </label>`;
+      body = [true,false].map(val => {
+        let cls = '';
+        if(showResults){ if(val===q.ans) cls='correct'; else if(saved===val) cls='wrong'; }
+        else if(saved===val) cls='selected';
+        return `<label class="opt ${cls}" data-qid="${qid}" data-val="${val}">
+          <input type="radio" name="${qid}" value="${val}" ${saved===val?'checked':''} style="display:none">
+          ${val?'✅ 正确':'❌ 错误'}
+        </label>`;
+      }).join('');
     }
     if(showResults && q.reason && ((q.type==='single' && saved!==q.ans) || (q.type==='judge' && saved!==q.ans) || (q.type==='fill' && (saved||'').trim().toLowerCase()!==q.ans.toLowerCase()))){
       feedback = `<div class="q-feedback no">💡 ${q.reason}</div>`;
@@ -1886,13 +1889,16 @@ function renderQuizArea(ch){
       if(quizState.submitted){
         cls = (userAns.trim().toLowerCase() === q.ans.toLowerCase()) ? 'correct' : 'wrong';
       }
-      body = `<input type="text" class="${cls}" placeholder="输入你的答案..." value="${userAns}" data-qid="${qid}">
+      body = `<input type="text" class="${cls}" placeholder="输入你的答案..." value="${esc(userAns)}" data-qid="${qid}">
         ${quizState.submitted && cls==='wrong' ? `<div class="ans-hint">正确答案：<b>${q.ans}</b></div>` : ''}`;
     } else if(q.type==='judge'){
-      body = `<label class="opt ${quizState.submitted && saved===q.ans ? 'correct' : (quizState.submitted && saved!==q.ans && saved!==undefined ? 'wrong' : (saved===true?'selected':''))}" data-qid="${qid}" data-val="true">
-        <input type="radio" name="${qid}" value="true" ${saved===true?'checked':''} style="display:none">✅ 正确</label>
-      <label class="opt ${quizState.submitted && saved===q.ans ? 'correct' : (quizState.submitted && saved!==q.ans && saved!==undefined ? 'wrong' : (saved===false?'selected':''))}" data-qid="${qid}" data-val="false">
-        <input type="radio" name="${qid}" value="false" ${saved===false?'checked':''} style="display:none">❌ 错误</label>`;
+      body = [true,false].map(val => {
+        let cls = '';
+        if(quizState.submitted){ if(val===q.ans) cls='correct'; else if(saved===val) cls='wrong'; }
+        else if(saved===val) cls='selected';
+        return `<label class="opt ${cls}" data-qid="${qid}" data-val="${val}">
+          <input type="radio" name="${qid}" value="${val}" ${saved===val?'checked':''} style="display:none">${val?'✅ 正确':'❌ 错误'}</label>`;
+      }).join('');
     }
     if(quizState.submitted && q.reason){
       const wrong = (q.type==='single' && saved!==q.ans) || (q.type==='judge' && saved!==q.ans) || (q.type==='fill' && (saved||'').trim().toLowerCase()!==q.ans.toLowerCase());
@@ -1997,7 +2003,7 @@ function renderCenter(tab){
           <div class="wrong-item">
             <button class="del" data-qid="${it.qid}">删除</button>
             <div class="q">${it.text}</div>
-            <div class="meta">题型：${it.type==='single'?'单选':it.type==='fill'?'填空':'判断'} · 你的答案：<span style="color:#d45a5a">${it.myAns}</span></div>
+            <div class="meta">题型：${it.type==='single'?'单选':it.type==='fill'?'填空':'判断'} · 你的答案：<span style="color:#d45a5a">${esc(it.myAns)}</span></div>
             <div class="ans">✅ 正确答案：<b>${it.rightAns}</b></div>
           </div>
         `).join('');
@@ -2038,7 +2044,12 @@ document.querySelectorAll('.center-tabs button').forEach(b => b.addEventListener
 document.addEventListener('click', e => {
   if(e.target.id === 'reset-all'){
     if(confirm('确定重置所有学习记录吗？此操作不可撤销哦～')){
-      localStorage.clear();
+      Object.keys(localStorage)
+        .filter(k => k==='currentCourse' || k==='scoreHistory' || /^(progress_|favorites_|wrongs_)/.test(k))
+        .forEach(k => localStorage.removeItem(k));
+      currentCourse = '51';
+      currentChapter = null;
+      quizState = { submitted:false, answers:{} };
       renderHome();
       renderCenter('progress');
       alert('已重置，祝你重新出发！🌈');
