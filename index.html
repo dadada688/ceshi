@@ -725,7 +725,7 @@ sbit LED = P1^<span class="str">1</span>;
 <h3>🧠 定时器是什么？</h3>
 <p>单片机内部有"计数器"硬件，每来一个脉冲就 +1，加到溢出时触发中断。51 通常有两个定时器：<b>T0</b> 和 <b>T1</b>（52 还有 T2）。</p>
 <ul>
-  <li><b>定时模式</b>：内部时钟脉冲计数（机器周期的 1/12，12MHz 晶振时是 1μs 一次）</li>
+  <li><b>定时模式</b>：对内部机器周期计数，每来一个机器周期加 1（计数脉冲 = 晶振频率的 1/12；12MHz 晶振时是 1μs 加一次）</li>
   <li><b>计数模式</b>：从 T0/T1 引脚输入外部脉冲计数</li>
 </ul>
 
@@ -877,9 +877,10 @@ sbit LED = P1^<span class="str">1</span>;
 
 <span class="cm">// 串口接收中断服务函数（中断号 4）</span>
 <span class="kw">void</span> <span class="fn">UART_ISR</span>(<span class="kw">void</span>) <span class="kw">interrupt</span> <span class="str">4</span> {
+    <span class="kw">unsigned char</span> recv;  <span class="cm">// C89 要求：变量声明必须放在块的开头</span>
     <span class="kw">if</span>(RI){           <span class="cm">// 接收中断</span>
         RI = <span class="str">0</span>;       <span class="cm">// 先清标志！</span>
-        <span class="kw">unsigned char</span> recv = SBUF;  <span class="cm">// 读走数据</span>
+        recv = SBUF;  <span class="cm">// 读走数据</span>
         UART_SendByte(recv);  <span class="cm">// 原样回显</span>
     }
 }</pre>
@@ -1755,6 +1756,7 @@ document.querySelectorAll('nav button').forEach(b => b.addEventListener('click',
   showPage(name);
   if(name==='home') renderHome();
   if(name==='center') renderCenter('progress');
+  if(name==='course' && currentChapter===null) openChapter(curChapters()[0].id);
 }));
 
 /* ========== 首页渲染 ========== */
