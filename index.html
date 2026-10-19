@@ -320,12 +320,22 @@ const CHAPTERS = [
   <li><b>PDIP</b> — 双列直插式封装（DIP）</li>
 </ul>
 
-<h3>📦 常见封装类型</h3>
+<h3>📦 常见封装类型（实物图解）</h3>
+
+<p>三种常见封装对比（左：DIP 双列直插；中：QFP 四边扁平；右：PLCC 方形）：</p>
+<img src="https://k1.spdns.de/Develop/Hardware/Infomix/IC%20Geh%C3%A4useformen/DIP%2CPQFP%2CPLCC.png" alt="DIP QFP PLCC 封装对比" referrerpolicy="no-referrer" onerror="this.style.display='none';this.insertAdjacentHTML('afterend','<div style=&quot;background:#f3f4f6;padding:10px;border-radius:6px;font-size:13px;color:#6b7280;text-align:center&quot;>📷（封装对比图加载中）</div>')">
+
+<p>PLCC 封装实物（方形，J 形内弯引脚，适合 SMT 贴装）：</p>
+<img src="https://k1.spdns.de/Develop/Hardware/Infomix/IC%20Geh%C3%A4useformen/PLCC.jpg" alt="PLCC 封装实物" referrerpolicy="no-referrer" onerror="this.style.display='none'">
+
+<p>QFP 封装实物（四边鸥翼式外弯引脚）：</p>
+<img src="https://k1.spdns.de/Develop/Hardware/Infomix/IC%20Geh%C3%A4useformen/PQFP-44.jpg" alt="PQFP-44 封装实物" referrerpolicy="no-referrer" onerror="this.style.display='none'">
+
 <ol>
-  <li><b>DIP</b>（双列直插式）：引脚从芯片两侧引出，适合手工焊接</li>
-  <li><b>PLCC</b>（带引线塑料封装）：J 形引脚，正方形</li>
-  <li><b>QFP</b>（四边引脚扁平式）：表面贴装（SMT），引脚四周引出</li>
-  <li><b>BGA</b>（球栅阵列）：高密度多引脚，球在底部</li>
+  <li><b>DIP</b>（双列直插式）：引脚从芯片两侧引出，适合手工焊接，能看到引脚是"直着"伸出来的</li>
+  <li><b>PLCC</b>（带引线塑料封装）：方形，J 形内弯引脚勾住 PCB 焊盘</li>
+  <li><b>QFP</b>（四边引脚扁平式）：表面贴装（SMT），引脚向外弯成"鸥翼"状</li>
+  <li><b>BGA</b>（球栅阵列）：高密度多引脚，引脚变成锡球在芯片底部</li>
 </ol>
 
 <h3>🌍 单片机能做什么？</h3>
@@ -348,7 +358,10 @@ const CHAPTERS = [
   id:2, title:"51 单片机外部引脚介绍", short:"40 个脚各有什么用？电源、时钟、复位、IO",
   emoji:"🔌", color:"sky",
   content:`
-<h3>🧷 引脚怎么数？</h3>
+<h3>🧷 40 脚 DIP 封装引脚图</h3>
+<p>下图清晰标注了 40 引脚 DIP 封装的 8051 每一脚的功能：</p>
+<img src="http://www.sc.ehu.es/sbweb/webcentro/automatica/web_8051/Contenido/tutor8051_52/Capitulo%208/patillas_8051.GIF" alt="8051 40 脚引脚图" referrerpolicy="no-referrer" onerror="this.style.display='none'">
+
 <p>芯片上有一个<b>小圆点或凹口</b>，正对着左上角时，<b>从左上角那个脚开始，逆时针数</b>就是 1、2、3…… 脚。最后一个（40脚）在 1 脚的正对面。</p>
 
 <h3>⚡ 电源和时钟引脚（必掌握）</h3>
@@ -567,6 +580,14 @@ const CHAPTERS = [
   <li>🕐 <b>时钟</b> — 晶振 + 负载电容，或外部有源时钟</li>
   <li>🔄 <b>复位电路</b> — 上电复位 + 手动复位</li>
 </ul>
+
+<h3>🔧 完整最小系统原理图</h3>
+<p>下图是一块 51 单片机开发板的完整原理图，能看到晶振、电容、复位、地址锁存器、SRAM、串口 MAX232 等元件：</p>
+<img src="https://www.pjrc.com/tech/8051/board2/dev2_sch.gif" alt="8051 最小系统原理图" referrerpolicy="no-referrer" onerror="this.style.display='none'">
+
+<h3>🧩 开发板实物照片</h3>
+<p>一块实际的 51 开发板，板上的黑色大芯片就是 87C51，旁边蓝色方块是 SRAM，蓝色 D 形接头是串口（DB-9），黄色电解电容是复位用的：</p>
+<img src="https://www.pjrc.com/tech/8051/board2/board-big.jpg" alt="51 单片机开发板实物" referrerpolicy="no-referrer" onerror="this.style.display='none'">
 
 <h3>⚡ 电源电路</h3>
 <p>Vcc 接 +5V，GND 接地。通常在 Vcc 和 GND 之间就近接一个 <b>0.1μF 电容</b>去耦，滤除高频噪声。</p>
@@ -840,6 +861,102 @@ sbit LED = P1^<span class="str">1</span>;
     {type:"single", text:"串口接收使用哪个引脚？", opts:["P3.1 (TXD)","P3.0 (RXD)","P1.0","P3.2"], ans:1},
     {type:"fill", text:"串口中断服务函数要先判断是 TI 还是 ______ 触发的。", ans:"RI", hint:"接收中断标志"},
     {type:"judge", text:"T1 做波特率发生器时通常配置为方式 1（16位）。", ans:false, reason:"T1 做波特率发生器通常用方式 2（8位自动重装），不用软件重装初值。"},
+  ]
+},
+{
+  id:12, title:"最终复习 · 速记清单", short:"考前过一遍，这些必背！",
+  emoji:"📝", color:"pink",
+  content:`
+<h2>🎯 考前速记清单</h2>
+<p>下面 10 条是历年 51 单片机考试的高频考点，背下来就能过！</p>
+
+<h3>1️⃣ 最小系统四要素</h3>
+<div class="tip"><b>电源（+5V）+ 时钟（晶振 11.0592/12MHz + 2 个 10~30pF 电容）+ 复位（10μF 电解电容 + 10kΩ 电阻）+ EA 接高电平（VCC）</b></div>
+
+<h3>2️⃣ EA 引脚接法</h3>
+<div class="warn">使用片内程序存储器时 <b>EA 必须接 VCC（高电平）</b>。这是初学者最常忘的接线！</div>
+
+<h3>3️⃣ 复位后 PC = ？</h3>
+<p>复位后 <b>PC = 0000H</b>，单片机从 0000H 单元开始执行。复位条件：RST 脚输入连续 <b>两个机器周期以上</b> 高电平。</p>
+
+<h3>4️⃣ P0 口需要什么？</h3>
+<p>P0 是<b>开漏结构</b>，输出高电平时需 <b>外接上拉电阻（通常 10kΩ）</b>。P1/P2/P3 内带上拉，不用外接。</p>
+
+<h3>5️⃣ "准双向口"是什么意思？</h3>
+<p>P1/P2/P3 作为输入前要先 <b>写 1</b>，让内部管子截止才能正确读出外部信号。</p>
+
+<h3>6️⃣ 机器周期怎么算？</h3>
+<p>机器周期 = <b>12 ÷ 晶振频率</b>。12MHz 晶振时机器周期 = 1μs；11.0592MHz 时 ≈ 1.085μs。</p>
+
+<h3>7️⃣ 定时器初值计算（方式 1）</h3>
+<p>定时时间 t = (65536 − 初值 X) × 机器周期</p>
+<p>12MHz 晶振定时 10ms：X = 65536 − 10000 = 55536 = <code>0xD8F0</code> → TH0=0xD8, TL0=0xF0</p>
+
+<h3>8️⃣ 5 个中断源 & 中断号</h3>
+<table style="border-collapse:collapse;width:100%;margin:8px 0;font-size:14px">
+<tr style="background:#2563eb;color:#fff"><th style="padding:6px;border:1px solid #2563eb">中断源</th><th style="padding:6px;border:1px solid #2563eb">中断号</th><th style="padding:6px;border:1px solid #2563eb">引脚</th></tr>
+<tr><td style="padding:6px;border:1px solid #e5e7eb">外部中断 0 (INT0)</td><td style="text-align:center;border:1px solid #e5e7eb">0</td><td style="text-align:center;border:1px solid #e5e7eb">P3.2</td></tr>
+<tr><td style="padding:6px;border:1px solid #e5e7eb">定时器 T0</td><td style="text-align:center;border:1px solid #e5e7eb">1</td><td style="text-align:center;border:1px solid #e5e7eb">内部</td></tr>
+<tr><td style="padding:6px;border:1px solid #e5e7eb">外部中断 1 (INT1)</td><td style="text-align:center;border:1px solid #e5e7eb">2</td><td style="text-align:center;border:1px solid #e5e7eb">P3.3</td></tr>
+<tr><td style="padding:6px;border:1px solid #e5e7eb">定时器 T1</td><td style="text-align:center;border:1px solid #e5e7eb">3</td><td style="text-align:center;border:1px solid #e5e7eb">内部</td></tr>
+<tr><td style="padding:6px;border:1px solid #e5e7eb">串口</td><td style="text-align:center;border:1px solid #e5e7eb">4</td><td style="text-align:center;border:1px solid #e5e7eb">内部</td></tr>
+</table>
+
+<h3>9️⃣ 开中断的顺序</h3>
+<p><b>EA = 1</b>（开总中断）→ 再开 <b>ET0/ET1/EX0/ES</b>（开具体中断）。中断函数声明：<code>void 函数名(void) interrupt 中断号</code>，<b>没有返回值、不能带参数</b>。</p>
+
+<h3>🔟 串口 9600 波特率</h3>
+<p>11.0592MHz 晶振，T1 方式 2 自动重装，<b>TH1 = TL1 = 0xFD</b>。SCON 设置为 <code>0x50</code>（方式 1，REN=1 允许接收）。</p>
+
+<h3>🧮 进制转换别搞错</h3>
+<ul>
+  <li>二进制转十六进制：从右往左每 4 位一组</li>
+  <li>十六进制转二进制：每 1 位展开成 4 位</li>
+  <li><code>0x3C</code>（十六进制）= 60（十进制）= <code>00111100</code>（二进制）</li>
+</ul>
+
+<h3>🎁 C 语言容易写错的</h3>
+<ul>
+  <li><b>= 是赋值，== 是比较</b>（if(x=3) 能编译但错）</li>
+  <li><b>&amp; 按位与，&amp;&amp; 逻辑与</b>；<b>| 按位或，|| 逻辑或</b></li>
+  <li><code>10/3 = 3</code>（整数除法），<code>10/3.0 ≈ 3.333</code>（浮点除法）</li>
+  <li>单注释 <code>//</code>，多注释 <code>/* */</code>（不能嵌套）</li>
+  <li>初学时必引 <code>#include &lt;reg52.h&gt;</code></li>
+</ul>
+
+<div class="tip">💪 把这些再过一遍，考试肯定稳！然后去下一章做最终测试吧～</div>
+  `,
+  quiz:[]
+},
+{
+  id:13, title:"🏆 最终测试（20 题）", short:"学完所有章节后挑战一下！",
+  emoji:"🏆", color:"pink",
+  content:`
+<h2>🎓 综合考试 · 20 题</h2>
+<p>这里是覆盖全部 11 个章节的综合测试。建议学完每章后再来挑战！80 分以上可以放心进考场啦～</p>
+<div class="warn">⚠️ 这是最终综合测试，包含选择题、填空题、判断题，限时不限次，做完可查看错题解析。</div>
+  `,
+  quiz:[
+    {type:"single", text:"单片机最小系统不包括哪一项？", opts:["电源 +5V","晶振与负载电容","复位电路","液晶屏显示"], ans:3, reason:"最小系统只需电源、时钟、复位、EA 接高电平四样。"},
+    {type:"single", text:"使用片内程序存储器时，EA 引脚应该接？", opts:["GND","VCC（高电平）","悬空","晶振"], ans:1, reason:"EA 接高电平时从片内读程序，接低时从外部读。"},
+    {type:"fill", text:"复位后程序计数器 PC = ______ H。", ans:"0000", hint:"四位十六进制"},
+    {type:"single", text:"复位触发的条件是 RST 脚持续高电平至少？", opts:["1 个机器周期","2 个机器周期","4 个机器周期","1 个时钟周期"], ans:1, reason:"RST 需连续两个机器周期以上高电平才有效。"},
+    {type:"single", text:"传统 51 的 P0 口作为普通 IO 输出时需要？", opts:["外接下拉电阻","外接上拉电阻（通常 10kΩ）","不需要任何电阻","串接一个二极管"], ans:1, reason:"P0 是开漏结构，输出高电平需要上拉。"},
+    {type:"single", text:"准双向口里「准」字体现在？", opts:["速度快","作为输入前要先写 1","可以双向同时传输","需要外接上拉"], ans:1, reason:"P1-P3 是准双向口，作为输入前先写 1。"},
+    {type:"fill", text:"12MHz 晶振下，51 单片机的机器周期是 ______ μs。", ans:"1", hint:"整数"},
+    {type:"single", text:"定时器 T0 工作在方式 1 时是多少位？", opts:["8 位","13 位","16 位","8 位自动重装"], ans:2, reason:"方式 1 是 16 位计数，方式 2 是 8 位自动重装。"},
+    {type:"fill", text:"12MHz 晶振下，定时器 0 方式 1 定时 10ms，初值 TH0=______。（提示：定时 10000 个机器周期）", ans:"0xD8", hint:"十六进制，大写，加 0x"},
+    {type:"fill", text:"定时器 0 方式 1 定时 10ms，初值 TL0=______。", ans:"0xF0", hint:"十六进制，大写，加 0x"},
+    {type:"single", text:"51 单片机外部中断 0 的中断号是？", opts:["0","1","2","3"], ans:0},
+    {type:"single", text:"定时器 T0 的中断号是？", opts:["0","1","2","3"], ans:1},
+    {type:"fill", text:"串口接收中断的中断号是 ______。", ans:"4"},
+    {type:"single", text:"开中断的正确顺序是？", opts:["直接开 ET0","先开 EA，再开 ET0","先开 ES，再开 EA","开 EA 就够了"], ans:1, reason:"EA 是总中断开关，必须先开 EA=1 才能开具体中断。"},
+    {type:"single", text:"串口 9600 波特率，T1 方式 2，重装值是？", opts:["0xFA","0xFD","0xE8","0x50"], ans:1, reason:"11.0592MHz 晶振 + T1 方式 2 产生 9600 波特率时 TH1=TL1=0xFD。"},
+    {type:"single", text:"二进制 1011 1100 转换为十六进制是？", opts:["0xBC","0xCB","0x5C","0xB4"], ans:0, reason:"1011=B, 1100=C → 0xBC"},
+    {type:"single", text:"0x55 & 0xAA 的结果是？", opts:["0xFF","0x00","0x55","0xAA"], ans:1, reason:"逐位与：每一位都是 1&0=0，结果全 0。"},
+    {type:"judge", text:"10/3 和 10/3.0 的结果相同。", ans:false, reason:"10/3 整数除法得 3，10/3.0 浮点除法得约 3.333。"},
+    {type:"judge", text":"中断服务函数可以有参数和返回值。", ans:false, reason:"中断函数声明为 void 函数名(void) interrupt N，无返回值无参数。"},
+    {type:"judge", text:"串口中断服务函数里需要软件清零 TI 或 RI 标志位。", ans:true, reason:"中断标志位不会自动清零，需要在 ISR 里手动 RI=0 或 TI=0。"},
   ]
 },
 ];
