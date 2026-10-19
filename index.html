@@ -955,7 +955,7 @@ sbit LED = P1^<span class="str">1</span>;
     {type:"single", text:"二进制 1011 1100 转换为十六进制是？", opts:["0xBC","0xCB","0x5C","0xB4"], ans:0, reason:"1011=B, 1100=C → 0xBC"},
     {type:"single", text:"0x55 & 0xAA 的结果是？", opts:["0xFF","0x00","0x55","0xAA"], ans:1, reason:"逐位与：每一位都是 1&0=0，结果全 0。"},
     {type:"judge", text:"10/3 和 10/3.0 的结果相同。", ans:false, reason:"10/3 整数除法得 3，10/3.0 浮点除法得约 3.333。"},
-    {type:"judge", text":"中断服务函数可以有参数和返回值。", ans:false, reason:"中断函数声明为 void 函数名(void) interrupt N，无返回值无参数。"},
+    {type:"judge", text:"中断服务函数可以有参数和返回值。", ans:false, reason:"中断函数必须声明为 void 函数名(void) interrupt N，没有返回值也不能带参数。"},
     {type:"judge", text:"串口中断服务函数里需要软件清零 TI 或 RI 标志位。", ans:true, reason:"中断标志位不会自动清零，需要在 ISR 里手动 RI=0 或 TI=0。"},
   ]
 },
