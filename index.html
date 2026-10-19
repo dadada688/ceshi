@@ -185,9 +185,21 @@ main{max-width:880px;margin:28px auto;padding:0 20px}
 
 /* ========== 个人中心 ========== */
 .center-tabs{display:flex;gap:0;margin-bottom:18px;border-bottom:1px solid var(--line)}
-.center-tabs button{flex:1;background:none;border:none;border-bottom:2px solid transparent;padding:12px;font-weight:500;cursor:pointer;font-size:14px;color:var(--ink-light);transition:all .15s}
+.center-tabs button{flex:1;background:none;border:none;border-bottom:2px solid transparent;padding:12px 4px;font-weight:500;cursor:pointer;font-size:13px;white-space:nowrap;color:var(--ink-light);transition:all .15s}
 .center-tabs button:hover{color:var(--ink)}
 .center-tabs button.active{color:var(--accent);border-bottom-color:var(--accent)}
+
+/* ========== 云同步 ========== */
+.sync-box{font-size:14px;line-height:1.8}
+.sync-box input{width:100%;box-sizing:border-box;padding:10px 12px;border:1px solid var(--line);border-radius:8px;font-size:13px;font-family:inherit;margin:6px 0}
+.sync-box input:focus{outline:none;border-color:var(--accent)}
+.sync-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+.sync-status{margin-top:12px;padding:9px 11px;border-radius:8px;font-size:12px;background:#f9fafb;border:1px solid var(--line)}
+.sync-status.ok{background:#f0fdf4;border-color:var(--ok);color:var(--ok)}
+.sync-status.err{background:#fef2f2;border-color:var(--err);color:var(--err)}
+.sync-help{margin-top:12px;font-size:13px;border-top:1px solid var(--line);padding-top:10px}
+.sync-help summary{cursor:pointer;color:var(--accent)}
+.sync-help ol{margin:8px 0 0 18px;line-height:2}
 .empty{text-align:center;padding:48px 20px;color:var(--ink-light);font-size:14px}
 .empty .emoji{display:none}
 
@@ -306,13 +318,15 @@ main{max-width:880px;margin:28px auto;padding:0 20px}
   <div class="card lilac">
     <h2 id="center-title">💖 我的学习空间</h2>
     <div class="center-tabs">
-      <button data-tab="progress" class="active">📈 学习进度</button>
-      <button data-tab="wrong">❌ 错题本</button>
-      <button data-tab="fav">⭐ 收藏夹</button>
+      <button data-tab="progress" class="active">📈 进度</button>
+      <button data-tab="wrong">❌ 错题</button>
+      <button data-tab="fav">⭐ 收藏</button>
+      <button data-tab="sync">☁️ 同步</button>
     </div>
     <div id="tab-progress"></div>
     <div id="tab-wrong" style="display:none"></div>
     <div id="tab-fav" style="display:none"></div>
+    <div id="tab-sync" style="display:none"></div>
   </div>
   <div class="card pink" style="text-align:center">
     <button class="btn-secondary" id="reset-all">🔄 重置所有数据</button>
@@ -1591,12 +1605,14 @@ const Store = {
     h.push({ id, score, course: currentCourse, time: Date.now() });
     if(h.length > 50) h.shift();
     this.scoreHistory = h;
+    syncChanged();
   },
   toggleFav(id){
     const f = this.favorites;
     const i = f.indexOf(id);
     if(i>=0) f.splice(i,1); else f.push(id);
     this.favorites = f;
+    syncChanged();
     return i<0;
   },
   isFav(id){ return this.favorites.includes(id); },
@@ -1606,10 +1622,115 @@ const Store = {
     const entry = { qid, ...data, time: Date.now() };
     if(i>=0) w[i] = entry; else w.push(entry);
     this.wrongs = w;
+    syncChanged();
   },
   removeWrong(qid){
     this.wrongs = this.wrongs.filter(x => x.qid !== qid);
+    syncChanged();
   },
+};
+
+/* ========== 云同步（GitHub Gist） ========== */
+const SYNC_FILE = 'xiaoyuan-progress.json';
+let syncMsg = null;
+let syncTimer = null;
+
+function syncChanged(){
+  Store.set('sync_ts', Date.now());
+  if(!Sync.configured()) return;
+  clearTimeout(syncTimer);
+  syncTimer = setTimeout(() => Sync.push(true), 1500);
+}
+
+const Sync = {
+  token(){ return Store.get('gh_token', ''); },
+  gist(){ return Store.get('gh_gist', ''); },
+  configured(){ return !!this.token(); },
+  msg(text, cls){
+    syncMsg = { text: text, cls: cls || '' };
+    const el = document.getElementById('sync-status');
+    if(el){ el.className = 'sync-status ' + (syncMsg.cls || ''); el.textContent = text; }
+  },
+  async errText(r){
+    let t = 'HTTP ' + r.status;
+    try{ const j = await r.json(); if(j && j.message) t += '（' + j.message + '）'; }catch(e){}
+    if(r.status === 401) t += ' — 令牌无效或已过期';
+    if(r.status === 403) t += ' — 令牌缺少 gist 权限';
+    if(r.status === 404) t += ' — 找不到云端文件';
+    return t;
+  },
+  collect(){
+    const out = { v:1, ts:Date.now(), progress:{}, favorites:{}, wrongs:{}, scoreHistory: Store.get('scoreHistory', []) };
+    ['51','c'].forEach(c => {
+      out.progress[c] = Store.get('progress_'+c, {});
+      out.favorites[c] = Store.get('favorites_'+c, []);
+      out.wrongs[c] = Store.get('wrongs_'+c, []);
+    });
+    return out;
+  },
+  apply(s){
+    ['51','c'].forEach(c => {
+      if(s.progress && s.progress[c]) Store.set('progress_'+c, s.progress[c]);
+      if(s.favorites && s.favorites[c]) Store.set('favorites_'+c, s.favorites[c]);
+      if(s.wrongs && s.wrongs[c]) Store.set('wrongs_'+c, s.wrongs[c]);
+    });
+    if(Array.isArray(s.scoreHistory)) Store.set('scoreHistory', s.scoreHistory.slice(-50));
+    Store.set('sync_ts', s.ts || Date.now());
+  },
+  async push(silent){
+    if(!this.configured()){ if(!silent) this.msg('请先填入 GitHub 令牌并保存', 'err'); return; }
+    const data = this.collect();
+    const content = JSON.stringify(data, null, 2);
+    try{
+      let id = this.gist();
+      if(!id){
+        const r = await fetch('https://api.github.com/gists', {
+          method:'POST',
+          headers:{ 'Authorization':'Bearer '+this.token(), 'Accept':'application/vnd.github+json', 'Content-Type':'application/json' },
+          body: JSON.stringify({ description:'单片机学园 · 学习进度（自动同步）', public:false, files:{ [SYNC_FILE]: { content } } })
+        });
+        if(!r.ok) throw new Error(await this.errText(r));
+        const j = await r.json();
+        Store.set('gh_gist', j.id);
+      } else {
+        const r = await fetch('https://api.github.com/gists/'+id, {
+          method:'PATCH',
+          headers:{ 'Authorization':'Bearer '+this.token(), 'Accept':'application/vnd.github+json', 'Content-Type':'application/json' },
+          body: JSON.stringify({ files:{ [SYNC_FILE]: { content } } })
+        });
+        if(!r.ok) throw new Error(await this.errText(r));
+      }
+      Store.set('sync_ts', data.ts);
+      this.msg(silent ? '已自动同步 ☁️' : '上传成功 ☁️', 'ok');
+    }catch(e){
+      this.msg('同步失败：' + e.message, 'err');
+    }
+  },
+  async pull(manual){
+    if(!this.configured()){ if(manual) this.msg('请先填入 GitHub 令牌并保存', 'err'); return; }
+    if(!this.gist()){ await this.push(manual); return; }
+    try{
+      const r = await fetch('https://api.github.com/gists/'+this.gist(), {
+        headers:{ 'Authorization':'Bearer '+this.token(), 'Accept':'application/vnd.github+json' }
+      });
+      if(!r.ok) throw new Error(await this.errText(r));
+      const j = await r.json();
+      const f = j.files && j.files[SYNC_FILE];
+      if(!f){ await this.push(true); return; }
+      const remote = JSON.parse(f.content || '{}');
+      const localTs = Store.get('sync_ts', 0);
+      if((remote.ts || 0) > localTs){
+        this.apply(remote);
+        this.msg('已从云端恢复 ☁️', 'ok');
+        renderHome();
+        if(currentPage === 'center') renderCenter('progress');
+      } else {
+        await this.push(true);
+      }
+    }catch(e){
+      this.msg('读取失败：' + e.message, 'err');
+    }
+  }
 };
 
 /* ========== 路由 ========== */
@@ -1970,7 +2091,7 @@ document.addEventListener('click', e => {
 /* ========== 个人中心 ========== */
 function renderCenter(tab){
   document.querySelectorAll('.center-tabs button').forEach(b => b.classList.toggle('active', b.dataset.tab===tab));
-  ['progress','wrong','fav'].forEach(t => document.getElementById('tab-'+t).style.display = (t===tab?'block':'none'));
+  ['progress','wrong','fav','sync'].forEach(t => document.getElementById('tab-'+t).style.display = (t===tab?'block':'none'));
   if(tab==='progress'){
     const doneList = curChapters().map(c => ({...c, done: Store.isDone(c.id), score: Store.progress[c.id]?.score || 0})).reverse();
     const doneCount = doneList.filter(c => c.done).length;
@@ -2035,6 +2156,53 @@ function renderCenter(tab){
         renderCenter('fav');
       } else openChapter(parseInt(el.dataset.id));
     }));
+  } else if(tab==='sync'){
+    const t = Sync.token();
+    document.getElementById('tab-sync').innerHTML = `
+      <h3>☁️ 云同步（GitHub）</h3>
+      <div class="sync-box">
+        <p>换设备也能接着学：学习记录会自动存进你 GitHub 账号下的一个<b>私有 Gist</b>，在另一台设备填入同一个令牌就能恢复。</p>
+        <p style="margin-top:6px">当前状态：<b>${t ? '已设置令牌 ✅' : '未设置令牌'}</b>${t ? (Sync.gist() ? '，云端文件已就绪' : '，云端文件尚未创建') : ''}</p>
+        <div style="margin-top:12px">
+          <label style="font-size:13px;color:#6b7280">GitHub 令牌（只需 gist 权限）${t ? '，填入新令牌可覆盖' : ''}</label>
+          <input type="password" id="sync-token" placeholder="粘贴 ghp_... 或 github_pat_...">
+        </div>
+        <div class="sync-row">
+          <button class="btn-primary" id="sync-save">💾 保存令牌</button>
+          <button class="btn-secondary" id="sync-up">⬆️ 上传进度</button>
+          <button class="btn-secondary" id="sync-down">⬇️ 从云端恢复</button>
+        </div>
+        ${t ? '<div class="sync-row"><button class="btn-secondary" id="sync-clear">🗑 清除令牌</button></div>' : ''}
+        <div class="sync-status ${syncMsg ? syncMsg.cls : ''}" id="sync-status">${syncMsg ? esc(syncMsg.text) : (t ? '已配置，之后的改动会自动上传。' : '填入令牌并保存后即可跨设备同步。')}</div>
+        <details class="sync-help">
+          <summary>📖 怎么创建令牌？（点开看步骤）</summary>
+          <ol>
+            <li>登录 GitHub → 右上角头像 → <b>Settings</b></li>
+            <li>左侧最底部 <b>Developer settings</b> → <b>Personal access tokens</b> → <b>Tokens (classic)</b></li>
+            <li>点 <b>Generate new token (classic)</b>，Note 随便写，Expiration 选 90 days 或 No expiration</li>
+            <li>只勾选 <b>gist</b> 这一项，其它都不用勾</li>
+            <li>点 <b>Generate token</b>，复制生成的那串字符（只显示一次）</li>
+            <li>回到本页粘到上面的输入框，点「保存令牌」</li>
+          </ol>
+        </details>
+      </div>`;
+    const bind = (id, fn) => { const el = document.getElementById(id); if(el) el.onclick = fn; };
+    bind('sync-save', async () => {
+      const v = document.getElementById('sync-token').value.trim();
+      if(!v){ Sync.msg('请先粘贴 GitHub 令牌', 'err'); return; }
+      Store.set('gh_token', v);
+      document.getElementById('sync-token').value = '';
+      Sync.msg('正在连接 GitHub…', '');
+      await Sync.pull(true);
+      renderCenter('sync');
+    });
+    bind('sync-up', () => Sync.push(false));
+    bind('sync-down', () => Sync.pull(true));
+    bind('sync-clear', () => {
+      Store.set('gh_token', ''); Store.set('gh_gist', '');
+      Sync.msg('已清除令牌，本机记录保留。', '');
+      renderCenter('sync');
+    });
   }
 }
 
@@ -2050,6 +2218,7 @@ document.addEventListener('click', e => {
       currentCourse = '51';
       currentChapter = null;
       quizState = { submitted:false, answers:{} };
+      if(Sync.configured()){ Store.set('sync_ts', Date.now()); Sync.push(true); }
       renderHome();
       renderCenter('progress');
       alert('已重置，祝你重新出发！🌈');
@@ -2073,6 +2242,7 @@ document.querySelectorAll('.course-card').forEach(c => c.addEventListener('click
 
 /* ========== 初始化 ========== */
 renderHome();
+if(Sync.configured()) Sync.pull(false);
 </script>
 </body>
 </html>
