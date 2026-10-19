@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>★ 51单片机学园 ☆ - 零基础也能学会！</title>
+<title>单片机学园 - 51单片机 & C语言 · 零基础也能学会！</title>
 <style>
 /* ========== 简约风 ========== */
 :root{
@@ -71,6 +71,19 @@ main{max-width:880px;margin:28px auto;padding:0 20px}
 .stat{background:#fff;padding:18px 12px;text-align:center}
 .stat .num{font-size:26px;font-weight:700;color:var(--accent);line-height:1.2}
 .stat .label{font-size:12px;color:var(--ink-light);margin-top:4px}
+
+/* ========== 课程选择 ========== */
+.course-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:24px}
+.course-card{
+  background:#fff;border:1px solid var(--line);border-radius:8px;
+  padding:20px 12px;text-align:center;cursor:pointer;
+  transition:border-color .15s,background .15s;
+}
+.course-card:hover{border-color:var(--accent)}
+.course-card.active{border-color:var(--accent);background:#eff6ff}
+.course-card .c-emoji{font-size:32px;line-height:1.3}
+.course-card .c-name{font-weight:600;font-size:15px;margin-top:4px}
+.course-card .c-desc{font-size:12px;color:var(--ink-light);margin-top:2px}
 
 .chapter-list{display:grid;gap:10px}
 .chapter-item{
@@ -217,7 +230,7 @@ main{max-width:880px;margin:28px auto;padding:0 20px}
 <div class="app">
 <header>
   <div class="header-inner">
-    <div class="logo">🌸 51单片机学园 <span class="chip">51</span></div>
+    <div class="logo">🌸 单片机学园 <span class="chip" id="logo-chip">51 单片机</span></div>
     <nav>
       <button data-nav="home" class="active">🏠 首页</button>
       <button data-nav="course">📖 课程</button>
@@ -233,8 +246,8 @@ main{max-width:880px;margin:28px auto;padding:0 20px}
 <section id="page-home" class="page active">
   <div class="hero">
     <div class="mascot">🤖💕</div>
-    <h1>欢迎来到 51 单片机学园！</h1>
-    <p>零基础也不怕～ 我们一起把单片机学会，顺利通过考试吧！<br>共 13 个章节，每章都有练习题，加油！</p>
+    <h1>欢迎来到单片机学园！</h1>
+    <p>零基础也不怕～ 两门课程任你学：<b>51 单片机</b> 和 <b>C 语言</b>，每章都有练习题，顺利通过考试吧！</p>
   </div>
 
   <div class="stat-grid">
@@ -244,8 +257,21 @@ main{max-width:880px;margin:28px auto;padding:0 20px}
     <div class="stat"><div class="num" id="stat-fav">0</div><div class="label">收藏</div></div>
   </div>
 
+  <div class="course-grid">
+    <div class="course-card" data-course="51">
+      <div class="c-emoji">🔧</div>
+      <div class="c-name">51 单片机</div>
+      <div class="c-desc">13 章 · 引脚 / 定时器 / 中断 / 串口</div>
+    </div>
+    <div class="course-card" data-course="c">
+      <div class="c-emoji">💻</div>
+      <div class="c-name">C 语言</div>
+      <div class="c-desc">13 章 · 从 Hello World 到指针</div>
+    </div>
+  </div>
+
   <div class="card pink">
-    <h2>📚 课程目录</h2>
+    <h2 id="home-course-title">📚 课程目录</h2>
     <div class="chapter-list" id="chapter-list-home"></div>
   </div>
 </section>
@@ -278,7 +304,7 @@ main{max-width:880px;margin:28px auto;padding:0 20px}
 <!-- ============ 个人中心 ============ -->
 <section id="page-center" class="page">
   <div class="card lilac">
-    <h2>💖 我的学习空间</h2>
+    <h2 id="center-title">💖 我的学习空间</h2>
     <div class="center-tabs">
       <button data-tab="progress" class="active">📈 学习进度</button>
       <button data-tab="wrong">❌ 错题本</button>
@@ -299,7 +325,7 @@ main{max-width:880px;margin:28px auto;padding:0 20px}
 
 <!-- ============ 章节数据 ============ -->
 <script>
-const CHAPTERS = [
+const CHAPTERS_51 = [
 {
   id:1, title:"什么是单片机 & 标号信息", short:"单片机是什么？芯片上印的数字啥意思？",
   emoji:"🌸", color:"pink",
@@ -962,18 +988,596 @@ sbit LED = P1^<span class="str">1</span>;
 ];
 </script>
 
+<!-- ============ C 语言课程数据 ============ -->
+<script>
+const CHAPTERS_C = [
+{
+  id:1, title:"C 语言简介与第一个程序", short:"C 语言是什么？写出并运行你的第一个程序",
+  emoji:"🖥️", color:"sky",
+  content:`
+<h3>🤔 C 语言是什么？</h3>
+<p><b>C 语言</b>诞生于 1972 年，由贝尔实验室的 <b>Dennis Ritchie（丹尼斯·里奇）</b>发明。它是一门<b>贴近硬件、执行效率极高</b>的编程语言：Linux、Windows 的内核，以及我们另一门课的 51 单片机程序，大多都是用 C 写的。</p>
+<div class="tip">通俗来说：C 语言就是和计算机对话最直接的高级语言之一。学会 C，再看单片机、C++、Python 都会轻松很多。</div>
+
+<h3>⚙️ 从代码到程序：编译四步走</h3>
+<p>计算机只认识 0 和 1。我们写的 <code>main.c</code> 要经过下面 4 步，才能变成能运行的程序：</p>
+<svg viewBox="0 0 750 110" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:750px;display:block;margin:12px 0;background:#f9fafb;border:1px solid #e5e7eb;border-radius:8px">
+<g font-size="13" text-anchor="middle">
+<rect x="12" y="26" width="115" height="46" rx="6" fill="#eff6ff" stroke="#2563eb"/><text x="69" y="46" fill="#1f2937">源代码</text><text x="69" y="63" font-size="11" fill="#6b7280">main.c</text>
+<line x1="127" y1="49" x2="160" y2="49" stroke="#2563eb" stroke-width="2"/><polygon points="164,49 156,44 156,54" fill="#2563eb"/>
+<rect x="164" y="26" width="115" height="46" rx="6" fill="#fff" stroke="#cbd5e1"/><text x="221" y="46" fill="#1f2937">预处理</text><text x="221" y="63" font-size="11" fill="#6b7280">展开 #include</text>
+<line x1="279" y1="49" x2="312" y2="49" stroke="#2563eb" stroke-width="2"/><polygon points="316,49 308,44 308,54" fill="#2563eb"/>
+<rect x="316" y="26" width="115" height="46" rx="6" fill="#fff" stroke="#cbd5e1"/><text x="373" y="46" fill="#1f2937">编译+汇编</text><text x="373" y="63" font-size="11" fill="#6b7280">main.obj</text>
+<line x1="431" y1="49" x2="464" y2="49" stroke="#2563eb" stroke-width="2"/><polygon points="468,49 460,44 460,54" fill="#2563eb"/>
+<rect x="468" y="26" width="115" height="46" rx="6" fill="#fff" stroke="#cbd5e1"/><text x="525" y="46" fill="#1f2937">链接</text><text x="525" y="63" font-size="11" fill="#6b7280">+ 库函数</text>
+<line x1="583" y1="49" x2="616" y2="49" stroke="#2563eb" stroke-width="2"/><polygon points="620,49 612,44 612,54" fill="#2563eb"/>
+<rect x="620" y="26" width="118" height="46" rx="6" fill="#eff6ff" stroke="#2563eb"/><text x="679" y="46" fill="#1f2937">可执行文件</text><text x="679" y="63" font-size="11" fill="#6b7280">main.exe</text>
+</g>
+</svg>
+
+<h3>👋 第一个程序：Hello World</h3>
+<pre><span class="kw">#include</span> <span class="str">&lt;stdio.h&gt;</span>   <span class="cm">// 头文件：printf 函数就住在 stdio.h 里</span>
+<span class="kw">int</span> <span class="fn">main</span>(<span class="kw">void</span>)          <span class="cm">// main 是程序入口，有且只有一个</span>
+{
+    <span class="fn">printf</span>(<span class="str">"Hello World!\\n"</span>);  <span class="cm">// 输出一句话，\\n 表示换行</span>
+    <span class="kw">return</span> 0;              <span class="cm">// 返回 0 表示程序正常结束</span>
+}</pre>
+<ul>
+  <li><code>#include &lt;stdio.h&gt;</code> — 把标准输入输出「工具箱」搬进来，不然不能用 printf</li>
+  <li><code>main</code> — <b>程序入口，有且只有一个</b>，程序从这里开始执行</li>
+  <li>每条语句以<b>分号 ;</b> 结束（考试超爱考！）</li>
+  <li>注释：<code>// 单行</code> 和 <code>/* 多行 */</code>，是写给人的说明，编译器会忽略</li>
+</ul>
+<div class="warn">新手三大报错：① 忘写分号 ② 把 main 拼成 mian ③ 用了中文分号 ；——任何一个都会让程序报错！</div>
+  `,
+  quiz:[
+    {type:"single", text:"C 语言程序的入口函数是？", opts:["start()","main()","init()","begin()"], ans:1},
+    {type:"single", text:"1972 年发明 C 语言的人是？", opts:["比尔·盖茨","Dennis Ritchie","冯·诺依曼","图灵"], ans:1},
+    {type:"fill", text:"每条 C 语句的结尾必须写____。", ans:"分号", hint:"英文状态下的 ; 这个符号叫什么？"},
+    {type:"judge", text:"一个 C 程序里可以同时存在两个 main 函数。", ans:false, reason:"main 是程序入口，有且只有一个。"},
+    {type:"single", text:".c 源文件经过编译和链接后生成？", opts:["main.obj","main.exe（可执行文件）","main.txt","还是 main.c"], ans:1},
+  ]
+},
+{
+  id:2, title:"变量与数据类型", short:"int、float、char 都占多大内存？变量怎么起名？",
+  emoji:"📦", color:"lemon",
+  content:`
+<h3>📦 变量：内存里的一个「盒子」</h3>
+<p><b>变量</b>就是在内存里申请的一块存储空间，给它起个名字、规定它装什么类型的数据：</p>
+<svg viewBox="0 0 680 130" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:680px;display:block;margin:12px 0;background:#f9fafb;border:1px solid #e5e7eb;border-radius:8px">
+<g font-size="13" text-anchor="middle">
+<text x="80" y="20" font-size="12" fill="#6b7280">int a = 10; 在内存中</text>
+<rect x="30" y="34" width="100" height="50" rx="6" fill="#eff6ff" stroke="#2563eb"/><text x="80" y="64" fill="#1f2937">a</text>
+<rect x="130" y="34" width="100" height="50" rx="6" fill="#fff" stroke="#2563eb"/><text x="180" y="64" fill="#1f2937">10</text>
+<text x="80" y="104" font-size="12" fill="#6b7280">变量名</text><text x="180" y="104" font-size="12" fill="#6b7280">值</text>
+<text x="330" y="64" text-anchor="start" fill="#1f2937">← 变量就像贴了名字标签的盒子，</text>
+<text x="330" y="84" text-anchor="start" fill="#6b7280" font-size="12">盒子大小由类型决定</text>
+</g>
+</svg>
+<pre><span class="kw">int</span> a = 10;          <span class="cm">// 定义整型变量 a，初始值 10</span>
+<span class="kw">float</span> price = 9.9f;  <span class="cm">// 单精度浮点</span>
+<span class="kw">double</span> pi = 3.14159; <span class="cm">// 双精度浮点，精度更高</span>
+<span class="kw">char</span> grade = <span class="str">'A'</span>;    <span class="cm">// 字符，注意用单引号</span></pre>
+
+<h3>📏 常用类型与字节数（考试必背）</h3>
+<ul>
+  <li><b>char</b> — 1 字节，存一个字符（ASCII）</li>
+  <li><b>int</b> — 4 字节，整数（16 位编译器里是 2 字节，看考题给的环境）</li>
+  <li><b>float</b> — 4 字节，单精度小数，约 7 位有效数字</li>
+  <li><b>double</b> — 8 字节，双精度小数，约 15 位有效数字</li>
+  <li><b>long</b> — 4 字节（Windows / 32 位）</li>
+</ul>
+<div class="tip">用 <code>sizeof(int)</code> 可以查出某类型占几个字节。1 字节 = 8 个二进制位。</div>
+
+<h3>🏷️ 变量命名规则（判断题高频）</h3>
+<ol>
+  <li>只能由<b>字母、数字、下划线</b>组成</li>
+  <li><b>不能以数字开头</b>（<code>3abc</code> ❌，<code>_sum</code> ✅）</li>
+  <li>不能用<b>关键字</b>（<code>int、float、return</code> ❌）</li>
+  <li>区分大小写：<code>Sum</code> 和 <code>sum</code> 是两个变量</li>
+</ol>
+
+<h3>🔒 常量</h3>
+<p>不想让值被改？用 <code>const</code> 修饰：<code>const int MAX = 100;</code>。或者用宏定义 <code>#define MAX 100</code>（预处理阶段做替换，结尾不加分号）。</p>
+  `,
+  quiz:[
+    {type:"single", text:"常见 32 位编译环境下，int 类型占几个字节？", opts:["1 个","2 个","4 个","8 个"], ans:2},
+    {type:"single", text:"下面哪个是合法的变量名？", opts:["3score","float","_sum","my-name"], ans:2, reason:"数字开头不行、float 是关键字、名字里不能有连字符 -，只有 _sum 合法。"},
+    {type:"fill", text:"1 个字节（byte）等于____个二进制位（bit）。", ans:"8"},
+    {type:"judge", text:"变量名可以用数字开头，比如 3abc。", ans:false, reason:"标识符不能以数字开头。"},
+    {type:"fill", text:"想把变量定义成不许修改的常量，要用关键字____修饰。", ans:"const", hint:"五个字母"},
+  ]
+},
+{
+  id:3, title:"运算符与表达式", short:"5/2 为什么等于 2？i++ 和 ++i 区别在哪？",
+  emoji:"🔢", color:"mint",
+  content:`
+<h3>➕ 算术运算符</h3>
+<p><code>+ - * / %</code> 五个，前四个和数学一样，<b>重点看 / 和 %</b>：</p>
+<pre><span class="kw">int</span> a = 5 / 2;    <span class="cm">// = 2 ！整数除法，小数部分直接扔掉</span>
+<span class="kw">double</span> b = 5.0 / 2; <span class="cm">// = 2.5，只要有一个是小数就是真除法</span>
+<span class="kw">int</span> c = 10 % 3;   <span class="cm">// = 1，取余数（取模）</span></pre>
+<div class="warn"><code>%</code> 取余运算符<b>只能用于整数</b>！<code>5.5 % 2</code> 直接编译报错。考试判断题高频！</div>
+
+<h3>⏫ 自增自减：i++ 与 ++i</h3>
+<pre><span class="kw">int</span> i = 3, j;
+j = i++;  <span class="cm">// 先用后加：j = 3，然后 i 变成 4</span>
+j = ++i;  <span class="cm">// 先加后用：i 先变 4，j = 4</span></pre>
+<div class="tip">一句话记忆：++ 在前就先加，++ 在后就后加。i-- 和 --i 同理。</div>
+
+<h3>⚖️ 关系运算符（比较）</h3>
+<p><code>&gt; &lt; &gt;= &lt;= == !=</code>，比较的结果只有两种：<b>1（真）或 0（假）</b>。</p>
+<div class="warn">最大的坑：<code>=</code> 是赋值，<code>==</code> 才是判断相等！写 <code>if(a = 5)</code> 是把 5 赋给 a，结果恒为真——逻辑全乱！</div>
+
+<h3>&& 逻辑运算符</h3>
+<ul>
+  <li><code>&amp;&amp;</code> 逻辑与：两边都真才真</li>
+  <li><code>||</code> 逻辑或：一边真就真</li>
+  <li><code>!</code> 逻辑非：真假互换</li>
+</ul>
+<p>C 语言里<b>非 0 就是真，0 就是假</b>，所以 <code>if(a)</code> 等价于 <code>if(a != 0)</code>。</p>
+
+<h3>📊 优先级（简版，考试够用）</h3>
+<ol>
+  <li>括号 <code>()</code> 永远最高</li>
+  <li><code>!</code>、<code>++</code>、<code>--</code> 单目运算符</li>
+  <li><code>* / %</code> 高于 <code>+ -</code></li>
+  <li>关系运算符高于逻辑运算符（<code>&gt;</code> 先算，<code>&amp;&amp;</code> 后算）</li>
+  <li>赋值 <code>=</code> 几乎最低</li>
+</ol>
+  `,
+  quiz:[
+    {type:"single", text:"表达式 5 / 2 的值是？", opts:["2.5","2","3","2.0"], ans:1, reason:"两个整数相除是整数除法，小数部分直接舍去，得 2。"},
+    {type:"single", text:"表达式 10 % 3 的值是？", opts:["3","1","0","3.33"], ans:1},
+    {type:"single", text:"int i=3, j; j = i++; 之后 j 和 i 分别是？", opts:["j=4, i=4","j=3, i=4","j=4, i=3","j=3, i=3"], ans:1, reason:"i++ 是先用后加：先把 3 赋给 j，i 再变成 4。"},
+    {type:"fill", text:"判断 a 和 b 是否相等，运算符写作____。", ans:"==", hint:"两个等号"},
+    {type:"judge", text:"% 取余运算符可以用于两个 float 类型数据。", ans:false, reason:"% 只能用于整数，浮点数用会直接编译报错。"},
+  ]
+},
+{
+  id:4, title:"输入与输出", short:"printf 怎么格式化输出？scanf 为什么要加 &？",
+  emoji:"⌨️", color:"lilac",
+  content:`
+<h3>🖨️ printf：格式化输出</h3>
+<pre><span class="fn">printf</span>(<span class="str">"姓名：%s，年龄：%d\\n"</span>, name, age);
+<span class="fn">printf</span>(<span class="str">"a=%d, b=%f\\n"</span>, a, b);</pre>
+<p><b>常用格式符</b>（%d 是考试核心，全都要认识）：</p>
+<ul>
+  <li><code>%d</code> — 十进制整数</li>
+  <li><code>%f</code> — float 小数（默认 6 位小数）</li>
+  <li><code>%lf</code> — double 小数（printf 里用 %f 也能输出，但 scanf 读 double 必须 %lf）</li>
+  <li><code>%c</code> — 单个字符</li>
+  <li><code>%s</code> — 字符串</li>
+  <li><code>%x</code> / <code>%o</code> — 十六进制 / 八进制</li>
+  <li><code>%%</code> — 输出一个百分号本身</li>
+</ul>
+<p><b>常用转义字符</b>：<code>\\n</code> 换行、<code>\\t</code> 制表符（对齐）、<code>\\\\</code> 反斜杠、<code>\\'</code> 单引号。</p>
+
+<h3>⌨️ scanf：格式化输入</h3>
+<pre><span class="kw">int</span> a;
+<span class="fn">scanf</span>(<span class="str">"%d"</span>, &amp;a);   <span class="cm">// 一定要取地址符 &amp; ！</span>
+<span class="kw">double</span> x;
+<span class="fn">scanf</span>(<span class="str">"%lf"</span>, &amp;x);  <span class="cm">// 读 double 用 %lf</span></pre>
+<div class="warn">scanf 必须传「地址」才能把读进来的数据放进变量：<code>scanf("%d", a)</code> 少了 &amp; 是新手最经典的崩溃写法！</div>
+<div class="tip">两个小细节：① <code>scanf("%d,%d",&amp;a,&amp;b)</code> 里引号中的逗号也要原样输入；② 读数组字符串时数组名本身就是地址，<b>不用加 &amp;</b>：<code>scanf("%s", str)</code>。</div>
+  `,
+  quiz:[
+    {type:"single", text:"printf 输出十进制整数应该用格式符？", opts:["%c","%s","%d","%f"], ans:2},
+    {type:"single", text:"scanf(\"%d\", &a) 里的 & 的作用是？", opts:["取变量 a 的地址","取 a 的值","让 a 自增","没有实际作用"], ans:0, reason:"scanf 需要地址才知道把数据存到哪里。"},
+    {type:"fill", text:"printf 中输出换行的转义字符写作____。", ans:"\\n", hint:"反斜杠 + 字母 n"},
+    {type:"judge", text:"用 scanf 读取 double 类型数据时可以用 %f。", ans:false, reason:"读 double 必须用 %lf，用 %f 是高频考点错误。"},
+    {type:"single", text:"printf(\"%d+%d=%d\", 2, 3, 5) 的输出结果是？", opts:["%d+%d=%d","2+3=5","2,3,5","235"], ans:1},
+  ]
+},
+{
+  id:5, title:"分支结构 if 与 switch", short:"让程序学会做选择：if-else、switch、三目运算符",
+  emoji:"🔀", color:"sky",
+  content:`
+<h3>🔀 if-else：二选一</h3>
+<pre><span class="kw">if</span> (score &gt;= 60) {
+    <span class="fn">printf</span>(<span class="str">"及格\\n"</span>);
+} <span class="kw">else</span> {
+    <span class="fn">printf</span>(<span class="str">"不及格，补考吧\\n"</span>);
+}</pre>
+<svg viewBox="0 0 720 150" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:720px;display:block;margin:12px 0;background:#f9fafb;border:1px solid #e5e7eb;border-radius:8px">
+<g font-size="13" text-anchor="middle">
+<rect x="20" y="50" width="150" height="50" rx="6" fill="#eff6ff" stroke="#2563eb"/><text x="95" y="80" fill="#1f2937">if (条件)</text>
+<line x1="170" y1="62" x2="226" y2="40" stroke="#059669" stroke-width="2"/><polygon points="230,38 221,36 225,46" fill="#059669"/>
+<text x="196" y="36" font-size="12" fill="#059669">真</text>
+<rect x="232" y="16" width="200" height="44" rx="6" fill="#f0fdf4" stroke="#059669"/><text x="332" y="43" fill="#1f2937">执行 if 后面的代码块</text>
+<line x1="170" y1="88" x2="226" y2="110" stroke="#dc2626" stroke-width="2"/><polygon points="230,112 225,103 221,113" fill="#dc2626"/>
+<text x="196" y="120" font-size="12" fill="#dc2626">假</text>
+<rect x="232" y="90" width="200" height="44" rx="6" fill="#fef2f2" stroke="#dc2626"/><text x="332" y="117" fill="#1f2937">执行 else 后面的代码块</text>
+<text x="500" y="60" text-anchor="start" font-size="12" fill="#6b7280">有 else if 时从上往下依次判断，</text>
+<text x="500" y="80" text-anchor="start" font-size="12" fill="#6b7280">命中一个分支后，其余全部跳过</text>
+</g>
+</svg>
+<p>多分支用 <code>if - else if - else</code> 链：<b>从上往下依次判断，命中一个就整个结束</b>，后面的不再看。</p>
+
+<h3>🚪 switch-case：多路开关</h3>
+<pre><span class="kw">switch</span> (grade) {
+  <span class="kw">case</span> <span class="str">'A'</span>: <span class="fn">printf</span>(<span class="str">"优秀"</span>); <span class="kw">break</span>;
+  <span class="kw">case</span> <span class="str">'B'</span>: <span class="fn">printf</span>(<span class="str">"良好"</span>); <span class="kw">break</span>;
+  <span class="kw">default</span>:  <span class="fn">printf</span>(<span class="str">"其他"</span>); <span class="kw">break</span>;
+}</pre>
+<ul>
+  <li><code>case</code> 后面只能是<b>整数或字符常量</b>，不能是变量或范围</li>
+  <li>每个 case 末尾<b>记得 break</b>，不然会「穿透」继续执行下面的 case（考试必考！）</li>
+  <li><code>default</code> 是兜底分支，所有 case 都不匹配时执行，位置随便放</li>
+</ul>
+
+<h3>❓ 三目运算符</h3>
+<pre><span class="kw">int</span> max = (a &gt; b) ? a : b;  <span class="cm">// a 大取 a，否则取 b</span></pre>
+<p>等价于一个 if-else，写起来更短。格式：<code>条件 ? 值1 : 值2</code>。</p>
+  `,
+  quiz:[
+    {type:"single", text:"switch 中某个 case 忘了写 break，会发生？", opts:["编译报错","自动跳出 switch","继续执行下面的 case（穿透）","重新执行本 case"], ans:2},
+    {type:"fill", text:"要表示 a 不等于 0：if(a____0)，横线处填运算符。", ans:"!=", hint:"感叹号开头"},
+    {type:"judge", text:"if(x = 5) 这句是判断 x 是否等于 5。", ans:false, reason:"= 是赋值不是比较，赋值结果恒为 5（真），判断相等要用 ==。"},
+    {type:"single", text:"表达式 a > b ? a : b 的含义是？", opts:["取 a 和 b 中较大的值","取较小的值","计算 a 加 b","判断是否为真"], ans:0},
+    {type:"fill", text:"switch 语句中，所有 case 都不匹配时执行____分支。", ans:"default"},
+  ]
+},
+{
+  id:6, title:"循环结构 for / while", short:"while、do-while、for，break 和 continue 怎么用？",
+  emoji:"🔁", color:"lemon",
+  content:`
+<h3>🔁 三种循环</h3>
+<pre><span class="cm">// 1. while：先判断，再执行</span>
+i = 0;
+<span class="kw">while</span> (i &lt; 5) { <span class="fn">printf</span>(<span class="str">"%d "</span>, i); i++; }
+
+<span class="cm">// 2. do-while：先执行一次，再判断（至少执行 1 次！）</span>
+<span class="kw">do</span> { <span class="fn">printf</span>(<span class="str">"%d "</span>, i); i++; } <span class="kw">while</span> (i &lt; 5);  <span class="cm">// 注意结尾分号</span>
+
+<span class="cm">// 3. for：初始; 条件; 更新 都写在括号里，最常用</span>
+<span class="kw">for</span> (i = 0; i &lt; 5; i++) { <span class="fn">printf</span>(<span class="str">"%d "</span>, i); }</pre>
+<div class="tip">循环三要素：<b>初始值、循环条件、更新语句</b>。三者缺一个就可能变成死循环。考试常问：<code>for(i=0; i&lt;n; i++)</code> 循环体执行 <b>n 次</b>。</div>
+
+<h3>🛑 break 与 continue</h3>
+<ul>
+  <li><code>break</code> — <b>彻底结束</b>整个循环（也能用在 switch 里跳出）</li>
+  <li><code>continue</code> — <b>跳过本次</b>循环剩下的语句，直接进入下一次循环</li>
+</ul>
+<pre><span class="kw">for</span> (i = 0; i &lt; 10; i++) {
+  <span class="kw">if</span> (i == 3) <span class="kw">continue</span>;  <span class="cm">// 3 不打印，但循环继续</span>
+  <span class="kw">if</span> (i == 7) <span class="kw">break</span>;     <span class="cm">// 到 7 直接结束循环</span>
+  <span class="fn">printf</span>(<span class="str">"%d "</span>, i);       <span class="cm">// 输出 0 1 2 4 5 6</span>
+}</pre>
+
+<h3>🎯 考试常见套路</h3>
+<ol>
+  <li>数循环次数：<code>for(i=0; i&lt;10; i++)</code> 执行 <b>10 次</b>；<code>for(i=1; i&lt;=10; i++)</code> 也是 10 次</li>
+  <li>算循环结束后的变量值：如 <code>i=0; while(i&lt;5) i+=2;</code> → i 依次 0→2→4→6，结束输出 <b>6</b></li>
+  <li>死循环写法：<code>while(1)</code>（单片机主程序就靠它一直转）</li>
+  <li>循环可以嵌套：外层走一步，内层走完整圈</li>
+</ol>
+  `,
+  quiz:[
+    {type:"single", text:"do-while 循环的循环体至少执行几次？", opts:["0 次","1 次","2 次","无数次"], ans:1, reason:"do-while 先执行后判断，所以至少 1 次；while 可能 0 次。"},
+    {type:"single", text:"continue 语句的作用是？", opts:["彻底结束整个循环","跳过本次循环，进入下一次","结束整个程序","从头重新执行循环"], ans:1},
+    {type:"fill", text:"for(i=0; i<10; i++) 的循环体共执行____次。", ans:"10"},
+    {type:"judge", text:"break 只能用在循环语句和 switch 语句中。", ans:true},
+    {type:"single", text:"i=0; while(i<5) i+=2; 循环结束后 i 的值是？", opts:["4","5","6","7"], ans:2, reason:"i 依次是 0→2→4→6，6 时条件不成立退出。"},
+  ]
+},
+{
+  id:7, title:"函数", short:"把代码打包复用：定义、声明、形参实参、递归",
+  emoji:"🧩", color:"mint",
+  content:`
+<h3>🧩 为什么需要函数？</h3>
+<p>同一段代码要用 10 次，复制粘贴 10 遍太蠢了——把它<b>打包成函数</b>，起个名字，想用就「喊」它（调用）。</p>
+<pre><span class="cm">// 返回值类型 函数名(参数列表) { 函数体 }</span>
+<span class="kw">int</span> <span class="fn">add</span>(<span class="kw">int</span> a, <span class="kw">int</span> b) {   <span class="cm">// a、b 是形参（形式参数）</span>
+    <span class="kw">return</span> a + b;          <span class="cm">// return 返回结果并结束函数</span>
+}
+
+<span class="kw">void</span> <span class="fn">sayHi</span>(<span class="kw">void</span>) {        <span class="cm">// void：不返回任何值</span>
+    <span class="fn">printf</span>(<span class="str">"Hi!\\n"</span>);
+}
+
+<span class="kw">int</span> <span class="fn">main</span>(<span class="kw">void</span>) {
+    <span class="kw">int</span> s = <span class="fn">add</span>(3, 5);    <span class="cm">// 3、5 是实参（实际参数），s = 8</span>
+    <span class="fn">sayHi</span>();
+    <span class="kw">return</span> 0;
+}</pre>
+
+<h3>📮 值传递（考试重点！）</h3>
+<p>C 语言传参是<b>值传递</b>：调用时把实参的值<b>拷贝一份</b>给形参，函数里怎么改形参，都<b>影响不到</b>外面的实参。</p>
+<pre><span class="kw">void</span> <span class="fn">tryChange</span>(<span class="kw">int</span> x) { x = 100; }
+<span class="kw">int</span> a = 1;
+<span class="fn">tryChange</span>(a);
+<span class="fn">printf</span>(<span class="str">"%d"</span>, a);  <span class="cm">// 还是 1！改的只是拷贝</span></pre>
+<div class="tip">想真的改外面的变量？传地址（指针）进去，第 10 章学了指针就懂了。</div>
+
+<h3>📋 声明与调用顺序</h3>
+<p>函数要<b>先声明（或先定义）再调用</b>。如果函数定义写在 main 后面，就要在前面加一行函数原型声明：<code>int add(int a, int b);</code>——注意结尾有分号！</p>
+
+<h3>🌀 递归简介</h3>
+<p>函数<b>调用自己</b>叫递归。经典例子：n 的阶乘。</p>
+<pre><span class="kw">int</span> <span class="fn">fact</span>(<span class="kw">int</span> n) {
+    <span class="kw">if</span> (n &lt;= 1) <span class="kw">return</span> 1;      <span class="cm">// 递归出口，没有出口会栈溢出！</span>
+    <span class="kw">return</span> n * <span class="fn">fact</span>(n - 1);    <span class="cm">// 自己调用自己</span>
+}</pre>
+  `,
+  quiz:[
+    {type:"single", text:"函数不需要返回任何值时，返回值类型写成？", opts:["int","void","null","empty"], ans:1},
+    {type:"single", text:"C 语言函数参数的传递方式是？", opts:["值传递（拷贝一份）","引用传递","地址自动传递","随机传递"], ans:0},
+    {type:"judge", text:"在被调函数里修改形参的值，会同步改变主调函数中的实参。", ans:false, reason:"值传递只是拷贝，改形参不影响实参；想改变实参要传指针。"},
+    {type:"fill", text:"函数内部把结果返回给调用者的语句用关键字____开头。", ans:"return"},
+    {type:"single", text:"int f(int x){ return x*2; } 那么 f(3) + f(1) 的值是？", opts:["6","8","4","7"], ans:1},
+  ]
+},
+{
+  id:8, title:"数组", short:"一排连续的盒子：定义、下标、遍历与常见考题",
+  emoji:"📚", color:"pink",
+  content:`
+<h3>📚 数组：一排连续的小盒子</h3>
+<p>存 5 个学生的成绩，总不能定义 a、b、c、d、e 五个变量——用<b>数组</b>：同类型数据<b>连续存放</b>，靠「下标」访问。</p>
+<svg viewBox="0 0 720 130" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:720px;display:block;margin:12px 0;background:#f9fafb;border:1px solid #e5e7eb;border-radius:8px">
+<g font-size="13" text-anchor="middle">
+<text x="24" y="20" text-anchor="start" font-size="12" fill="#6b7280">int a[5] = {12, 34, 56, 78, 90}; 每格占 4 字节</text>
+<rect x="24" y="34" width="110" height="50" rx="6" fill="#eff6ff" stroke="#2563eb"/><text x="79" y="64" fill="#1f2937">12</text>
+<rect x="146" y="34" width="110" height="50" rx="6" fill="#fff" stroke="#cbd5e1"/><text x="201" y="64" fill="#1f2937">34</text>
+<rect x="268" y="34" width="110" height="50" rx="6" fill="#fff" stroke="#cbd5e1"/><text x="323" y="64" fill="#1f2937">56</text>
+<rect x="390" y="34" width="110" height="50" rx="6" fill="#fff" stroke="#cbd5e1"/><text x="445" y="64" fill="#1f2937">78</text>
+<rect x="512" y="34" width="110" height="50" rx="6" fill="#fff" stroke="#cbd5e1"/><text x="567" y="64" fill="#1f2937">90</text>
+<text x="79" y="104" font-size="12" fill="#6b7280">下标 0</text><text x="201" y="104" font-size="12" fill="#6b7280">下标 1</text><text x="323" y="104" font-size="12" fill="#6b7280">下标 2</text><text x="445" y="104" font-size="12" fill="#6b7280">下标 3</text><text x="567" y="104" font-size="12" fill="#6b7280">下标 4</text>
+</g>
+</svg>
+<pre><span class="kw">int</span> a[5] = {12, 34, 56, 78, 90};  <span class="cm">// 定义+完全初始化</span>
+<span class="kw">int</span> b[3] = {7};                   <span class="cm">// 部分初始化：b = {7, 0, 0}，其余自动补 0</span>
+a[0] = 100;                       <span class="cm">// 下标从 0 开始！最大下标是 4</span></pre>
+<div class="warn"><b>下标从 0 开始</b>：<code>int a[5]</code> 的合法下标是 0～4，访问 <code>a[5]</code> 就是越界！编译器不报错但会踩坏别的内存——非常隐蔽的 bug。</div>
+
+<h3>🔁 遍历 + 求最大值（考试实操题）</h3>
+<pre><span class="kw">int</span> max = a[0];               <span class="cm">// 先假设第 0 个最大</span>
+<span class="kw">for</span> (<span class="kw">int</span> i = 1; i &lt; 5; i++) {
+    <span class="kw">if</span> (a[i] &gt; max) max = a[i];  <span class="cm">// 谁更大就更新 max</span>
+}
+<span class="fn">printf</span>(<span class="str">"最大值=%d\\n"</span>, max);</pre>
+
+<h3>🧮 二维数组</h3>
+<pre><span class="kw">int</span> m[2][3] = {{1,2,3}, {4,5,6}};  <span class="cm">// 2 行 3 列，共 6 个元素</span>
+m[1][2] = 9;                        <span class="cm">// 第 2 行第 3 列</span></pre>
+<p>元素个数 = 行数 × 列数。考试爱问：<code>int a[2][3]</code> 共有 <b>6</b> 个元素。</p>
+  `,
+  quiz:[
+    {type:"fill", text:"int a[5]; 的合法下标范围是 0 到____。", ans:"4"},
+    {type:"single", text:"int b[3] = {7}; 那么 b[0] 和 b[1] 分别是？", opts:["7 和 0","0 和 7","7 和 7","不确定"], ans:0, reason:"部分初始化时，剩余元素自动补 0。"},
+    {type:"judge", text:"数组 int a[5] 中访问 a[5] 是安全合法的。", ans:false, reason:"下标 0～4，访问 a[5] 属于数组越界，可能破坏其他内存。"},
+    {type:"single", text:"二维数组 int a[2][3] 共有多少个元素？", opts:["5 个","6 个","2 个","3 个"], ans:1},
+    {type:"fill", text:"数组的下标是从____开始编号的。", ans:"0"},
+  ]
+},
+{
+  id:9, title:"字符串", short:"C 没有字符串类型？字符数组 + 结束符 '\\0' 的故事",
+  emoji:"✏️", color:"sky",
+  content:`
+<h3>✏️ C 语言的字符串真相</h3>
+<p>C 语言<b>没有</b>真正的字符串类型！所谓字符串，就是一个<b>字符数组</b> + 一个结束标志 <code>'\\0'</code>：</p>
+<pre><span class="kw">char</span> s[] = <span class="str">"hello"</span>;
+<span class="cm">// 内存里实际是：h e l l o \\0 —— 一共 6 个字节！</span></pre>
+<svg viewBox="0 0 720 120" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:720px;display:block;margin:12px 0;background:#f9fafb;border:1px solid #e5e7eb;border-radius:8px">
+<g font-size="13" text-anchor="middle">
+<text x="24" y="20" text-anchor="start" font-size="12" fill="#6b7280">字符串 &quot;hello&quot; 在内存里：</text>
+<rect x="24" y="34" width="96" height="46" rx="6" fill="#fff" stroke="#cbd5e1"/><text x="72" y="62">h</text>
+<rect x="138" y="34" width="96" height="46" rx="6" fill="#fff" stroke="#cbd5e1"/><text x="186" y="62">e</text>
+<rect x="252" y="34" width="96" height="46" rx="6" fill="#fff" stroke="#cbd5e1"/><text x="300" y="62">l</text>
+<rect x="366" y="34" width="96" height="46" rx="6" fill="#fff" stroke="#cbd5e1"/><text x="414" y="62">l</text>
+<rect x="480" y="34" width="96" height="46" rx="6" fill="#fff" stroke="#cbd5e1"/><text x="528" y="62">o</text>
+<rect x="594" y="34" width="102" height="46" rx="6" fill="#fef2f2" stroke="#dc2626"/><text x="645" y="62" fill="#dc2626">\\0</text>
+<text x="645" y="104" font-size="12" fill="#dc2626">结束标志</text>
+</g>
+</svg>
+<div class="warn">区分两位「常客」：<code>strlen(s)</code> 数字符个数<b>不算 '\\0'</b>（"hello" 得 5）；<code>sizeof(s)</code> 算数组总大小<b>要算 '\\0'</b>（得 6）。判断题每年都考！</div>
+
+<h3>🧰 常用字符串函数（要 #include &lt;string.h&gt;）</h3>
+<ul>
+  <li><code>strlen(s)</code> — 求字符串长度（不含 \\0）</li>
+  <li><code>strcpy(dst, src)</code> — 复制字符串</li>
+  <li><code>strcat(dst, src)</code> — 拼接字符串</li>
+  <li><code>strcmp(s1, s2)</code> — 比较字符串：相等返回 0</li>
+</ul>
+<div class="warn">比较两个字符串<b>不能用 ==</b>！== 比较的是地址。必须用 <code>strcmp(s1, s2) == 0</code> 判断内容相同。</div>
+
+<h3>⌨️ 字符串输入输出</h3>
+<pre><span class="kw">char</span> name[20];
+<span class="fn">scanf</span>(<span class="str">"%s"</span>, name);   <span class="cm">// 数组名本身就是地址，不用加 &amp;</span>
+<span class="fn">printf</span>(<span class="str">"你好, %s\\n"</span>, name);</pre>
+  `,
+  quiz:[
+    {type:"single", text:"字符串 \"abc\" 在内存中占几个字节？", opts:["3 个","4 个","5 个","2 个"], ans:1, reason:"3 个字符 + 1 个结束符 '\\0' = 4 字节。"},
+    {type:"single", text:"strlen(\"hello\") 的返回值是？", opts:["5","6","4","不确定"], ans:0},
+    {type:"judge", text:"sizeof(\"abc\") 的值是 3。", ans:false, reason:"sizeof 要算上结束符 '\\0'，结果是 4；strlen 才是 3。"},
+    {type:"fill", text:"C 语言字符串的结束标志字符写作____（反斜杠加数字 0）。", ans:"\\0"},
+    {type:"single", text:"比较两个字符串内容是否相同，应该用？", opts:["== 运算符","= 运算符","strcmp 函数","strlen 函数"], ans:2, reason:"== 比的是地址不是内容，字符串比较必须用 strcmp。"},
+  ]
+},
+{
+  id:10, title:"指针入门", short:"& 取地址，* 取内容——最难也最核心的一章",
+  emoji:"🎯", color:"lemon",
+  content:`
+<h3>🏠 内存地址是什么？</h3>
+<p>内存像一条超长的街道，每个字节都有<b>门牌号（地址）</b>。<b>指针就是存「门牌号」的变量</b>。</p>
+<pre><span class="kw">int</span> a = 5;        <span class="cm">// 普通变量</span>
+<span class="kw">int</span> *p = &amp;a;      <span class="cm">// 指针 p 存了 a 的地址（&amp; 读作「取地址」）</span></pre>
+<svg viewBox="0 0 720 150" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:720px;display:block;margin:12px 0;background:#f9fafb;border:1px solid #e5e7eb;border-radius:8px">
+<g font-size="13" text-anchor="middle">
+<text x="24" y="24" text-anchor="start" font-size="12" fill="#6b7280">int a = 5; int *p = &amp;a;</text>
+<rect x="120" y="44" width="150" height="56" rx="6" fill="#eff6ff" stroke="#2563eb"/>
+<text x="195" y="68" fill="#1f2937">a</text><text x="195" y="90" font-size="12" fill="#6b7280">值 = 5</text>
+<text x="195" y="130" font-size="12" fill="#6b7280">地址 0x100</text>
+<rect x="450" y="44" width="150" height="56" rx="6" fill="#fff" stroke="#2563eb"/>
+<text x="525" y="68" fill="#1f2937">p</text><text x="525" y="90" font-size="12" fill="#6b7280">值 = 0x100</text>
+<text x="525" y="130" font-size="12" fill="#6b7280">地址 0x200</text>
+<line x1="450" y1="72" x2="286" y2="72" stroke="#059669" stroke-width="2" stroke-dasharray="6,4"/>
+<polygon points="282,72 292,66 292,78" fill="#059669"/>
+<text x="366" y="62" font-size="12" fill="#059669">p 指向 a</text>
+<text x="366" y="106" font-size="12" fill="#6b7280">*p 就是顺着地址找到 a，所以 *p = 5</text>
+</g>
+</svg>
+
+<h3>🔑 两个核心符号</h3>
+<ul>
+  <li><code>&amp;a</code> — 取地址：「a 住在哪里？」</li>
+  <li><code>*p</code> — 解引用（取内容）：「这个地址里住着谁？」</li>
+</ul>
+<pre><span class="fn">printf</span>(<span class="str">"%p"</span>, p);   <span class="cm">// 打印地址</span>
+*p = 100;          <span class="cm">// 等价于 a = 100 ！通过指针改值</span></pre>
+
+<h3>🎯 指针与数组（考试爱考）</h3>
+<p><b>数组名就是首元素的地址</b>：<code>a</code> 等价于 <code>&amp;a[0]</code>。所以：</p>
+<pre>a[i]  等价于  *(a + i)   <span class="cm">// 两种写法一个意思</span></pre>
+
+<h3>⚠️ 指针安全</h3>
+<ul>
+  <li>没赋过地址的指针叫<b>野指针</b>，用它 = 随机踩内存，程序可能崩</li>
+  <li>暂时不知道指向哪，先置空：<code>int *p = NULL;</code></li>
+  <li>指针类型要匹配：<code>int*</code> 就指 int 变量</li>
+</ul>
+  `,
+  quiz:[
+    {type:"single", text:"运算符 & 的作用是？", opts:["取变量的地址","取变量的值","逻辑与","按位与"], ans:0},
+    {type:"single", text:"int a=5, *p=&a; 那么 *p 的值是？", opts:["5","a 的地址","0","p 的地址"], ans:0},
+    {type:"fill", text:"通过指针 p 访问它所指向的变量，要写成____p。", ans:"*", hint:"乘号那个符号"},
+    {type:"judge", text:"数组名 a 的值等于第一个元素 a[0] 的地址。", ans:true, reason:"数组名就是首元素地址（首地址）。"},
+    {type:"single", text:"定义了却没赋初始地址就去使用的指针叫做？", opts:["空指针","野指针","数组指针","函数指针"], ans:1, reason:"野指针指向不明确，解引用会导致不可预期的错误。"},
+  ]
+},
+{
+  id:11, title:"结构体", short:"把不同类型的数据打包：struct 的定义与使用",
+  emoji:"🏗️", color:"mint",
+  content:`
+<h3>🏗️ 为什么需要结构体？</h3>
+<p>描述一个学生：姓名（字符串）、学号（整数）、成绩（小数）——三种不同类型的数据是一件事的整体。数组只能装同类型，<b>结构体 struct</b> 才能打包不同类型：</p>
+<pre><span class="kw">struct</span> <span class="fn">Student</span> {          <span class="cm">// 定义结构体类型（此时还不占内存）</span>
+    <span class="kw">char</span> name[20];        <span class="cm">// 成员：姓名</span>
+    <span class="kw">int</span>  id;              <span class="cm">// 成员：学号</span>
+    <span class="kw">float</span> score;          <span class="cm">// 成员：成绩</span>
+};
+
+<span class="kw">struct</span> Student s1 = {<span class="str">"小明"</span>, 1001, 92.5f};  <span class="cm">// 定义变量并初始化</span></pre>
+
+<h3>🔑 访问成员：点和箭头</h3>
+<pre>s1.score = 95;              <span class="cm">// 结构体变量用「点」</span>
+
+<span class="kw">struct</span> Student *p = &amp;s1;    <span class="cm">// 结构体指针</span>
+p-&gt;score = 95;              <span class="cm">// 指针用「箭头 -&gt;」</span>
+(*p).score = 95;            <span class="cm">// 等价写法：先解引用再点</span></pre>
+<div class="tip">口诀：<b>变量用点（.），指针用箭头（-&gt;）</b>。考试给你结构体指针选写法，认准 -&gt;。</div>
+
+<h3>📦 结构体数组</h3>
+<pre><span class="kw">struct</span> Student cls[3] = {
+    {<span class="str">"小明"</span>, 1001, 92.5f},
+    {<span class="str">"小红"</span>, 1002, 88.0f},
+    {<span class="str">"小刚"</span>, 1003, 79.5f}
+};
+<span class="fn">printf</span>(<span class="str">"%s: %f\\n"</span>, cls[1].name, cls[1].score);</pre>
+
+<h3>🏷️ typedef：起个短名</h3>
+<pre><span class="kw">typedef</span> <span class="kw">struct</span> { <span class="kw">int</span> x; <span class="kw">int</span> y; } Point;
+Point p1 = {3, 4};   <span class="cm">// 以后不用再写 struct 了</span></pre>
+<div class="warn">易错点：结构体类型定义结尾的<b>分号不能忘</b>；结构体成员可以是不同类型——这正是它存在的意义。</div>
+  `,
+  quiz:[
+    {type:"fill", text:"定义结构体类型要使用关键字____。", ans:"struct"},
+    {type:"single", text:"结构体变量 s 访问成员 score 的写法是？", opts:["s->score","s.score","s:score","s#score"], ans:1},
+    {type:"single", text:"结构体指针 p 访问成员 name 的写法是？", opts:["p.name","p->name","*p.name","p:name"], ans:1},
+    {type:"judge", text:"结构体的各个成员可以是不同的数据类型。", ans:true, reason:"这正是结构体区别于数组的价值：打包不同类型。"},
+    {type:"judge", text:"typedef 可以给结构体类型起一个简短的别名。", ans:true},
+  ]
+},
+{
+  id:12, title:"C 语言最终复习 · 速记清单", short:"考前过一遍，这些必背！",
+  emoji:"📋", color:"pink",
+  content:`
+<h2>📋 考前速记 · 12 条清单</h2>
+<ol>
+  <li><b>程序骨架</b>：程序从 <code>main</code> 开始执行，main 有且只有一个；每条语句以<b>分号</b>结束</li>
+  <li><b>类型字节数</b>：<code>char 1</code>、<code>int 4</code>、<code>float 4</code>、<code>double 8</code>（32 位环境）</li>
+  <li><b>整数除法</b>：<code>5/2 = 2</code>；<code>%</code> 取余<b>只能用于整数</b>，<code>10%3 = 1</code></li>
+  <li><b>= 与 ==</b>：<code>=</code> 是赋值，<code>==</code> 才是判断相等；<code>if(x=5)</code> 恒为真</li>
+  <li><b>i++ 与 ++i</b>：先用后加 vs 先加后用；<code>i=3</code> 时 <code>j=i++</code> 得 j=3、i=4</li>
+  <li><b>scanf 要 &amp;</b>：<code>scanf("%d", &amp;a)</code> 少了 &amp; 就崩；读 double 用 <code>%lf</code></li>
+  <li><b>switch 要 break</b>：忘了 break 就穿透到下一个 case；default 是兜底</li>
+  <li><b>循环</b>：do-while 至少执行 1 次；<code>for(i=0;i&lt;n;i++)</code> 执行 n 次；break 跳出整个循环、continue 跳过本次</li>
+  <li><b>数组</b>：下标从 <b>0</b> 开始，<code>int a[5]</code> 最大下标 4，谨防越界；部分初始化其余补 0</li>
+  <li><b>字符串</b>：以 <code>'\\0'</code> 结尾；<code>strlen("abc")=3</code> 不算 \\0，<code>sizeof("abc")=4</code> 要算；比较内容用 <code>strcmp</code>，不能用 ==</li>
+  <li><b>函数</b>：值传递——改形参<b>不影响</b>实参；想改变实参就传指针</li>
+  <li><b>指针与结构体</b>：<code>&amp;</code> 取地址、<code>*</code> 取内容；数组名 = 首地址；结构体变量用 <code>.</code>、结构体指针用 <code>-&gt;</code></li>
+</ol>
+<h3>🚨 六大高频送分/丢分点</h3>
+<ul>
+  <li><code>if(x = 5)</code> — 赋值当判断，恒真（丢分重灾区）</li>
+  <li><code>scanf</code> 忘写 <code>&amp;</code>（送分题也是丢分题）</li>
+  <li><code>5/2</code> 答成 2.5（整数除法答 2 才对）</li>
+  <li>数组 <code>a[5]</code> 当第 5 个元素用（其实是越界，第 5 个是 <code>a[4]</code>）</li>
+  <li><code>sizeof</code> 和 <code>strlen</code> 傻傻分不清（一个含 \\0 一个不含）</li>
+  <li>字符串用 <code>==</code> 比较（应该用 <code>strcmp</code>）</li>
+</ul>
+<div class="tip">💪 把这份清单过两遍再去做第 13 章的最终测试，稳稳的！</div>
+  `,
+  quiz:[
+    {type:"fill", text:"printf 输出 float 类型数据用格式符____。", ans:"%f"},
+    {type:"single", text:"表达式 3 + 5 / 2 的值是？", opts:["5","5.5","4","6"], ans:0, reason:"除法优先级高且是整数除法：5/2=2，再 3+2=5。"},
+    {type:"judge", text:"continue 语句会彻底结束整个循环。", ans:false, reason:"break 才是结束整个循环，continue 只是跳过本次。"},
+  ]
+},
+{
+  id:13, title:"🏆 C 语言最终测试（20 题）", short:"学完所有章节后挑战一下！",
+  emoji:"🏆", color:"lemon",
+  content:`
+<h2>🎓 C 语言综合考试 · 20 题</h2>
+<p>覆盖第 1～11 章全部知识点。建议先把第 12 章的速记清单过一遍再来挑战！80 分以上可以放心进考场啦～</p>
+<div class="warn">⚠️ 综合测试包含选择题、填空题、判断题，做完可查看错题解析。</div>
+  `,
+  quiz:[
+    {type:"single", text:"C 程序总是从哪个函数开始执行？", opts:["第一个定义的函数","main 函数","stdio.h 里的函数","随机函数"], ans:1},
+    {type:"single", text:"32 位环境下 int 类型占？", opts:["1 字节","2 字节","4 字节","8 字节"], ans:2},
+    {type:"single", text:"表达式 7 / 2 的值是？", opts:["3.5","3","4","2"], ans:1, reason:"整数除法舍去小数部分。"},
+    {type:"single", text:"用 scanf 读取 double 类型数据应使用格式符？", opts:["%f","%d","%lf","%c"], ans:2},
+    {type:"single", text:"switch 语句中缺少 break 会导致？", opts:["编译错误","case 穿透，继续执行后面的 case","自动跳出 switch","死循环"], ans:1},
+    {type:"single", text:"strlen(\"abc\") 的值是？", opts:["3","4","2","5"], ans:0},
+    {type:"fill", text:"C 程序从____函数开始执行。", ans:"main"},
+    {type:"fill", text:"表达式 10 % 3 的值是____。", ans:"1"},
+    {type:"fill", text:"int a[4]; 其合法下标最大是____。", ans:"3"},
+    {type:"fill", text:"逻辑或运算符写作____。", ans:"||", hint:"两个竖线"},
+    {type:"fill", text:"取地址运算符写作____。", ans:"&"},
+    {type:"fill", text:"定义结构体使用关键字____。", ans:"struct"},
+    {type:"judge", text:"变量名可以用数字开头。", ans:false, reason:"标识符不能以数字开头。"},
+    {type:"judge", text:"do-while 循环的循环体至少执行一次。", ans:true, reason:"先执行后判断。"},
+    {type:"judge", text:"函数内修改形参会改变主调函数中的实参。", ans:false, reason:"值传递只是拷贝，不影响实参。"},
+    {type:"single", text:"int i=3; int j=++i; 之后 j 的值是？", opts:["3","4","5","2"], ans:1, reason:"++i 先加后用：i 变 4，j 取到 4。"},
+    {type:"single", text:"int a[3]={7}; 则 a[1] 的值是？", opts:["7","0","不确定","报错"], ans:1, reason:"部分初始化，其余元素自动补 0。"},
+    {type:"single", text:"int a=5,*p=&a; 那么 *p 等价于？", opts:["&a","a","p","a 的地址"], ans:1},
+    {type:"single", text:"比较两个字符串内容是否相同应使用？", opts:["==","strcmp","=","sizeof"], ans:1},
+    {type:"judge", text:"sizeof(\"abc\") 的值是 3。", ans:false, reason:"要算上结束符 \\0，是 4。"},
+  ]
+},
+];
+const COURSES = {
+  '51': { name:'51 单片机', emoji:'🔧', chapters: CHAPTERS_51 },
+  'c':  { name:'C 语言', emoji:'💻', chapters: CHAPTERS_C },
+};
+</script>
+
 <!-- ============ 应用逻辑 ============ -->
 <script>
-/* ========== 存储管理 ========== */
+/* ========== 课程与存储管理 ========== */
+let currentCourse = '51';
+try{ currentCourse = JSON.parse(localStorage.getItem('currentCourse')) || '51'; }catch(e){}
+function curChapters(){ return COURSES[currentCourse].chapters; }
+
 const Store = {
   get(key, def){ try{ const v = localStorage.getItem(key); return v===null?def:JSON.parse(v); }catch(e){ return def; } },
   set(key, val){ try{ localStorage.setItem(key, JSON.stringify(val)); }catch(e){} },
-  get progress(){ return this.get('progress', {}); },
-  set progress(v){ this.set('progress', v); },
-  get favorites(){ return this.get('favorites', []); },
-  set favorites(v){ this.set('favorites', v); },
-  get wrongs(){ return this.get('wrongs', []); },
-  set wrongs(v){ this.set('wrongs', v); },
+  get progress(){ return this.get('progress_'+currentCourse, {}); },
+  set progress(v){ this.set('progress_'+currentCourse, v); },
+  get favorites(){ return this.get('favorites_'+currentCourse, []); },
+  set favorites(v){ this.set('favorites_'+currentCourse, v); },
+  get wrongs(){ return this.get('wrongs_'+currentCourse, []); },
+  set wrongs(v){ this.set('wrongs_'+currentCourse, v); },
   get scoreHistory(){ return this.get('scoreHistory', []); },
   set scoreHistory(v){ this.set('scoreHistory', v); },
   isDone(id){ return !!this.progress[id]; },
@@ -983,7 +1587,7 @@ const Store = {
     p[id] = { done:true, score: Math.max(score||0, old?.score||0), time: Date.now() };
     this.progress = p;
     const h = this.scoreHistory;
-    h.push({ id, score, time: Date.now() });
+    h.push({ id, score, course: currentCourse, time: Date.now() });
     if(h.length > 50) h.shift();
     this.scoreHistory = h;
   },
@@ -1010,6 +1614,13 @@ const Store = {
 /* ========== 路由 ========== */
 let currentPage = 'home';
 let currentChapter = null;
+function setCurrentCourse(c){
+  if(c === currentCourse) return;
+  currentCourse = c;
+  Store.set('currentCourse', c);
+  currentChapter = null;
+  quizState = { submitted:false, answers:{} };
+}
 function showPage(name){
   currentPage = name;
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
@@ -1026,8 +1637,11 @@ document.querySelectorAll('nav button').forEach(b => b.addEventListener('click',
 
 /* ========== 首页渲染 ========== */
 function renderHome(){
+  document.getElementById('logo-chip').textContent = COURSES[currentCourse].name;
+  document.getElementById('home-course-title').textContent = '📚 课程目录 · ' + COURSES[currentCourse].name;
+  document.querySelectorAll('.course-card').forEach(c => c.classList.toggle('active', c.dataset.course===currentCourse));
   const list = document.getElementById('chapter-list-home');
-  list.innerHTML = CHAPTERS.map(ch => `
+  list.innerHTML = curChapters().map(ch => `
     <div class="chapter-item ${Store.isDone(ch.id)?'done':''}" data-id="${ch.id}">
       <div class="num">${ch.emoji}</div>
       <div class="info">
@@ -1045,7 +1659,7 @@ function renderHome(){
   const p = Store.progress;
   const doneCount = Object.values(p).filter(x => x.done).length;
   document.getElementById('stat-done').textContent = doneCount;
-  const last = Store.scoreHistory.slice().reverse().find(s => true);
+  const last = Store.scoreHistory.slice().reverse().find(s => s.course ? s.course===currentCourse : true);
   document.getElementById('stat-score').textContent = last ? last.score + '分' : '-';
   document.getElementById('stat-wrong').textContent = Store.wrongs.length;
   document.getElementById('stat-fav').textContent = Store.favorites.length;
@@ -1054,7 +1668,7 @@ function renderHome(){
 /* ========== 打开章节 ========== */
 function openChapter(id){
   currentChapter = id;
-  const ch = CHAPTERS.find(c => c.id === id);
+  const ch = curChapters().find(c => c.id === id);
   showPage('course');
   renderChapterNav();
   document.getElementById('fav-btn').textContent = Store.isFav(id) ? '★ 已收藏' : '⭐ 收藏';
@@ -1067,7 +1681,7 @@ function openChapter(id){
 
 function renderChapterNav(){
   const nav = document.getElementById('chapter-nav');
-  nav.innerHTML = CHAPTERS.map(c => `<button class="${c.id===currentChapter?'active':''}" data-id="${c.id}">${c.emoji} 第${c.id}章</button>`).join('');
+  nav.innerHTML = curChapters().map(c => `<button class="${c.id===currentChapter?'active':''}" data-id="${c.id}">${c.emoji} 第${c.id}章</button>`).join('');
   nav.querySelectorAll('button').forEach(b => b.addEventListener('click', () => openChapter(parseInt(b.dataset.id))));
 }
 
@@ -1077,7 +1691,7 @@ let quizState = { submitted:false, answers:{} };
 function renderQuiz(ch, showResults){
   const block = document.getElementById('quiz-block');
   block.innerHTML = `<h3>✏️ 本章练习 · 共 ${ch.quiz.length} 题</h3>` + ch.quiz.map((q, i) => {
-    const qid = ch.id + '_' + i;
+    const qid = currentCourse + '_' + ch.id + '_' + i;
     const saved = quizState.answers[qid];
     let body = '';
     let feedback = '';
@@ -1126,6 +1740,7 @@ function renderQuiz(ch, showResults){
     el.addEventListener('click', e => {
       if(quizState.submitted) return;
       const qid = el.dataset.qid;
+      const q = ch.quiz[parseInt(qid.split('_').pop())];
       if(q.type==='single'){
         const oi = parseInt(el.dataset.oi);
         quizState.answers[qid] = oi;
@@ -1151,12 +1766,12 @@ function renderQuiz(ch, showResults){
 
 /* ========== 提交判分 ========== */
 function submitQuiz(){
-  const ch = CHAPTERS.find(c => c.id === currentChapter);
+  const ch = curChapters().find(c => c.id === currentChapter);
   if(!ch) return;
   let correct = 0;
   const wrongList = [];
   ch.quiz.forEach((q, i) => {
-    const qid = ch.id + '_' + i;
+    const qid = currentCourse + '_' + ch.id + '_' + i;
     const user = quizState.answers[qid];
     let ok = false;
     if(q.type==='single') ok = (user === q.ans);
@@ -1188,7 +1803,7 @@ function submitQuiz(){
 }
 
 function resetQuiz(){
-  const ch = CHAPTERS.find(c => c.id === currentChapter);
+  const ch = curChapters().find(c => c.id === currentChapter);
   quizState = { submitted:false, answers:{} };
   renderQuiz(ch, false);
   document.getElementById('score-result').innerHTML = '';
@@ -1223,13 +1838,13 @@ function spawnHearts(){
 /* ========== 练习页面 ========== */
 function renderQuizPage(){
   const nav = document.getElementById('quiz-nav');
-  nav.innerHTML = CHAPTERS.map(c => `<button data-id="${c.id}" class="${c.id===currentChapter?'active':''}">${c.emoji} 第${c.id}章</button>`).join('');
+  nav.innerHTML = curChapters().map(c => `<button data-id="${c.id}" class="${c.id===currentChapter?'active':''}">${c.emoji} 第${c.id}章</button>`).join('');
   nav.querySelectorAll('button').forEach(b => b.addEventListener('click', () => {
     currentChapter = parseInt(b.dataset.id);
     quizState = { submitted:false, answers:{} };
     renderQuizPage();
     const area = document.getElementById('quiz-page-area');
-    const ch = CHAPTERS.find(c => c.id===currentChapter);
+    const ch = curChapters().find(c => c.id===currentChapter);
     area.innerHTML = `<div class="card pink"><div id="qp-quiz-block"></div><div class="quiz-controls">
       <button class="btn-primary" id="qp-submit">提交答案</button>
       <button class="btn-secondary" id="qp-reset">重做</button>
@@ -1237,7 +1852,7 @@ function renderQuizPage(){
     renderQuizArea(ch);
   }));
   const area = document.getElementById('quiz-page-area');
-  const ch = CHAPTERS.find(c => c.id===currentChapter);
+  const ch = curChapters().find(c => c.id===currentChapter);
   if(!ch) return;
   area.innerHTML = `<div class="card pink"><div id="qp-quiz-block"></div><div class="quiz-controls">
     <button class="btn-primary" id="qp-submit">提交答案</button>
@@ -1249,7 +1864,7 @@ function renderQuizPage(){
 function renderQuizArea(ch){
   const block = document.getElementById('qp-quiz-block');
   block.innerHTML = `<h3 style="text-align:center;color:var(--pink-deep);font-size:19px;margin-bottom:14px">📝 ${ch.emoji} 第${ch.id}章：${ch.title}（共 ${ch.quiz.length} 题）</h3>` + ch.quiz.map((q, i) => {
-    const qid = ch.id + '_' + i;
+    const qid = currentCourse + '_' + ch.id + '_' + i;
     const saved = quizState.answers[qid];
     let body = '';
     let feedback = '';
@@ -1292,6 +1907,7 @@ function renderQuizArea(ch){
   block.querySelectorAll('.opt').forEach(el => el.addEventListener('click', e => {
     if(quizState.submitted) return;
     const qid = el.dataset.qid;
+    const q = ch.quiz[parseInt(qid.split('_').pop())];
     if(q.type==='single'){
       const oi = parseInt(el.dataset.oi);
       quizState.answers[qid] = oi;
@@ -1313,10 +1929,10 @@ function renderQuizArea(ch){
 
 document.addEventListener('click', e => {
   if(e.target.id === 'qp-submit'){
-    const ch = CHAPTERS.find(c => c.id===currentChapter);
+    const ch = curChapters().find(c => c.id===currentChapter);
     let correct = 0;
     ch.quiz.forEach((q,i) => {
-      const qid = ch.id+'_'+i;
+      const qid = currentCourse+'_'+ch.id+'_'+i;
       const u = quizState.answers[qid];
       let ok=false;
       if(q.type==='single') ok=(u===q.ans);
@@ -1338,7 +1954,7 @@ document.addEventListener('click', e => {
   }
   if(e.target.id === 'qp-reset'){
     quizState = { submitted:false, answers:{} };
-    const ch = CHAPTERS.find(c => c.id===currentChapter);
+    const ch = curChapters().find(c => c.id===currentChapter);
     renderQuizArea(ch);
     document.getElementById('qp-result').innerHTML = '';
     document.getElementById('qp-submit').style.display='inline-block';
@@ -1350,11 +1966,12 @@ function renderCenter(tab){
   document.querySelectorAll('.center-tabs button').forEach(b => b.classList.toggle('active', b.dataset.tab===tab));
   ['progress','wrong','fav'].forEach(t => document.getElementById('tab-'+t).style.display = (t===tab?'block':'none'));
   if(tab==='progress'){
-    const doneList = CHAPTERS.map(c => ({...c, done: Store.isDone(c.id), score: Store.progress[c.id]?.score || 0})).reverse();
+    const doneList = curChapters().map(c => ({...c, done: Store.isDone(c.id), score: Store.progress[c.id]?.score || 0})).reverse();
     const doneCount = doneList.filter(c => c.done).length;
+    document.getElementById('center-title').textContent = '💖 我的学习空间 · ' + COURSES[currentCourse].name;
     document.getElementById('tab-progress').innerHTML = `
       <h3>📈 学习进度</h3>
-      <p style="margin:8px 0">共 ${CHAPTERS.length} 章，已学 <b style="color:var(--pink-deep)">${doneCount}</b> 章</p>
+      <p style="margin:8px 0">当前课程：${COURSES[currentCourse].name}，共 ${curChapters().length} 章，已学 <b style="color:var(--accent)">${doneCount}</b> 章</p>
       ${doneList.map(c => `<div class="chapter-item ${c.done?'done':''}" data-id="${c.id}" style="cursor:pointer;margin:8px 0">
         <div class="num">${c.emoji}</div>
         <div class="info">
@@ -1374,7 +1991,7 @@ function renderCenter(tab){
     if(w.length === 0) html += '<div class="empty"><span class="emoji">🎉</span>太棒了，还没有错题！</div>';
     else {
       Object.entries(byChapter).forEach(([cid, items]) => {
-        const ch = CHAPTERS.find(c => c.id===parseInt(cid));
+        const ch = curChapters().find(c => c.id===parseInt(cid));
         html += `<h4 style="margin-top:16px">${ch?.emoji} 第${cid}章 · ${ch?.title}（${items.length}题）</h4>`;
         html += items.map(it => `
           <div class="wrong-item">
@@ -1397,7 +2014,7 @@ function renderCenter(tab){
     if(favs.length === 0) html += '<div class="empty"><span class="emoji">💭</span>还没有收藏内容哦～</div>';
     else {
       html += favs.map(id => {
-        const ch = CHAPTERS.find(c => c.id===id);
+        const ch = curChapters().find(c => c.id===id);
         return `<div class="fav-item" data-id="${id}" style="cursor:pointer">
           <button class="del" data-id="${id}">取消</button>
           <div class="title">${ch?.emoji} 第${id}章 · ${ch?.title}</div>
@@ -1435,6 +2052,13 @@ document.querySelector('[data-nav="quiz"]').addEventListener('click', () => {
   quizState = { submitted:false, answers:{} };
   renderQuizPage();
 });
+
+/* ========== 课程卡片切换 ========== */
+document.querySelectorAll('.course-card').forEach(c => c.addEventListener('click', () => {
+  setCurrentCourse(c.dataset.course);
+  showPage('home');
+  renderHome();
+}));
 
 /* ========== 初始化 ========== */
 renderHome();
