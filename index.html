@@ -200,6 +200,13 @@ main{max-width:880px;margin:28px auto;padding:0 20px}
 .sync-help{margin-top:12px;font-size:13px;border-top:1px solid var(--line);padding-top:10px}
 .sync-help summary{cursor:pointer;color:var(--accent)}
 .sync-help ol{margin:8px 0 0 18px;line-height:2}
+
+/* ========== 助记对比表格 ========== */
+.cmp{width:100%;border-collapse:collapse;margin:12px 0;font-size:14px}
+.cmp th{background:#2563eb;color:#fff;padding:8px;border:1px solid #2563eb;text-align:center}
+.cmp td{padding:7px 8px;border:1px solid #e5e7eb;text-align:center}
+.cmp tr:nth-child(even) td{background:#f9fafb}
+.cmp td.l{text-align:left}
 .empty{text-align:center;padding:48px 20px;color:var(--ink-light);font-size:14px}
 .empty .emoji{display:none}
 
@@ -347,7 +354,28 @@ const CHAPTERS_51 = [
 <h3>🤔 什么是单片机？</h3>
 <p>用专业语言讲，<b>单片机</b>就是在一块硅片上集成了<b>微处理器、存储器、各种输入/输出接口</b>的芯片，这样一块芯片就具有了计算机的属性，因而被称为<b>单片微型计算机</b>，简称单片机。</p>
 
-<div class="tip">通俗来说：单片机就是一台超小型的"电脑"，能干活、能控制，广泛用在各种电子设备里。</div>
+<div class="tip">通俗来说：单片机就是一台超小型的"电脑"——把主机、内存、硬盘、键盘鼠标接口全部浓缩进一块指甲盖大的芯片里。</div>
+
+<h3>🆚 单片机 vs 普通电脑（对比记忆）</h3>
+<table class="cmp">
+<tr><th>对比项</th><th>普通电脑 PC</th><th>单片机 MCU</th></tr>
+<tr><td>CPU</td><td>性能强、功耗高</td><td>性能够用、功耗极低</td></tr>
+<tr><td>存储器</td><td>内存 + 硬盘（GB 级）</td><td>RAM + ROM 全在片内（KB 级）</td></tr>
+<tr><td>输入输出</td><td>键盘、鼠标、显示器</td><td>引脚直接接 LED、按键、电机</td></tr>
+<tr><td>形态</td><td>主机 + 外设一大套</td><td>一块芯片就是整机</td></tr>
+<tr><td>价格</td><td>几千元</td><td>几元～几十元</td></tr>
+<tr><td>用途</td><td>通用计算</td><td>专用控制（电饭煲、遥控器、玩具…）</td></tr>
+</table>
+
+<h3>🧠 RAM 和 ROM 分不清？</h3>
+<table class="cmp">
+<tr><th></th><th>ROM（程序存储器）</th><th>RAM（数据存储器）</th></tr>
+<tr><td>存什么</td><td>烧录好的程序</td><td>程序运行的临时数据</td></tr>
+<tr><td>断电后</td><td><b>不丢失</b></td><td><b>全部丢失</b></td></tr>
+<tr><td>打个比方</td><td>刻在光盘里的歌</td><td>黑板上的草稿</td></tr>
+<tr><td>51 容量</td><td>4KB（52 为 8KB Flash）</td><td>128B（52 为 256B）</td></tr>
+</table>
+<div class="warn">考试常考：<b>ROM 断电不丢、RAM 断电即丢</b>。型号里的 RC/RD 后缀表示片内 RAM 大小（RC=512B，RD+=1280B）。</div>
 
 <h3>🏷️ 芯片标号怎么读？</h3>
 <p>示例标号：<code>STC 89C51RC 40C-PDIP 0707CU8138.00D</code></p>
@@ -355,28 +383,54 @@ const CHAPTERS_51 = [
   <li><b>STC</b> — 前缀，表示 STC 公司生产（其他厂商还有 AT、Intel、Winbond、SST 等）</li>
   <li><b>89C51</b> — 8051 兼容系列；其中 89 通常表示 Flash 程序存储器，C 表示 CMOS 器件</li>
   <li><b>RC</b> — 片内 RAM 512B（同系列 RD+ 为 1280B）</li>
-  <li><b>40</b> — 通常与速度等级有关</li>
+  <li><b>40</b> — 最高工作频率 40MHz</li>
   <li><b>C</b> — 商业级温度范围 0℃～+75℃（I 工业级 -40℃～+85℃）</li>
   <li><b>PDIP</b> — 双列直插式封装（DIP）</li>
 </ul>
 
-<h3>📦 常见封装类型（实物图解）</h3>
-
-<p>三种常见封装对比（左：DIP 双列直插；中：QFP 四边扁平；右：PLCC 方形）：</p>
-<img src="https://k1.spdns.de/Develop/Hardware/Infomix/IC%20Geh%C3%A4useformen/DIP%2CPQFP%2CPLCC.png" alt="DIP QFP PLCC 封装对比" referrerpolicy="no-referrer" onerror="this.style.display='none';this.insertAdjacentHTML('afterend','<div style=&quot;background:#f3f4f6;padding:10px;border-radius:6px;font-size:13px;color:#6b7280;text-align:center&quot;>📷（封装对比图加载中）</div>')">
-
-<p>PLCC 封装实物（方形，J 形内弯引脚，适合 SMT 贴装）：</p>
-<img src="https://k1.spdns.de/Develop/Hardware/Infomix/IC%20Geh%C3%A4useformen/PLCC.jpg" alt="PLCC 封装实物" referrerpolicy="no-referrer" onerror="this.style.display='none'">
-
-<p>QFP 封装实物（四边鸥翼式外弯引脚）：</p>
-<img src="https://k1.spdns.de/Develop/Hardware/Infomix/IC%20Geh%C3%A4useformen/PQFP-44.jpg" alt="PQFP-44 封装实物" referrerpolicy="no-referrer" onerror="this.style.display='none'">
-
+<h3>🔍 观察实物芯片（识图常考）</h3>
+<svg viewBox="0 0 360 200" style="max-width:360px;display:block;margin:8px auto;background:#fff">
+  <rect x="110" y="30" width="140" height="140" rx="6" fill="#1f2937"/>
+  <circle cx="180" cy="30" r="9" fill="#fff"/>
+  <circle cx="126" cy="48" r="4" fill="#9ca3af"/>
+  <line x1="102" y1="40" x2="102" y2="158" stroke="#6b7280" stroke-width="16" stroke-dasharray="4 2"/>
+  <line x1="258" y1="40" x2="258" y2="158" stroke="#6b7280" stroke-width="16" stroke-dasharray="4 2"/>
+  <text x="180" y="102" text-anchor="middle" fill="#fff" font-size="13">STC89C52RC</text>
+  <text x="180" y="120" text-anchor="middle" fill="#9ca3af" font-size="10">40 脚 DIP 俯视图</text>
+  <text x="88" y="45" text-anchor="end" font-size="10" fill="#374151">1</text>
+  <text x="88" y="160" text-anchor="end" font-size="10" fill="#374151">20</text>
+  <text x="272" y="45" text-anchor="start" font-size="10" fill="#374151">40</text>
+  <text x="272" y="160" text-anchor="start" font-size="10" fill="#374151">21</text>
+  <line x1="193" y1="22" x2="186" y2="27" stroke="#6b7280" stroke-width="1"/>
+  <text x="196" y="24" font-size="9" fill="#6b7280">半圆缺口</text>
+</svg>
 <ol>
-  <li><b>DIP</b>（双列直插式）：引脚从芯片两侧引出，适合手工焊接，能看到引脚是"直着"伸出来的</li>
-  <li><b>PLCC</b>（带引线塑料封装）：方形，J 形内弯引脚勾住 PCB 焊盘</li>
-  <li><b>QFP</b>（四边引脚扁平式）：表面贴装（SMT），引脚向外弯成"鸥翼"状</li>
-  <li><b>BGA</b>（球栅阵列）：高密度多引脚，引脚变成锡球在芯片底部</li>
+  <li><b>黑色长方形</b>：芯片主体，里面用环氧树脂封着真正的硅片</li>
+  <li><b>两边各 20 只脚</b>：一共 40 只脚，负责电源、时钟和与外界通信</li>
+  <li><b>半圆缺口 + 小圆点</b>：缺口朝左时，从缺口旁那脚开始<b>逆时针数</b> 1→40 号脚，左下是 20、右下是 21</li>
 </ol>
+
+<h3>📦 五种常见封装（实物图）</h3>
+<p><b>① DIP</b> 双列直插（教学最常用，插面包板/插座都方便）：</p>
+<img src="https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=Top%20view%20photo%20of%20a%20black%20DIP-40%20integrated%20circuit%20chip%2C%20dual%20in-line%20package%20with%20two%20rows%20of%20straight%20metal%20pins%2C%20small%20semicircular%20notch%20on%20one%20end%2C%20clean%20white%20background%2C%20photorealistic%20product%20photography&image_size=square" alt="DIP 双列直插封装实物" loading="lazy" onerror="this.style.display='none'">
+<p><b>② PLCC</b> 塑料有引线芯片载体（方形，J 形脚向内弯）：</p>
+<img src="https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=Photo%20of%20a%20square%20PLCC%20plastic%20leaded%20chip%20carrier%20package%2C%20J-shaped%20pins%20bent%20inward%20on%20four%20sides%2C%20black%20plastic%20body%2C%20clean%20white%20background%2C%20photorealistic%20product%20photography&image_size=square" alt="PLCC 封装实物" loading="lazy" onerror="this.style.display='none'">
+<p><b>③ QFP</b> 四边引脚扁平封装（鸥翼脚向外弯，贴片焊接）：</p>
+<img src="https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=Photo%20of%20a%20QFP%20quad%20flat%20package%20chip%2C%20thin%20gull-wing%20pins%20extending%20outward%20from%20all%20four%20sides%2C%20flat%20black%20square%20body%2C%20clean%20white%20background%2C%20photorealistic%20product%20photography&image_size=square" alt="QFP 封装实物" loading="lazy" onerror="this.style.display='none'">
+<p><b>④ PGA</b> 针栅阵列（底部满布金针，老式 CPU 常见）：</p>
+<img src="https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=Photo%20of%20the%20bottom%20side%20of%20a%20ceramic%20PGA%20pin%20grid%20array%20chip%2C%20dense%20grid%20of%20gold%20pins%2C%20clean%20white%20background%2C%20photorealistic%20product%20photography&image_size=square" alt="PGA 封装实物" loading="lazy" onerror="this.style.display='none'">
+<p><b>⑤ BGA</b> 球栅阵列（底部锡球，密度最高，现代芯片主流）：</p>
+<img src="https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=Photo%20of%20the%20bottom%20side%20of%20a%20BGA%20ball%20grid%20array%20chip%2C%20regular%20grid%20of%20small%20silver%20solder%20balls%20on%20green%20substrate%2C%20clean%20white%20background%2C%20photorealistic%20product%20photography&image_size=square" alt="BGA 封装实物" loading="lazy" onerror="this.style.display='none'">
+
+<h3>📋 封装对比速查表</h3>
+<table class="cmp">
+<tr><th>封装</th><th>引脚形态</th><th>安装方式</th><th>优点</th><th>常见场景</th></tr>
+<tr><td><b>DIP</b></td><td>两排直针</td><td>插件/插座</td><td class="l">好插好焊好更换</td><td class="l">教学实验、洞洞板</td></tr>
+<tr><td><b>PLCC</b></td><td>J 形脚内弯</td><td>插座/贴片</td><td class="l">占面积小、可插拔</td><td class="l">早期主板 BIOS</td></tr>
+<tr><td><b>QFP</b></td><td>鸥翼脚外弯</td><td>表面贴装</td><td class="l">引脚多、成本低</td><td class="l">主流贴片芯片</td></tr>
+<tr><td><b>PGA</b></td><td>底部针阵</td><td>插座</td><td class="l">引脚多且可插拔</td><td class="l">老式 CPU</td></tr>
+<tr><td><b>BGA</b></td><td>底部锡球阵</td><td>表面贴装</td><td class="l">密度最高、高频好</td><td class="l">现代 CPU/内存/手机</td></tr>
+</table>
 
 <h3>🌍 单片机能做什么？</h3>
 <ul>
@@ -403,6 +457,24 @@ const CHAPTERS_51 = [
 <img src="pinout_8051.gif" alt="8051 40 脚引脚图" onerror="this.style.display='none'">
 
 <p>芯片上有一个<b>小圆点或凹口</b>，正对着左上角时，<b>从左上角那个脚开始，逆时针数</b>就是 1、2、3…… 脚。最后一个（40脚）在 1 脚的正对面。</p>
+
+<h3>📋 40 只脚功能速查总表</h3>
+<table class="cmp">
+<tr><th>分组</th><th>引脚号</th><th>名称</th><th>作用</th></tr>
+<tr><td rowspan="2">🔋 电源</td><td>40</td><td>Vcc</td><td class="l">接 +5V 电源正极</td></tr>
+<tr><td>20</td><td>GND</td><td class="l">接地</td></tr>
+<tr><td rowspan="2">🕐 时钟</td><td>19</td><td>XTAL1</td><td class="l">晶振输入端</td></tr>
+<tr><td>18</td><td>XTAL2</td><td class="l">晶振输出端</td></tr>
+<tr><td>🔄 复位</td><td>9</td><td>RST</td><td class="l">连续 2 个机器周期高电平触发复位</td></tr>
+<tr><td rowspan="3">🎚️ 控制</td><td>31</td><td>EA</td><td class="l">用片内 ROM 时接高电平</td></tr>
+<tr><td>30</td><td>ALE</td><td class="l">扩展存储器时锁存低 8 位地址</td></tr>
+<tr><td>29</td><td>PSEN</td><td class="l">外部程序存储器读选通</td></tr>
+<tr><td rowspan="4">🎛️ IO 口</td><td>32~39</td><td>P0</td><td class="l">开漏结构，作 IO 需外接上拉</td></tr>
+<tr><td>1~8</td><td>P1</td><td class="l">准双向，内带上拉</td></tr>
+<tr><td>21~28</td><td>P2</td><td class="l">准双向，内带上拉</td></tr>
+<tr><td>10~17</td><td>P3</td><td class="l">准双向，每脚有第二功能</td></tr>
+</table>
+<div class="tip">速记口诀：<b>40 吃电 20 接地，18、19 接晶振，9 号复位 31 EA</b>，剩下 32 只脚全是 IO 口。</div>
 
 <h3>⚡ 电源和时钟引脚（必掌握）</h3>
 <ul>
@@ -470,7 +542,18 @@ const CHAPTERS_51 = [
 
 <span class="cm">// 二进制：C51 不直接支持，通常用十六进制代替</span></pre>
 
-<div class="tip">记一下：<b>0</b>=0000, <b>1</b>=0001, <b>2</b>=0010, <b>3</b>=0011, <b>4</b>=0100, <b>5</b>=0101, <b>6</b>=0110, <b>7</b>=0111, <b>8</b>=1000, <b>9</b>=1001, <b>A</b>=1010, <b>B</b>=1011, <b>C</b>=1100, <b>D</b>=1101, <b>E</b>=1110, <b>F</b>=1111</div>
+<h3>📋 0~15 三进制对照表（背熟！）</h3>
+<table class="cmp">
+<tr><th>十进制</th><th>二进制</th><th>十六进制</th><th>十进制</th><th>二进制</th><th>十六进制</th></tr>
+<tr><td>0</td><td>0000</td><td>0</td><td>8</td><td>1000</td><td>8</td></tr>
+<tr><td>1</td><td>0001</td><td>1</td><td>9</td><td>1001</td><td>9</td></tr>
+<tr><td>2</td><td>0010</td><td>2</td><td>10</td><td>1010</td><td>A</td></tr>
+<tr><td>3</td><td>0011</td><td>3</td><td>11</td><td>1011</td><td>B</td></tr>
+<tr><td>4</td><td>0100</td><td>4</td><td>12</td><td>1100</td><td>C</td></tr>
+<tr><td>5</td><td>0101</td><td>5</td><td>13</td><td>1101</td><td>D</td></tr>
+<tr><td>6</td><td>0110</td><td>6</td><td>14</td><td>1110</td><td>E</td></tr>
+<tr><td>7</td><td>0111</td><td>7</td><td>15</td><td>1111</td><td>F</td></tr>
+</table>
   `,
   quiz:[
     {type:"single", text:"二进制 1101 转换为十进制是？", opts:["11","12","13","14"], ans:2},
@@ -503,6 +586,15 @@ const CHAPTERS_51 = [
 <h3>🔗 异或运算（XOR）</h3>
 <p>规则：<b>不同则有，相同则无</b>。0⊕0=0, 0⊕1=1, 1⊕0=1, 1⊕1=0</p>
 <p>C 语言：<code>^</code> 按位异或。常用技巧：<b>异或自身=0</b>，<b>异或 1=取反</b></p>
+
+<h3>📋 四种运算真值表（背下来）</h3>
+<table class="cmp">
+<tr><th>A</th><th>B</th><th>A &amp; B（与）</th><th>A | B（或）</th><th>A ^ B（异或）</th></tr>
+<tr><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td></tr>
+<tr><td>0</td><td>1</td><td>0</td><td>1</td><td>1</td></tr>
+<tr><td>1</td><td>0</td><td>0</td><td>1</td><td>1</td></tr>
+<tr><td>1</td><td>1</td><td>1</td><td>1</td><td>0</td></tr>
+</table>
 
 <div class="tip">考试重点区分：<b>& 是按位与</b>，<b>&& 是逻辑与</b>；<b>| 是按位或</b>，<b>|| 是逻辑或</b>。别搞混了！</div>
   `,
@@ -621,9 +713,83 @@ const CHAPTERS_51 = [
   <li>🔄 <b>复位电路</b> — 上电复位 + 手动复位</li>
 </ul>
 
-<h3>🔧 完整最小系统原理图</h3>
+<h3>🔧 最小系统原理图（教学简化版）</h3>
+<p>最小系统 = <b>电源 + 时钟（晶振）+ 复位 + EA 接高</b>。下图把这四部分的接法画全了，对照着看：</p>
+<svg viewBox="0 0 640 360" style="max-width:640px;display:block;margin:8px auto;background:#fff">
+  <line x1="40" y1="40" x2="620" y2="40" stroke="#2563eb" stroke-width="2"/>
+  <text x="628" y="44" font-size="12" fill="#2563eb">+5V</text>
+  <line x1="40" y1="320" x2="620" y2="320" stroke="#374151" stroke-width="2"/>
+  <text x="628" y="324" font-size="12" fill="#374151">GND</text>
+  <rect x="300" y="80" width="160" height="200" rx="8" fill="#1f2937"/>
+  <text x="380" y="165" text-anchor="middle" fill="#fff" font-size="20">89C51</text>
+  <text x="380" y="185" text-anchor="middle" fill="#9ca3af" font-size="11">51 单片机</text>
+  <line x1="300" y1="110" x2="250" y2="110" stroke="#374151" stroke-width="1.5"/>
+  <text x="296" y="104" text-anchor="end" font-size="10" fill="#374151">RST (9)</text>
+  <line x1="300" y1="240" x2="250" y2="240" stroke="#374151" stroke-width="1.5"/>
+  <text x="296" y="234" text-anchor="end" font-size="10" fill="#374151">GND (20)</text>
+  <line x1="250" y1="240" x2="250" y2="320" stroke="#374151" stroke-width="1.5"/>
+  <line x1="460" y1="90" x2="560" y2="90" stroke="#374151" stroke-width="1.5"/>
+  <line x1="560" y1="90" x2="560" y2="40" stroke="#374151" stroke-width="1.5"/>
+  <text x="464" y="84" font-size="10" fill="#374151">Vcc (40)</text>
+  <line x1="460" y1="130" x2="530" y2="130" stroke="#374151" stroke-width="1.5"/>
+  <line x1="530" y1="130" x2="530" y2="40" stroke="#374151" stroke-width="1.5"/>
+  <text x="464" y="124" font-size="10" fill="#374151">EA (31)</text>
+  <line x1="460" y1="175" x2="530" y2="175" stroke="#374151" stroke-width="1.5"/>
+  <text x="464" y="169" font-size="10" fill="#374151">XTAL2 (18)</text>
+  <line x1="460" y1="225" x2="530" y2="225" stroke="#374151" stroke-width="1.5"/>
+  <text x="464" y="219" font-size="10" fill="#374151">XTAL1 (19)</text>
+  <line x1="530" y1="175" x2="540" y2="175" stroke="#374151" stroke-width="1.5"/>
+  <line x1="540" y1="175" x2="540" y2="183" stroke="#374151" stroke-width="1.5"/>
+  <rect x="533" y="183" width="14" height="34" fill="#fff" stroke="#374151" stroke-width="1.5"/>
+  <line x1="540" y1="217" x2="540" y2="225" stroke="#374151" stroke-width="1.5"/>
+  <line x1="540" y1="225" x2="530" y2="225" stroke="#374151" stroke-width="1.5"/>
+  <text x="556" y="203" font-size="10" fill="#6b7280">晶振 11.0592MHz</text>
+  <line x1="490" y1="175" x2="490" y2="189" stroke="#374151" stroke-width="1.5"/>
+  <line x1="482" y1="189" x2="498" y2="189" stroke="#374151" stroke-width="2"/>
+  <line x1="482" y1="197" x2="498" y2="197" stroke="#374151" stroke-width="2"/>
+  <line x1="490" y1="197" x2="490" y2="209" stroke="#374151" stroke-width="1.5"/>
+  <line x1="480" y1="209" x2="500" y2="209" stroke="#374151" stroke-width="2"/>
+  <line x1="484" y1="214" x2="496" y2="214" stroke="#374151" stroke-width="2"/>
+  <line x1="488" y1="219" x2="492" y2="219" stroke="#374151" stroke-width="2"/>
+  <text x="506" y="195" font-size="9" fill="#6b7280">22pF</text>
+  <line x1="490" y1="225" x2="490" y2="239" stroke="#374151" stroke-width="1.5"/>
+  <line x1="482" y1="239" x2="498" y2="239" stroke="#374151" stroke-width="2"/>
+  <line x1="482" y1="247" x2="498" y2="247" stroke="#374151" stroke-width="2"/>
+  <line x1="490" y1="247" x2="490" y2="259" stroke="#374151" stroke-width="1.5"/>
+  <line x1="480" y1="259" x2="500" y2="259" stroke="#374151" stroke-width="2"/>
+  <line x1="484" y1="264" x2="496" y2="264" stroke="#374151" stroke-width="2"/>
+  <line x1="488" y1="269" x2="492" y2="269" stroke="#374151" stroke-width="2"/>
+  <text x="506" y="245" font-size="9" fill="#6b7280">22pF</text>
+  <line x1="250" y1="110" x2="250" y2="84" stroke="#374151" stroke-width="1.5"/>
+  <line x1="242" y1="84" x2="258" y2="84" stroke="#374151" stroke-width="2"/>
+  <line x1="242" y1="76" x2="258" y2="76" stroke="#374151" stroke-width="2"/>
+  <line x1="250" y1="76" x2="250" y2="40" stroke="#374151" stroke-width="1.5"/>
+  <text x="264" y="82" font-size="10" fill="#6b7280">10μF</text>
+  <line x1="250" y1="110" x2="220" y2="110" stroke="#374151" stroke-width="1.5"/>
+  <line x1="220" y1="110" x2="220" y2="88" stroke="#374151" stroke-width="1.5"/>
+  <circle cx="220" cy="88" r="1.8" fill="#374151"/>
+  <line x1="220" y1="88" x2="235" y2="74" stroke="#374151" stroke-width="1.5"/>
+  <circle cx="220" cy="72" r="1.8" fill="#374151"/>
+  <line x1="220" y1="72" x2="220" y2="40" stroke="#374151" stroke-width="1.5"/>
+  <text x="180" y="70" font-size="10" fill="#6b7280">复位按键</text>
+  <line x1="250" y1="110" x2="250" y2="132" stroke="#374151" stroke-width="1.5"/>
+  <rect x="243" y="132" width="14" height="36" fill="#fff" stroke="#374151" stroke-width="1.5"/>
+  <line x1="250" y1="168" x2="250" y2="182" stroke="#374151" stroke-width="1.5"/>
+  <line x1="240" y1="182" x2="260" y2="182" stroke="#374151" stroke-width="2"/>
+  <line x1="244" y1="187" x2="256" y2="187" stroke="#374151" stroke-width="2"/>
+  <line x1="247" y1="192" x2="253" y2="192" stroke="#374151" stroke-width="2"/>
+  <text x="264" y="152" font-size="10" fill="#6b7280">10kΩ</text>
+  <line x1="600" y1="40" x2="600" y2="58" stroke="#374151" stroke-width="1.5"/>
+  <line x1="592" y1="58" x2="608" y2="58" stroke="#374151" stroke-width="2"/>
+  <line x1="592" y1="66" x2="608" y2="66" stroke="#374151" stroke-width="2"/>
+  <line x1="600" y1="66" x2="600" y2="320" stroke="#374151" stroke-width="1.5"/>
+  <text x="556" y="70" font-size="10" fill="#6b7280">0.1μF 去耦</text>
+  <text x="380" y="300" text-anchor="middle" font-size="10" fill="#9ca3af">（P0~P3 等 IO 口未用到，图中省略）</text>
+</svg>
+
+<h3>🧩 完整开发板原理图（进阶参考）</h3>
 <p>下图是一块 51 单片机开发板的完整原理图，能看到晶振、电容、复位、地址锁存器、SRAM、串口 MAX232 等元件：</p>
-<img src="https://www.pjrc.com/tech/8051/board2/dev2_sch.gif" alt="8051 最小系统原理图" referrerpolicy="no-referrer" onerror="this.style.display='none'">
+<img src="https://www.pjrc.com/tech/8051/board2/dev2_sch.gif" alt="8051 开发板完整原理图" referrerpolicy="no-referrer" onerror="this.style.display='none'">
 
 <h3>🧩 开发板实物照片</h3>
 <p>一块实际的 51 开发板，板上的黑色大芯片就是 87C51，旁边蓝色方块是 SRAM，蓝色 D 形接头是串口（DB-9），黄色电解电容是复位用的：</p>
@@ -736,13 +902,14 @@ sbit LED = P1^<span class="str">1</span>;
   <li><b>TH0 / TL0</b>：T0 的计数初值（高 8 位 / 低 8 位）</li>
 </ul>
 
-<h3>⚙️ 四种工作方式</h3>
-<ul>
-  <li><b>方式 0</b>：13 位定时器（基本不用）</li>
-  <li><b>方式 1</b>：<b>16 位定时器</b>（最常用！范围 0~65535）</li>
-  <li><b>方式 2</b>：<b>8 位自动重装</b>（常用于串口波特率发生器）</li>
-  <li><b>方式 3</b>：T0 分成两个 8 位</li>
-</ul>
+<h3>⚙️ 四种工作方式（对比记忆）</h3>
+<table class="cmp">
+<tr><th>方式</th><th>位数</th><th>最大计数</th><th>自动重装</th><th>典型用途</th></tr>
+<tr><td>方式 0</td><td>13 位</td><td>8192</td><td>否</td><td class="l">兼容老式，基本不用</td></tr>
+<tr><td><b>方式 1</b></td><td><b>16 位</b></td><td><b>65536</b></td><td>否</td><td class="l"><b>精确定时（最常用）</b></td></tr>
+<tr><td><b>方式 2</b></td><td>8 位</td><td>256</td><td><b>✅ 是</b></td><td class="l"><b>串口波特率发生器</b></td></tr>
+<tr><td>方式 3</td><td>2×8 位</td><td>256</td><td>否</td><td class="l">仅 T0 可拆，很少用</td></tr>
+</table>
 
 <h3>🧮 初值计算（方式 1）</h3>
 <p>16 位定时器从初值 X 计到溢出需要 <b>(65536 - X)</b> 个机器周期。</p>
@@ -852,6 +1019,23 @@ sbit LED = P1^<span class="str">1</span>;
   <li><b>TH1 / TL1</b> — T1 重装值，决定波特率</li>
   <li><b>SBUF</b> — 发送/接收缓冲寄存器</li>
 </ul>
+
+<h3>📋 串口四种工作方式</h3>
+<table class="cmp">
+<tr><th>方式</th><th>SM0 SM1</th><th>帧格式</th><th>波特率</th><th>用途</th></tr>
+<tr><td>方式 0</td><td>0 0</td><td>8 位同步移位</td><td>固定 fosc/12</td><td class="l">扩展 IO（移位寄存器）</td></tr>
+<tr><td><b>方式 1</b></td><td><b>0 1</b></td><td><b>10 位异步</b></td><td><b>T1 溢出率决定</b></td><td class="l"><b>最常用：和电脑通信</b></td></tr>
+<tr><td>方式 2</td><td>1 0</td><td>11 位异步</td><td>固定 fosc/32 或 /64</td><td class="l">多机通信</td></tr>
+<tr><td>方式 3</td><td>1 1</td><td>11 位异步</td><td>T1 溢出率决定</td><td class="l">多机通信</td></tr>
+</table>
+
+<h3>📋 SCON = 0x50 是怎么来的？</h3>
+<table class="cmp">
+<tr><th>位</th><th>SM0</th><th>SM1</th><th>SM2</th><th>REN</th><th>TB8</th><th>RB8</th><th>TI</th><th>RI</th></tr>
+<tr><td><b>取值</b></td><td>0</td><td>1</td><td>0</td><td>1</td><td>0</td><td>0</td><td>0</td><td>0</td></tr>
+<tr><td>含义</td><td colspan="2">01 → 方式 1</td><td>多机控制</td><td>允许接收</td><td colspan="2">第 9 位数据</td><td>发送标志</td><td>接收标志</td></tr>
+</table>
+<div class="tip">SM0 SM1 = 01（方式 1）、REN = 1（允许接收）→ 0101 0000 = <b>0x50</b>。</div>
 
 <h3>📐 波特率设置（常用 9600）</h3>
 <p>11.0592MHz 晶振 + T1 方式 2 产生 9600 波特率：<b>TH1 = TL1 = 0xFD</b></p>
