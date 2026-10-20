@@ -413,17 +413,38 @@ const CHAPTERS_51 = [
   <li><b>半圆缺口 + 小圆点</b>：缺口朝上时，从缺口旁（左上角）那脚开始<b>逆时针数</b> 1→40 号脚，左下是 20、右下是 21</li>
 </ol>
 
-<h3>📦 五种常见封装（实物图）</h3>
-<p><b>① DIP</b> 双列直插（教学最常用，插面包板/插座都方便）：</p>
-<img src="https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=Top%20view%20photo%20of%20a%20black%20DIP-40%20integrated%20circuit%20chip%2C%20dual%20in-line%20package%20with%20two%20rows%20of%20straight%20metal%20pins%2C%20small%20semicircular%20notch%20on%20one%20end%2C%20clean%20white%20background%2C%20photorealistic%20product%20photography&image_size=square" alt="DIP 双列直插封装实物" loading="lazy" onerror="this.style.display='none'">
-<p><b>② PLCC</b> 塑料有引线芯片载体（方形，J 形脚向内弯）：</p>
-<img src="https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=Photo%20of%20a%20square%20PLCC%20plastic%20leaded%20chip%20carrier%20package%2C%20J-shaped%20pins%20bent%20inward%20on%20four%20sides%2C%20black%20plastic%20body%2C%20clean%20white%20background%2C%20photorealistic%20product%20photography&image_size=square" alt="PLCC 封装实物" loading="lazy" onerror="this.style.display='none'">
-<p><b>③ QFP</b> 四边引脚扁平封装（鸥翼脚向外弯，贴片焊接）：</p>
-<img src="https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=Photo%20of%20a%20QFP%20quad%20flat%20package%20chip%2C%20thin%20gull-wing%20pins%20extending%20outward%20from%20all%20four%20sides%2C%20flat%20black%20square%20body%2C%20clean%20white%20background%2C%20photorealistic%20product%20photography&image_size=square" alt="QFP 封装实物" loading="lazy" onerror="this.style.display='none'">
-<p><b>④ PGA</b> 针栅阵列（底部满布金针，老式 CPU 常见）：</p>
-<img src="https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=Photo%20of%20the%20bottom%20side%20of%20a%20ceramic%20PGA%20pin%20grid%20array%20chip%2C%20dense%20grid%20of%20gold%20pins%2C%20clean%20white%20background%2C%20photorealistic%20product%20photography&image_size=square" alt="PGA 封装实物" loading="lazy" onerror="this.style.display='none'">
-<p><b>⑤ BGA</b> 球栅阵列（底部锡球，密度最高，现代芯片主流）：</p>
-<img src="https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=Photo%20of%20the%20bottom%20side%20of%20a%20BGA%20ball%20grid%20array%20chip%2C%20regular%20grid%20of%20small%20silver%20solder%20balls%20on%20green%20substrate%2C%20clean%20white%20background%2C%20photorealistic%20product%20photography&image_size=square" alt="BGA 封装实物" loading="lazy" onerror="this.style.display='none'">
+<h3>📦 五种常见封装（图解）</h3>
+<p>四种最常见封装的顶视图（DIP 双列直插、CERDIP 陶瓷双列、PQFP 四边扁平、PLCC 方形载体）：</p>
+<img src="pkg_dip_qfp_plcc.png" alt="DIP CERDIP PQFP PLCC 封装顶视图" loading="lazy">
+<p>PLCC 实物照片（方形黑色躯体，J 形引脚藏在四边向内弯）：</p>
+<img src="pkg_plcc.jpg" alt="PLCC 封装实物" loading="lazy">
+<p>PQFP-44 实物照片（四边鸥翼形引脚向外张开）：</p>
+<img src="pkg_qfp44.jpg" alt="PQFP-44 封装实物" loading="lazy">
+<p><b>④ PGA 与 ⑤ BGA</b> 的底视图（引脚不在四周，全在背面）：</p>
+<svg viewBox="0 0 420 210" style="max-width:420px;display:block;margin:8px auto;background:#fff">
+  <text x="105" y="24" text-anchor="middle" font-size="14" font-weight="bold" fill="#1f2937">PGA 针栅阵列</text>
+  <rect x="45" y="40" width="120" height="120" rx="4" fill="#92400e"/>
+  <g fill="#d4a017">
+    <circle cx="60" cy="55" r="4"/><circle cx="80" cy="55" r="4"/><circle cx="100" cy="55" r="4"/><circle cx="120" cy="55" r="4"/><circle cx="140" cy="55" r="4"/>
+    <circle cx="60" cy="75" r="4"/><circle cx="80" cy="75" r="4"/><circle cx="100" cy="75" r="4"/><circle cx="120" cy="75" r="4"/><circle cx="140" cy="75" r="4"/>
+    <circle cx="60" cy="95" r="4"/><circle cx="80" cy="95" r="4"/><circle cx="100" cy="95" r="4"/><circle cx="120" cy="95" r="4"/><circle cx="140" cy="95" r="4"/>
+    <circle cx="60" cy="115" r="4"/><circle cx="80" cy="115" r="4"/><circle cx="100" cy="115" r="4"/><circle cx="120" cy="115" r="4"/><circle cx="140" cy="115" r="4"/>
+    <circle cx="60" cy="135" r="4"/><circle cx="80" cy="135" r="4"/><circle cx="100" cy="135" r="4"/><circle cx="120" cy="135" r="4"/><circle cx="140" cy="135" r="4"/>
+  </g>
+  <text x="105" y="180" text-anchor="middle" font-size="11" fill="#6b7280">背面满布金色插针</text>
+  <text x="105" y="196" text-anchor="middle" font-size="11" fill="#6b7280">（老式 CPU，插插座用）</text>
+  <text x="315" y="24" text-anchor="middle" font-size="14" font-weight="bold" fill="#1f2937">BGA 球栅阵列</text>
+  <rect x="255" y="40" width="120" height="120" rx="4" fill="#166534"/>
+  <g fill="#cbd5e1">
+    <circle cx="270" cy="55" r="5"/><circle cx="290" cy="55" r="5"/><circle cx="310" cy="55" r="5"/><circle cx="330" cy="55" r="5"/><circle cx="350" cy="55" r="5"/>
+    <circle cx="270" cy="75" r="5"/><circle cx="290" cy="75" r="5"/><circle cx="310" cy="75" r="5"/><circle cx="330" cy="75" r="5"/><circle cx="350" cy="75" r="5"/>
+    <circle cx="270" cy="95" r="5"/><circle cx="290" cy="95" r="5"/><circle cx="310" cy="95" r="5"/><circle cx="330" cy="95" r="5"/><circle cx="350" cy="95" r="5"/>
+    <circle cx="270" cy="115" r="5"/><circle cx="290" cy="115" r="5"/><circle cx="310" cy="115" r="5"/><circle cx="330" cy="115" r="5"/><circle cx="350" cy="115" r="5"/>
+    <circle cx="270" cy="135" r="5"/><circle cx="290" cy="135" r="5"/><circle cx="310" cy="135" r="5"/><circle cx="330" cy="135" r="5"/><circle cx="350" cy="135" r="5"/>
+  </g>
+  <text x="315" y="180" text-anchor="middle" font-size="11" fill="#6b7280">背面满布银色锡球</text>
+  <text x="315" y="196" text-anchor="middle" font-size="11" fill="#6b7280">（手机/CPU，加热焊死）</text>
+</svg>
 
 <h3>📋 封装对比速查表</h3>
 <table class="cmp">
@@ -806,11 +827,11 @@ const CHAPTERS_51 = [
 
 <h3>🧩 完整开发板原理图（进阶参考）</h3>
 <p>下图是一块 51 单片机开发板的完整原理图，能看到晶振、电容、复位、地址锁存器、SRAM、串口 MAX232 等元件：</p>
-<img src="https://www.pjrc.com/tech/8051/board2/dev2_sch.gif" alt="8051 开发板完整原理图" referrerpolicy="no-referrer" onerror="this.style.display='none'">
+<img src="dev2_sch.gif" alt="8051 开发板完整原理图" loading="lazy">
 
 <h3>🧩 开发板实物照片</h3>
 <p>一块实际的 51 开发板，板上的黑色大芯片就是 87C51，旁边蓝色方块是 SRAM，蓝色 D 形接头是串口（DB-9），黄色电解电容是复位用的：</p>
-<img src="https://www.pjrc.com/tech/8051/board2/board-big.jpg" alt="51 单片机开发板实物" referrerpolicy="no-referrer" onerror="this.style.display='none'">
+<img src="board-big.jpg" alt="51 单片机开发板实物" loading="lazy">
 
 <h3>⚡ 电源电路</h3>
 <p>Vcc 接 +5V，GND 接地。通常在 Vcc 和 GND 之间就近接一个 <b>0.1μF 电容</b>去耦，滤除高频噪声。</p>
