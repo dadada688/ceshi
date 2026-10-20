@@ -294,6 +294,7 @@ main{max-width:880px;margin:28px auto;padding:0 20px}
 
   <div class="card pink">
     <h2 id="home-course-title">📚 课程目录</h2>
+    <div id="path-legend" style="background:linear-gradient(135deg,#fef3c7,#fde68a);border-radius:12px;padding:12px 16px;margin:10px 0 16px;font-size:14px;line-height:1.8;color:#78350f"></div>
     <div class="chapter-list" id="chapter-list-home"></div>
   </div>
 </section>
@@ -308,6 +309,7 @@ main{max-width:880px;margin:28px auto;padding:0 20px}
     <div class="quiz-controls" id="quiz-controls" style="display:none">
       <button class="btn-primary" id="submit-quiz">提交答案</button>
       <button class="btn-secondary" id="reset-quiz">重做</button>
+      <button class="btn-secondary" id="next-chapter">下一章 →</button>
     </div>
     <div id="score-result"></div>
   </div>
@@ -351,7 +353,7 @@ main{max-width:880px;margin:28px auto;padding:0 20px}
 <script>
 const CHAPTERS_51 = [
 {
-  id:1, title:"什么是单片机 & 标号信息", short:"单片机是什么？芯片上印的数字啥意思？",
+  id:1, title:"📖 什么是单片机 & 标号信息", short:"【了解】单片机是什么？芯片上印的数字啥意思？",
   emoji:"🌸", color:"pink",
   content:`
 <h3>🤔 什么是单片机？</h3>
@@ -376,7 +378,7 @@ const CHAPTERS_51 = [
 <tr><td>存什么</td><td>烧录好的程序</td><td>程序运行的临时数据</td></tr>
 <tr><td>断电后</td><td><b>不丢失</b></td><td><b>全部丢失</b></td></tr>
 <tr><td>打个比方</td><td>刻在光盘里的歌</td><td>黑板上的草稿</td></tr>
-<tr><td>51 容量</td><td>4KB（52 为 8KB Flash）</td><td>128B（52 为 256B）</td></tr>
+<tr><td>51 容量</td><td>4KB（52 为 8KB Flash）</td><td>STC89C51RC 为 512B（传统 8051 为 128B，52 为 256B）</td></tr>
 </table>
 <div class="warn">考试常考：<b>ROM 断电不丢、RAM 断电即丢</b>。型号里的 RC/RD 后缀表示片内 RAM 大小（RC=512B，RD+=1280B）。</div>
 
@@ -384,12 +386,24 @@ const CHAPTERS_51 = [
 <p>示例标号：<code>STC 89C51RC 40C-PDIP 0707CU8138.00D</code></p>
 <ul>
   <li><b>STC</b> — 前缀，表示 STC 公司生产（其他厂商还有 AT、Intel、Winbond、SST 等）</li>
-  <li><b>89C51</b> — 8051 兼容系列；其中 89 通常表示 Flash 程序存储器，C 表示 CMOS 器件</li>
+  <li><b>89C51</b> — 8051 兼容系列；其中 8 表示 8051 兼容系列，9 通常表示 Flash 程序存储器，C 表示 CMOS 器件</li>
   <li><b>RC</b> — 片内 RAM 512B（同系列 RD+ 为 1280B）</li>
-  <li><b>40</b> — 最高工作频率 40MHz</li>
-  <li><b>C</b> — 商业级温度范围 0℃～+75℃（I 工业级 -40℃～+85℃）</li>
+  <li><b>40</b> — 速度等级标记（本型号对应 40MHz 档，其他芯片不能一律认定）</li>
+  <li><b>C</b> — 产品级别标记（商业级，见下方温度表）</li>
   <li><b>PDIP</b> — 双列直插式封装（DIP）</li>
+  <li><b>0707</b> — 可能是生产日期或批次标记（缺少官方编码说明时不能断定就是"2007 年第 7 周"）</li>
+  <li><b>CU8138.00D</b> — 含义未确认，可能用于工厂追溯</li>
 </ul>
+
+<h3>🌡️ 标号对应温度范围（知识点）</h3>
+<p class="warn">各厂商编码并不统一，以下范围<b>不能跨品牌直接套用</b>：</p>
+<table class="cmp">
+<tr><th>字母</th><th>级别</th><th>温度范围</th></tr>
+<tr><td><b>C</b></td><td>商业级</td><td>本资料 STC89C51RC 系列为 0℃～+75℃（其他器件可能为 0℃～+70℃）</td></tr>
+<tr><td><b>I</b></td><td>工业级</td><td>-40℃～+85℃</td></tr>
+<tr><td><b>A</b></td><td>汽车级</td><td>常见 -40℃～+125℃，以器件手册为准</td></tr>
+<tr><td><b>M</b></td><td>军用级</td><td>常见 -55℃～+125℃（并非统一 +150℃）</td></tr>
+</table>
 
 <h3>🔍 观察实物芯片（识图常考）</h3>
 <svg viewBox="0 0 360 200" style="max-width:360px;display:block;margin:8px auto;background:#fff">
@@ -398,7 +412,7 @@ const CHAPTERS_51 = [
   <circle cx="126" cy="48" r="4" fill="#9ca3af"/>
   <line x1="102" y1="40" x2="102" y2="158" stroke="#6b7280" stroke-width="16" stroke-dasharray="4 2"/>
   <line x1="258" y1="40" x2="258" y2="158" stroke="#6b7280" stroke-width="16" stroke-dasharray="4 2"/>
-  <text x="180" y="102" text-anchor="middle" fill="#fff" font-size="13">STC89C52RC</text>
+  <text x="180" y="102" text-anchor="middle" fill="#fff" font-size="13">STC89C51RC</text>
   <text x="180" y="120" text-anchor="middle" fill="#9ca3af" font-size="10">40 脚 DIP 俯视图</text>
   <text x="88" y="45" text-anchor="end" font-size="10" fill="#374151">1</text>
   <text x="88" y="160" text-anchor="end" font-size="10" fill="#374151">20</text>
@@ -446,6 +460,23 @@ const CHAPTERS_51 = [
   <text x="315" y="196" text-anchor="middle" font-size="11" fill="#6b7280">（手机/CPU，加热焊死）</text>
 </svg>
 
+<h3>📖 封装细节（备考资料原文要点）</h3>
+<ul>
+  <li><b>DIP 双列直插</b>：引脚从芯片两侧引出，引脚数一般 8～64，安装方便，适合手工焊接</li>
+  <li><b>PLCC 带引线塑料芯片封装</b>：引脚从四侧引出，J 形引脚，正方形，尺寸小、可靠性高</li>
+  <li><b>QFP 四边引脚扁平式</b>：引脚从四周引出；Q 表示 quad（四边），不是"必须正方形"；引脚数有 32、44、64、100 等多种规格（不能笼统说"大多 100 以上"）；通常用 SMT 表面贴装。QFP 常见 PQFP/LQFP/TQFP；PFP 是塑料扁平封装的宽泛名称</li>
+  <li><b>PGA 插针网格阵列</b>：芯片背面有多个方阵型插针，按引脚多少围成不同圈数；可用 ZIF 零插入力插座安装，插入时无需强压针脚（但仍需注意接触可靠性）</li>
+  <li><b>BGA 球栅阵列</b>：高密度、高性能、多引脚封装，细分为五大类：
+    <ul>
+      <li>PBGA（塑料 BGA，有机基板）</li>
+      <li>CBGA（陶瓷 BGA，陶瓷基板）</li>
+      <li>FCBGA（倒装芯片 BGA，多层基板）</li>
+      <li>TBGA（带状软质 1~2 层 PCB 基板）</li>
+      <li>CDPBGA（腔体朝下的塑料 BGA，封装中央有方形低陷空腔区）</li>
+    </ul>
+  </li>
+</ul>
+
 <h3>📋 封装对比速查表</h3>
 <table class="cmp">
 <tr><th>封装</th><th>引脚形态</th><th>安装方式</th><th>优点</th><th>常见场景</th></tr>
@@ -467,13 +498,13 @@ const CHAPTERS_51 = [
   `,
   quiz:[
     {type:"single", text:"单片机集成了哪些基本模块？", opts:["仅微处理器","微处理器、存储器、输入/输出接口","仅存储器","仅输入/输出接口"], ans:1},
-    {type:"single", text:"标号 STC89C51 中的 '89' 通常表示？", opts:["8KB 存储器","采用 Flash 程序存储器","8MHz 频率","8 位处理器"], ans:1},
+    {type:"single", text:"标号 STC89C51 中的 '9' 通常表示？", opts:["8051 兼容系列","采用 Flash 程序存储器","CMOS 器件","商业级温度"], ans:1},
     {type:"fill", text:"DIP 封装的全称是______。", ans:"双列直插式封装", hint:"四个字开头"},
     {type:"judge", text:"AT89C51 中的 'C' 表示陶瓷封装。", ans:false, reason:"'C' 表示 CMOS 器件，不是陶瓷封装。"},
   ]
 },
 {
-  id:2, title:"51 单片机外部引脚介绍", short:"40 个脚各有什么用？电源、时钟、复位、IO",
+  id:2, title:"🔥 51 单片机外部引脚介绍", short:"【重点】40 个脚各有什么用？电源、时钟、复位、IO",
   emoji:"🔌", color:"sky",
   content:`
 <h3>🧷 40 脚 DIP 封装引脚图</h3>
@@ -481,6 +512,7 @@ const CHAPTERS_51 = [
 <img src="pinout_8051.gif" alt="8051 40 脚引脚图" onerror="this.style.display='none'">
 
 <p>芯片上有一个<b>小圆点或凹口</b>，正对着左上角时，<b>从左上角那个脚开始，逆时针数</b>就是 1、2、3…… 脚。最后一个（40脚）在 1 脚的正对面。</p>
+<div class="tip">51 单片机不只有 40 脚！还有 <b>20、28、32、44</b> 等不同引脚数的型号——不能只见了 40 脚的芯片才认为它是 51 单片机。引脚数或封装相同，引脚功能也不一定完全相同，<b>必须查具体型号引脚图</b>。</div>
 
 <h3>📋 40 只脚功能速查总表</h3>
 <table class="cmp">
@@ -516,12 +548,13 @@ const CHAPTERS_51 = [
 
 <h3>⚡ 电源和时钟引脚（必掌握）</h3>
 <ul>
-  <li><b>Vcc（40脚）</b> — 电源正极，通常 +5V</li>
+  <li><b>Vcc（40脚）</b> — 电源正极，常压为 <b>+5V</b>，低压型号为 <b>+3.3V</b>，使用时要查芯片对应文档</li>
   <li><b>GND（20脚）</b> — 电源地</li>
   <li><b>XTAL1（19脚）</b> — 片内振荡电路输入端，外接晶振的一脚</li>
   <li><b>XTAL2（18脚）</b> — 振荡电路输出端，外接晶振的另一脚</li>
 </ul>
 <div class="tip">晶振接法：XTAL1 和 XTAL2 之间接石英晶体，各接一个 10~30pF 小电容到 GND。</div>
+<div class="tip">使用<b>外部有源时钟</b>时（STC89C51RC / AT89S52）：时钟信号从 <b>XTAL1 输入</b>，<b>XTAL2 悬空</b>。</div>
 
 <h3>🔄 复位引脚</h3>
 <ul>
@@ -530,15 +563,22 @@ const CHAPTERS_51 = [
 
 <h3>💾 外部存储器控制（了解即可）</h3>
 <ul>
-  <li><b>PSEN（29脚）</b> — 外部程序存储器读选通。内部 ROM 读取时不动作。</li>
-  <li><b>ALE/PROG（30脚）</b> — 扩展外部 RAM 时锁存低 8 位地址。</li>
-  <li><b>EA/VPP（31脚）</b> — 使用<b>片内程序存储器时 EA 接高电平（接 VCC）</b>。现在基本都用片内 Flash，所以 EA 一律接高。</li>
+  <li><b>PSEN（29脚）</b> — 程序存储器允许输出控制端，读<b>外部</b>程序存储器时低电平有效。现在单片机内部 ROM 已足够大，几乎没人再扩展外部 ROM，了解即可：
+    <ul>
+      <li>读<b>内部</b> ROM 时，PSEN <b>不动作</b></li>
+      <li>读<b>外部</b> ROM 时，<b>每个机器周期动作两次</b></li>
+      <li>读外部 <b>RAM</b> 时，两个 PSEN 脉冲被<b>跳过</b>不输出</li>
+      <li>外接 ROM 时，PSEN 与 ROM 的 <b>OE</b> 脚相接</li>
+    </ul>
+  </li>
+  <li><b>ALE/PROG（30脚）</b> — 扩展外部 RAM 时，把 P0 口输出的低 8 位地址送锁存器锁存，实现低位地址和数据的隔离。</li>
+  <li><b>EA/VPP（31脚）</b> — 使用<b>片内程序存储器时 EA 接高电平（通常接 VCC）</b>。对支持外部程序存储器的经典器件：EA 为高时，在片内地址范围内读片内程序，<b>超出片内范围时自动访问外部程序存储器</b>；EA 为<b>低</b>电平时，<b>从外部程序存储器取指</b>。</li>
 </ul>
 
 <h3>🎛️ 四组 IO 口（必掌握）</h3>
 <ul>
   <li><b>P0 口（39~32脚）</b> — 8位，传统 51 作为普通 IO 时为<b>开漏结构</b>，输出高电平时需<b>外接上拉电阻（通常 10kΩ）</b></li>
-  <li><b>P1 口（1~8脚）</b> — 准双向 8位 IO，<b>内带上拉电阻</b>。52 的 P1.0 是 T2 定时器外部输入</li>
+  <li><b>P1 口（1~8脚）</b> — 准双向 8位 IO，<b>内带上拉电阻</b>。52 单片机的 <b>P1.0</b> 第二功能为 T2 定时器/计数器外部输入，<b>P1.1</b> 第二功能为 <b>T2EX</b>（捕捉、重装触发，即 T2 的外部控制端）</li>
   <li><b>P2 口（21~28脚）</b> — 准双向 8位 IO，内带上拉电阻</li>
   <li><b>P3 口（10~17脚）</b> — 准双向 8位 IO，内带上拉电阻，且每脚有<b>第二功能</b>（串口、中断、定时器）</li>
 </ul>
@@ -553,7 +593,7 @@ const CHAPTERS_51 = [
   ]
 },
 {
-  id:3, title:"进制转换基础", short:"二进制、十进制、十六进制互转",
+  id:3, title:"⭐ 进制转换基础", short:"【掌握】二进制、十进制、十六进制互转",
   emoji:"🔢", color:"lemon",
   content:`
 <h3>📊 二进制 ↔ 十进制</h3>
@@ -601,7 +641,7 @@ const CHAPTERS_51 = [
   ]
 },
 {
-  id:4, title:"二进制逻辑运算", short:"与或非异或，C 语言怎么写？",
+  id:4, title:"⭐ 二进制逻辑运算", short:"【掌握】与或非异或，C 语言怎么写？",
   emoji:"⚙️", color:"mint",
   content:`
 <h3>🔗 与运算（AND）</h3>
@@ -621,17 +661,21 @@ const CHAPTERS_51 = [
 <p>规则：<b>求反</b>。!0=1, !1=0</p>
 <p>C 语言：<code>~</code> 按位取反；<code>!</code> 逻辑非</p>
 
+<h3>🔗 同或运算（XNOR，了解）</h3>
+<p>规则：<b>相同则有，不同则无</b>。逻辑运算符为「◎」：0⊙0=1, 1⊙0=0, 0⊙1=0, 1⊙1=1</p>
+<p><b>C 语言中没有规定同或符号</b>。同或与异或用得较少，简单了解即可。</p>
+
 <h3>🔗 异或运算（XOR）</h3>
 <p>规则：<b>不同则有，相同则无</b>。0⊕0=0, 0⊕1=1, 1⊕0=1, 1⊕1=0</p>
-<p>C 语言：<code>^</code> 按位异或。常用技巧：<b>异或自身=0</b>，<b>异或 1=取反</b></p>
+<p>C 语言：<code>^</code> 按位异或。常用技巧：<b>异或自身=0</b>，<b>异或 1=取反</b>。同或 = 异或结果再取反。</p>
 
-<h3>📋 四种运算真值表（背下来）</h3>
+<h3>📋 五种运算真值表（背下来）</h3>
 <table class="cmp">
-<tr><th>A</th><th>B</th><th>A &amp; B（与）</th><th>A | B（或）</th><th>A ^ B（异或）</th></tr>
-<tr><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td></tr>
-<tr><td>0</td><td>1</td><td>0</td><td>1</td><td>1</td></tr>
-<tr><td>1</td><td>0</td><td>0</td><td>1</td><td>1</td></tr>
-<tr><td>1</td><td>1</td><td>1</td><td>1</td><td>0</td></tr>
+<tr><th>A</th><th>B</th><th>A &amp; B（与）</th><th>A | B（或）</th><th>A ^ B（异或）</th><th>A ⊙ B（同或）</th></tr>
+<tr><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>1</td></tr>
+<tr><td>0</td><td>1</td><td>0</td><td>1</td><td>1</td><td>0</td></tr>
+<tr><td>1</td><td>0</td><td>0</td><td>1</td><td>1</td><td>0</td></tr>
+<tr><td>1</td><td>1</td><td>1</td><td>1</td><td>0</td><td>1</td></tr>
 </table>
 
 <div class="tip">考试重点区分：<b>& 是按位与</b>，<b>&& 是逻辑与</b>；<b>| 是按位或</b>，<b>|| 是逻辑或</b>。别搞混了！</div>
@@ -644,26 +688,31 @@ const CHAPTERS_51 = [
   ]
 },
 {
-  id:5, title:"C51 数据类型与运算符", short:"单片机 C 语言和普通 C 有什么不同？",
+  id:5, title:"⭐ C51 数据类型与运算符", short:"【掌握】单片机 C 语言和普通 C 有什么不同？",
   emoji:"💾", color:"sky",
   content:`
 <h3>📏 C51 常用数据类型</h3>
 <table style="border-collapse:collapse;width:100%;margin:10px 0;font-size:14px">
 <tr style="background:var(--pink);color:#fff"><th style="padding:6px;border:2px solid var(--pink-deep)">类型</th><th style="padding:6px;border:2px solid var(--pink-deep)">位数</th><th style="padding:6px;border:2px solid var(--pink-deep)">范围</th></tr>
-<tr><td style="padding:6px;border:1px solid #ddd">unsigned char</td><td style="text-align:center;border:1px solid #ddd">8</td><td style="text-align:center;border:1px solid #ddd">0 ~ 255</td></tr>
-<tr style="background:#fafafa"><td style="padding:6px;border:1px solid #ddd">unsigned int</td><td style="text-align:center;border:1px solid #ddd">16</td><td style="text-align:center;border:1px solid #ddd">0 ~ 65535</td></tr>
-<tr><td style="padding:6px;border:1px solid #ddd">int</td><td style="text-align:center;border:1px solid #ddd">16</td><td style="text-align:center;border:1px solid #ddd">-32768 ~ 32767</td></tr>
-<tr style="background:#fafafa"><td style="padding:6px;border:1px solid #ddd">unsigned long</td><td style="text-align:center;border:1px solid #ddd">32</td><td style="text-align:center;border:1px solid #ddd">0 ~ 2³²-1</td></tr>
-<tr><td style="padding:6px;border:1px solid #ddd">bit</td><td style="text-align:center;border:1px solid #ddd">1</td><td style="text-align:center;border:1px solid #ddd">0 或 1</td></tr>
-<tr style="background:#fafafa"><td style="padding:6px;border:1px solid #ddd">float</td><td style="text-align:center;border:1px solid #ddd">32</td><td style="text-align:center;border:1px solid #ddd">±1.17e-38 ~ ±3.4e38</td></tr>
+<tr><td style="padding:6px;border:1px solid #ddd">unsigned char（无符号字符型）</td><td style="text-align:center;border:1px solid #ddd">8</td><td style="text-align:center;border:1px solid #ddd">0 ~ 255</td></tr>
+<tr style="background:#fafafa"><td style="padding:6px;border:1px solid #ddd">signed char（有符号字符型）</td><td style="text-align:center;border:1px solid #ddd">8</td><td style="text-align:center;border:1px solid #ddd">-128 ~ 127</td></tr>
+<tr><td style="padding:6px;border:1px solid #ddd">unsigned int（无符号整型）</td><td style="text-align:center;border:1px solid #ddd">16</td><td style="text-align:center;border:1px solid #ddd">0 ~ 65535</td></tr>
+<tr style="background:#fafafa"><td style="padding:6px;border:1px solid #ddd">int（有符号整型）</td><td style="text-align:center;border:1px solid #ddd">16</td><td style="text-align:center;border:1px solid #ddd">-32768 ~ 32767</td></tr>
+<tr><td style="padding:6px;border:1px solid #ddd">unsigned long（无符号长整型）</td><td style="text-align:center;border:1px solid #ddd">32</td><td style="text-align:center;border:1px solid #ddd">0 ~ 2³²-1</td></tr>
+<tr style="background:#fafafa"><td style="padding:6px;border:1px solid #ddd">long（有符号长整型）</td><td style="text-align:center;border:1px solid #ddd">32</td><td style="text-align:center;border:1px solid #ddd">-2³¹ ~ 2³¹-1</td></tr>
+<tr><td style="padding:6px;border:1px solid #ddd">float（单精度实数）</td><td style="text-align:center;border:1px solid #ddd">32</td><td style="text-align:center;border:1px solid #ddd">约 ±1.175494×10⁻³⁸ ~ ±3.402823×10³⁸</td></tr>
+<tr style="background:#fafafa"><td style="padding:6px;border:1px solid #ddd">double（双精度实数）</td><td style="text-align:center;border:1px solid #ddd">32</td><td style="text-align:center;border:1px solid #ddd">Keil C51 中与 float 同精度</td></tr>
+<tr><td style="padding:6px;border:1px solid #ddd">bit（位类型）</td><td style="text-align:center;border:1px solid #ddd">1</td><td style="text-align:center;border:1px solid #ddd">0 或 1</td></tr>
 </table>
 
-<div class="tip">初学时用得最多的是 <code>unsigned char</code>（简称 uchar，8位，0~255），占用空间小，运算快。</div>
+<div class="tip">初学时用得最多的是 <code>unsigned char</code>（简称 uchar，8位，0~255），占用空间小，运算快。<b>注意：Keil C51 中 double 只有 32 位，与 float 同精度</b>（不像 PC 上 double 是 64 位）。</div>
 
 <h3>📚 常用头文件</h3>
+<p>C51 常用头文件有：<code>reg51.h</code>、<code>reg52.h</code>、<code>math.h</code>、<code>ctype.h</code>、<code>stdio.h</code>、<code>stdlib.h</code>、<code>absacc.h</code>、<code>intrins.h</code>。初学常用 reg51.h / reg52.h，其余按需引用。</p>
 <ul>
-  <li><code>&lt;reg51.h&gt;</code> / <code>&lt;reg52.h&gt;</code> — <b>必引</b>！定义了 51/52 的特殊功能寄存器（P0~P3、TMOD、TCON 等）</li>
-  <li><code>&lt;math.h&gt;</code> — 数学函数（sqrt、sin、fabs）</li>
+  <li><code>&lt;reg51.h&gt;</code> / <code>&lt;reg52.h&gt;</code> — <b>必引</b>！定义了 51/52 的特殊功能寄存器和位寄存器（P0~P3、TMOD、TCON 等）。两者大部分内容相同，<b>52 比 51 多一个定时器 T2</b>，所以 reg52.h 中多了几行 T2 寄存器的定义</li>
+  <li><code>&lt;math.h&gt;</code> — 声明常用数学函数：浮点绝对值 fabs、平方根 sqrt、正弦 sin、余弦 cos</li>
+  <li><code>&lt;stdlib.h&gt;</code> — 注意：<b>整数绝对值 abs() 在 stdlib.h 中声明</b>，不在 math.h</li>
   <li><code>&lt;intrins.h&gt;</code> — 内部函数（_nop_() 空操作）</li>
 </ul>
 
@@ -684,11 +733,11 @@ const CHAPTERS_51 = [
   ]
 },
 {
-  id:6, title:"C51 基础语句", short:"while、for、main 函数怎么写？",
+  id:6, title:"⭐ C51 基础语句", short:"【掌握】while、for、main 函数怎么写？",
   emoji:"✍️", color:"pink",
   content:`
 <h3>🏠 main() 函数</h3>
-<p>每个 C 程序都必须有一个 <code>main()</code> 函数，程序从这里开始执行。</p>
+<p>每个 C 程序都必须有一个 <code>main()</code> 函数，程序从这里开始执行。Keil C51 裸机工程常用写法：<code>void main(void)</code>——无返回值（前面 void 表示"空"）、无参数，<b>函数定义后不加分号</b>。</p>
 <pre><span class="kw">void</span> <span class="fn">main</span>(<span class="kw">void</span>){
     <span class="cm">// 初始化代码写在这里</span>
     
@@ -699,13 +748,28 @@ const CHAPTERS_51 = [
 
 <div class="tip">单片机程序通常用 <code>while(1){}</code> 做无限循环，因为 main 执行完后不能像 PC 程序那样"退出"，必须一直循环检测和响应。</div>
 
+<h3>📥 引用头文件：#include 的两种写法</h3>
+<p>引用头文件的实际意义：<b>把头文件中的全部内容放到引用的位置处</b>，免去每次重复编写。两种写法<b>后面都不需要加分号</b>：</p>
+<table class="cmp">
+<tr><th>写法</th><th>搜索顺序</th></tr>
+<tr><td><code>#include &lt;reg52.h&gt;</code></td><td class="l">按编译器配置的包含路径搜索（Keil C51 系统头文件在安装目录 INC 下）</td></tr>
+<tr><td><code>#include "reg52.h"</code></td><td class="l">先搜索<b>当前源文件所在目录</b>，再搜索配置的包含目录</td></tr>
+</table>
+<div class="tip">reg52.h 通常在系统包含路径中，所以一般写成 <code>#include &lt;reg52.h&gt;</code>。找不到头文件编译器会报错。</div>
+
 <h3>🔄 while 语句</h3>
 <p>格式：<code>while(表达式) { 语句 }</code></p>
 <ul>
   <li><b>先判断表达式</b>，非 0（真）就执行循环体，为 0（假）就跳出</li>
+  <li>C 语言中<b>把 0 当"假"，非 0 都是"真"</b>（1、2、3……都是真）</li>
   <li>表达式可以是常量、运算、函数返回值</li>
-  <li>循环体可以为空：<code>while(1);</code></li>
+  <li>循环体可以为空：<code>while(1){ }</code> 或 <code>while(1);</code>（英文半角分号不能少）</li>
 </ul>
+<div class="warn">⚠️ 经典陷阱：while 后面<b>没写大括号</b>时，while 只控制紧跟的<b>第一条</b>语句！
+<pre><span class="kw">while</span>(<span class="str">1</span>)
+    P1 = <span class="str">123</span>;   <span class="cm">// ← 只有这句是循环体，被无限执行</span>
+P2 = <span class="str">121</span>;       <span class="cm">// ← 在循环外，通常永远执行不到</span></pre>
+若循环体只有一条语句，可以省大括号直接跟在后面，但多条语句必须加大括号。</div>
 
 <h3>🔁 for 语句</h3>
 <p>格式：<code>for(表达式1; 表达式2; 表达式3) { 语句 }</code></p>
@@ -740,7 +804,7 @@ const CHAPTERS_51 = [
   ]
 },
 {
-  id:7, title:"单片机最小系统", short:"让单片机跑起来需要哪些东西？",
+  id:7, title:"🔥 单片机最小系统", short:"【重点】让单片机跑起来需要哪些东西？",
   emoji:"🔧", color:"lemon",
   content:`
 <h3>✨ 最小系统 = 让单片机工作的最少电路</h3>
@@ -860,7 +924,7 @@ const CHAPTERS_51 = [
   ]
 },
 {
-  id:8, title:"IO 口操作", short:"怎么让灯亮？怎么读按键？",
+  id:8, title:"🔥 IO 口操作", short:"【重点】怎么让灯亮？怎么读按键？",
   emoji:"💡", color:"mint",
   content:`
 <h3>📤 输出：让 LED 亮起来</h3>
@@ -923,7 +987,7 @@ sbit LED = P1^<span class="str">1</span>;
   ]
 },
 {
-  id:9, title:"定时器", short:"精确计时的核心，考试重点！",
+  id:9, title:"🔥 定时器", short:"【重点】精确计时的核心，考试重点！",
   emoji:"⏰", color:"pink",
   content:`
 <h3>🧠 定时器是什么？</h3>
@@ -982,7 +1046,7 @@ sbit LED = P1^<span class="str">1</span>;
   ]
 },
 {
-  id:10, title:"中断系统", short:"让单片机能同时处理多个事件",
+  id:10, title:"🔥 中断系统", short:"【重点】让单片机能同时处理多个事件",
   emoji:"🚨", color:"lilac",
   content:`
 <h3>💡 什么是中断？</h3>
@@ -1039,7 +1103,7 @@ sbit LED = P1^<span class="str">1</span>;
   ]
 },
 {
-  id:11, title:"串口通信", short:"单片机和电脑怎么对话？",
+  id:11, title:"🔥 串口通信", short:"【重点】单片机和电脑怎么对话？",
   emoji:"📡", color:"sky",
   content:`
 <h3>💬 串口通信是什么？</h3>
@@ -1190,15 +1254,25 @@ sbit LED = P1^<span class="str">1</span>;
   <li>初学时必引 <code>#include &lt;reg52.h&gt;</code></li>
 </ul>
 
+<h3>🎓 备考资料划重点：单片机要掌握的 5 大内容</h3>
+<ol>
+  <li><b>最小系统运行必要条件</b>：① 电源 ② 时钟（外接晶体或有源时钟）③ 复位及启动条件（检查复位电路，用片内 ROM 时 EA 接高）</li>
+  <li><b>任意 IO 口操作</b>：① 输出控制电平高低 ② 输入检测电平高低</li>
+  <li><b>定时器</b>：方式 1（16 位计数）、方式 2（8 位自动重装），理解计数频率、初值、溢出</li>
+  <li><b>中断</b>：外部中断、定时器中断、串口中断</li>
+  <li><b>串口通信</b>：单片机之间、单片机与计算机之间通信</li>
+</ol>
+<div class="tip">掌握以上 5 点，51 单片机基本就掌握了——其他知识都是在这几点基础上扩展的。</div>
+
 <div class="tip">💪 把这些再过一遍，考试肯定稳！然后去下一章做最终测试吧～</div>
   `,
   quiz:[]
 },
 {
-  id:13, title:"🏆 最终测试（20 题）", short:"学完所有章节后挑战一下！",
+  id:13, title:"🏆 最终测试（30 题）", short:"学完所有章节后挑战一下！",
   emoji:"🏆", color:"pink",
   content:`
-<h2>🎓 综合考试 · 20 题</h2>
+<h2>🎓 综合考试 · 30 题</h2>
 <p>这里是覆盖全部 13 个章节的综合测试。建议学完每章后再来挑战！80 分以上可以放心进考场啦～</p>
 <div class="warn">⚠️ 这是最终综合测试，包含选择题、填空题、判断题，限时不限次，做完可查看错题解析。</div>
   `,
@@ -1223,6 +1297,16 @@ sbit LED = P1^<span class="str">1</span>;
     {type:"judge", text:"10/3 和 10/3.0 的结果相同。", ans:false, reason:"10/3 整数除法得 3，10/3.0 浮点除法得约 3.333。"},
     {type:"judge", text:"中断服务函数可以有参数和返回值。", ans:false, reason:"中断函数必须声明为 void 函数名(void) interrupt N，没有返回值也不能带参数。"},
     {type:"judge", text:"串口中断服务函数里需要软件清零 TI 或 RI 标志位。", ans:true, reason:"串口的 TI/RI 不会自动清零，必须在 ISR 里软件清零；而定时器的 TF0/TF1 由硬件在响应中断时自动清零，外部中断边沿触发方式的 IE0/IE1 同样由硬件清零。"},
+    {type:"single", text:"标号 STC89C51RC 中的「RC」表示片内 RAM 大小为？", opts:["128B","256B","512B","1280B"], ans:2, reason:"STC89C51RC 的 RC 表示 512B 片内 RAM；同系列 RD+ 为 1280B。"},
+    {type:"single", text:"「89C51」中的「9」通常表示该芯片采用？", opts:["Mask ROM","EPROM","Flash 程序存储器","EEPROM"], ans:2, reason:"80C51 是 Mask ROM，87C51 是 EPROM（紫外线擦除），89C51 通常是 Flash。"},
+    {type:"single", text:"下列哪种封装是「引脚从芯片四侧引出、J 形引脚、正方形」？", opts:["DIP","PLCC","QFP","BGA"], ans:1, reason:"PLCC 带引线塑料芯片封装：四侧 J 形引脚、正方形。"},
+    {type:"judge", text:"QFP 封装的引脚数量大多在 100 以上。", ans:false, reason:"QFP 引脚数有 32、44、64、100 等多种规格，不能笼统说大多在 100 以上。"},
+    {type:"single", text:"52 单片机 P1.1 引脚的第二功能是？", opts:["T2 定时器外部输入","T2EX（捕捉、重装触发）","外部中断 2","串口第二通道"], ans:1, reason:"52 的 P1.0=T2 外部输入，P1.1=T2EX（T2 的外部控制端）。"},
+    {type:"judge", text:"读外部程序存储器时，PSEN 每个机器周期动作两次；读外部 RAM 时两个 PSEN 脉冲被跳过不输出。", ans:true, reason:"PSEN 三细节：内部 ROM 不动作、外部 ROM 每机器周期两次、外部 RAM 跳过。"},
+    {type:"fill", text:"C51 中 unsigned int 占 ______ 位，范围 0~65535。", ans:"16", hint:"两位数"},
+    {type:"judge", text:"Keil C51 中 double 类型占 64 位，比 float 精度高。", ans:false, reason:"Keil C51 中 double 只有 32 位，与 float 同精度。"},
+    {type:"single", text:"整数绝对值函数 abs() 声明在哪个头文件？", opts:["math.h","stdlib.h","ctype.h","absacc.h"], ans:1, reason:"abs() 在 stdlib.h 中声明；math.h 里是浮点绝对值 fabs。"},
+    {type:"judge", text:"同或运算在 C 语言中有专门的运算符。", ans:false, reason:"C 语言没有规定同或符号；同或=异或结果取反。"},
   ]
 },
 ];
@@ -1232,7 +1316,7 @@ sbit LED = P1^<span class="str">1</span>;
 <script>
 const CHAPTERS_C = [
 {
-  id:1, title:"C 语言简介与第一个程序", short:"C 语言是什么？写出并运行你的第一个程序",
+  id:1, title:"📖 C 语言简介与第一个程序", short:"【了解】C 语言是什么？写出并运行你的第一个程序",
   emoji:"🖥️", color:"sky",
   content:`
 <h3>🤔 C 语言是什么？</h3>
@@ -1279,7 +1363,7 @@ const CHAPTERS_C = [
   ]
 },
 {
-  id:2, title:"变量与数据类型", short:"int、float、char 都占多大内存？变量怎么起名？",
+  id:2, title:"🔥 变量与数据类型", short:"【重点】int、float、char 都占多大内存？变量怎么起名？",
   emoji:"📦", color:"lemon",
   content:`
 <h3>📦 变量：内存里的一个「盒子」</h3>
@@ -1329,7 +1413,7 @@ const CHAPTERS_C = [
   ]
 },
 {
-  id:3, title:"运算符与表达式", short:"5/2 为什么等于 2？i++ 和 ++i 区别在哪？",
+  id:3, title:"🔥 运算符与表达式", short:"【重点】5/2 为什么等于 2？i++ 和 ++i 区别在哪？",
   emoji:"🔢", color:"mint",
   content:`
 <h3>➕ 算术运算符</h3>
@@ -1378,7 +1462,7 @@ j = ++i;  <span class="cm">// 先加后用：i 先变 4，j = 4</span></pre>
   ]
 },
 {
-  id:4, title:"输入与输出", short:"printf 怎么格式化输出？scanf 为什么要加 &？",
+  id:4, title:"⭐ 输入与输出", short:"【掌握】printf 怎么格式化输出？scanf 为什么要加 &？",
   emoji:"⌨️", color:"lilac",
   content:`
 <h3>🖨️ printf：格式化输出</h3>
@@ -1414,7 +1498,7 @@ j = ++i;  <span class="cm">// 先加后用：i 先变 4，j = 4</span></pre>
   ]
 },
 {
-  id:5, title:"分支结构 if 与 switch", short:"让程序学会做选择：if-else、switch、三目运算符",
+  id:5, title:"🔥 分支结构 if 与 switch", short:"【重点】让程序学会做选择：if-else、switch、三目运算符",
   emoji:"🔀", color:"sky",
   content:`
 <h3>🔀 if-else：二选一</h3>
@@ -1463,7 +1547,7 @@ j = ++i;  <span class="cm">// 先加后用：i 先变 4，j = 4</span></pre>
   ]
 },
 {
-  id:6, title:"循环结构 for / while", short:"while、do-while、for，break 和 continue 怎么用？",
+  id:6, title:"🔥 循环结构 for / while", short:"【重点】while、do-while、for，break 和 continue 怎么用？",
   emoji:"🔁", color:"lemon",
   content:`
 <h3>🔁 三种循环</h3>
@@ -1507,7 +1591,7 @@ i = 0;  <span class="cm">// 先重置 i（上面 while 跑完后 i 已是 5，�
   ]
 },
 {
-  id:7, title:"函数", short:"把代码打包复用：定义、声明、形参实参、递归",
+  id:7, title:"🔥 函数", short:"【重点】把代码打包复用：定义、声明、形参实参、递归",
   emoji:"🧩", color:"mint",
   content:`
 <h3>🧩 为什么需要函数？</h3>
@@ -1555,7 +1639,7 @@ i = 0;  <span class="cm">// 先重置 i（上面 while 跑完后 i 已是 5，�
   ]
 },
 {
-  id:8, title:"数组", short:"一排连续的盒子：定义、下标、遍历与常见考题",
+  id:8, title:"🔥 数组", short:"【重点】一排连续的盒子：定义、下标、遍历与常见考题",
   emoji:"📚", color:"pink",
   content:`
 <h3>📚 数组：一排连续的小盒子</h3>
@@ -1597,7 +1681,7 @@ m[1][2] = 9;                        <span class="cm">// 第 2 行第 3 列</span
   ]
 },
 {
-  id:9, title:"字符串", short:"C 没有字符串类型？字符数组 + 结束符 '\\0' 的故事",
+  id:9, title:"⭐ 字符串", short:"【掌握】C 没有字符串类型？字符数组 + 结束符 '\\0' 的故事",
   emoji:"✏️", color:"sky",
   content:`
 <h3>✏️ C 语言的字符串真相</h3>
@@ -1642,7 +1726,7 @@ m[1][2] = 9;                        <span class="cm">// 第 2 行第 3 列</span
   ]
 },
 {
-  id:10, title:"指针入门", short:"& 取地址，* 取内容——最难也最核心的一章",
+  id:10, title:"🔥 指针入门", short:"【重点】& 取地址，* 取内容——最难也最核心的一章",
   emoji:"🎯", color:"lemon",
   content:`
 <h3>🏠 内存地址是什么？</h3>
@@ -1693,7 +1777,7 @@ m[1][2] = 9;                        <span class="cm">// 第 2 行第 3 列</span
   ]
 },
 {
-  id:11, title:"结构体", short:"把不同类型的数据打包：struct 的定义与使用",
+  id:11, title:"⭐ 结构体", short:"【掌握】把不同类型的数据打包：struct 的定义与使用",
   emoji:"🏗️", color:"mint",
   content:`
 <h3>🏗️ 为什么需要结构体？</h3>
@@ -1772,10 +1856,10 @@ Point p1 = {3, 4};   <span class="cm">// 以后不用再写 struct 了</span></p
   ]
 },
 {
-  id:13, title:"🏆 C 语言最终测试（20 题）", short:"学完所有章节后挑战一下！",
+  id:13, title:"🏆 C 语言最终测试（30 题）", short:"学完所有章节后挑战一下！",
   emoji:"🏆", color:"lemon",
   content:`
-<h2>🎓 C 语言综合考试 · 20 题</h2>
+<h2>🎓 C 语言综合考试 · 30 题</h2>
 <p>覆盖第 1～11 章全部知识点。建议先把第 12 章的速记清单过一遍再来挑战！80 分以上可以放心进考场啦～</p>
 <div class="warn">⚠️ 综合测试包含选择题、填空题、判断题，做完可查看错题解析。</div>
   `,
@@ -1800,6 +1884,16 @@ Point p1 = {3, 4};   <span class="cm">// 以后不用再写 struct 了</span></p
     {type:"single", text:"int a=5,*p=&a; 那么 *p 等价于？", opts:["&a","a","p","a 的地址"], ans:1},
     {type:"single", text:"比较两个字符串内容是否相同应使用？", opts:["==","strcmp","=","sizeof"], ans:1},
     {type:"judge", text:"sizeof(\"abc\") 的值是 3。", ans:false, reason:"要算上结束符 \\0，是 4。"},
+    {type:"single", text:"printf(\"%d\", 5/2) 的输出是？", opts:["2.5","2","3","报错"], ans:1, reason:"整数除法结果为 2。"},
+    {type:"single", text:"下列哪个是合法的 C 变量名？", opts:["2abc","int","_count","my-var"], ans:2, reason:"标识符只能以字母或下划线开头，不能是关键字，不能含 -。"},
+    {type:"single", text:"char 类型在大多数系统中占几个字节？", opts:["1","2","4","8"], ans:0},
+    {type:"fill", text:"要交换两个变量的值，必须借助______变量（或通过指针）。", ans:"临时", alt:["第三个","中间"], hint:"两个字"},
+    {type:"fill", text:"for 循环的三个表达式之间用______分隔。", ans:"分号", alt:[";"], hint:"标点符号"},
+    {type:"judge", text:"if(x=5) 能编译通过，但逻辑上是错的（应为 x==5）。", ans:true, reason:"= 是赋值，== 才是比较相等。"},
+    {type:"single", text:"数组名作为函数参数传递时，实际上传的是？", opts:["整个数组的拷贝","数组首元素的地址","数组长度","数组最后一个元素"], ans:1, reason:"数组名退化为指向首元素的指针。"},
+    {type:"single", text:"int *p; p 是一个？", opts:["整数","指向 int 的指针","int 的地址常量","函数"], ans:1},
+    {type:"judge", text:"野指针是指向 0 地址的指针。", ans:false, reason:"野指针是未初始化就使用的指针；指向 0 地址的叫空指针 NULL。"},
+    {type:"judge", text:"struct 只能包含相同类型的成员。", ans:false, reason:"结构体正是为了打包不同类型的数据。"},
   ]
 },
 ];
@@ -2002,6 +2096,11 @@ document.querySelectorAll('nav button').forEach(b => b.addEventListener('click',
 function renderHome(){
   document.getElementById('logo-chip').textContent = COURSES[currentCourse].name;
   document.getElementById('home-course-title').textContent = '📚 课程目录 · ' + COURSES[currentCourse].name;
+  const PATH_TEXT = {
+    '51': '<b>🎓 学习路径（多位教育专家共同推荐）</b><br><span style="display:inline-block;margin-right:12px">🔥 <b>重点必考</b>：必须吃透，反复练</span><span style="display:inline-block;margin-right:12px">⭐ <b>需要掌握</b>：会用即可</span><span style="display:inline-block">📖 <b>了解即可</b>：知道有这回事</span><br><b>推荐顺序</b>：先「认识实物」(1~2章) → 「软件基础」(3~6章) → 「最小系统与 IO」(7~8章) → 「三大外设」(9~11章) → 「复习 + 最终测试」(12~13章)。按顺序学最省时间！',
+    'c':  '<b>🎓 学习路径（多位教育专家共同推荐）</b><br><span style="display:inline-block;margin-right:12px">🔥 <b>重点必考</b>：必须吃透，反复练</span><span style="display:inline-block;margin-right:12px">⭐ <b>需要掌握</b>：会用即可</span><span style="display:inline-block">📖 <b>了解即可</b>：知道有这回事</span><br><b>推荐顺序</b>：先「认识 C 语言」(1章) → 「基础语法」(2~4章) → 「三大结构」(5~6章) → 「函数与数组」(7~9章) → 「指针与结构体」(10~11章) → 「复习 + 最终测试」(12~13章)。按顺序学最省时间！'
+  };
+  document.getElementById('path-legend').innerHTML = PATH_TEXT[currentCourse] || PATH_TEXT['51'];
   document.querySelectorAll('.course-card').forEach(c => c.classList.toggle('active', c.dataset.course===currentCourse));
   const list = document.getElementById('chapter-list-home');
   list.innerHTML = curChapters().map(ch => `
@@ -2184,6 +2283,12 @@ function resetQuiz(){
 document.addEventListener('click', e => {
   if(e.target.id === 'submit-quiz') submitQuiz();
   if(e.target.id === 'reset-quiz') resetQuiz();
+  if(e.target.id === 'next-chapter'){
+    const chs = curChapters();
+    const idx = chs.findIndex(c => c.id === currentChapter);
+    if(idx >= 0 && idx < chs.length - 1) openChapter(chs[idx+1].id);
+    else showPage('home'), renderHome();
+  }
   if(e.target.id === 'fav-btn'){
     const ok = Store.toggleFav(currentChapter);
     e.target.textContent = ok ? '★ 已收藏' : '⭐ 收藏';
