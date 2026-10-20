@@ -16,6 +16,8 @@
   --bg-soft:#f9fafb;
   --ok:#059669;
   --err:#dc2626;
+  --pink:#ec4899;
+  --pink-deep:#db2777;
 }
 *{box-sizing:border-box;margin:0;padding:0}
 html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Hiragino Sans GB","Microsoft YaHei","Helvetica Neue",Arial,sans-serif;color:var(--ink);background:var(--bg);line-height:1.75;overflow-x:hidden;font-size:15px;-webkit-font-smoothing:antialiased}
@@ -207,6 +209,7 @@ main{max-width:880px;margin:28px auto;padding:0 20px}
 .cmp td{padding:7px 8px;border:1px solid #e5e7eb;text-align:center}
 .cmp tr:nth-child(even) td{background:#f9fafb}
 .cmp td.l{text-align:left}
+@media(max-width:640px){.cmp{display:block;overflow-x:auto}}
 .empty{text-align:center;padding:48px 20px;color:var(--ink-light);font-size:14px}
 .empty .emoji{display:none}
 
@@ -407,7 +410,7 @@ const CHAPTERS_51 = [
 <ol>
   <li><b>黑色长方形</b>：芯片主体，里面用环氧树脂封着真正的硅片</li>
   <li><b>两边各 20 只脚</b>：一共 40 只脚，负责电源、时钟和与外界通信</li>
-  <li><b>半圆缺口 + 小圆点</b>：缺口朝左时，从缺口旁那脚开始<b>逆时针数</b> 1→40 号脚，左下是 20、右下是 21</li>
+  <li><b>半圆缺口 + 小圆点</b>：缺口朝上时，从缺口旁（左上角）那脚开始<b>逆时针数</b> 1→40 号脚，左下是 20、右下是 21</li>
 </ol>
 
 <h3>📦 五种常见封装（实物图）</h3>
@@ -474,7 +477,21 @@ const CHAPTERS_51 = [
 <tr><td>21~28</td><td>P2</td><td class="l">准双向，内带上拉</td></tr>
 <tr><td>10~17</td><td>P3</td><td class="l">准双向，每脚有第二功能</td></tr>
 </table>
-<div class="tip">速记口诀：<b>40 吃电 20 接地，18、19 接晶振，9 号复位 31 EA</b>，剩下 32 只脚全是 IO 口。</div>
+<div class="tip">速记口诀：<b>40 吃电 20 接地，18、19 接晶振，9 号复位 31 EA，29、30 扩展用，剩下的 32 只脚全是 IO 口。</b></div>
+
+<h3>🔁 P3 口第二功能（必背！）</h3>
+<p>P3 口每一位都有第二功能，这是引脚类最高频考点：</p>
+<table class="cmp">
+<tr><th>引脚</th><th>第二功能</th><th>含义</th></tr>
+<tr><td>P3.0</td><td>RXD</td><td class="l">串口接收端</td></tr>
+<tr><td>P3.1</td><td>TXD</td><td class="l">串口发送端</td></tr>
+<tr><td>P3.2</td><td>INT0</td><td class="l">外部中断 0 请求输入</td></tr>
+<tr><td>P3.3</td><td>INT1</td><td class="l">外部中断 1 请求输入</td></tr>
+<tr><td>P3.4</td><td>T0</td><td class="l">定时器 0 外部计数输入</td></tr>
+<tr><td>P3.5</td><td>T1</td><td class="l">定时器 1 外部计数输入</td></tr>
+<tr><td>P3.6</td><td>WR</td><td class="l">外部数据存储器写选通</td></tr>
+<tr><td>P3.7</td><td>RD</td><td class="l">外部数据存储器读选通</td></tr>
+</table>
 
 <h3>⚡ 电源和时钟引脚（必掌握）</h3>
 <ul>
@@ -487,7 +504,7 @@ const CHAPTERS_51 = [
 
 <h3>🔄 复位引脚</h3>
 <ul>
-  <li><b>RST（9脚）</b> — 复位引脚。输入连续<b>两个机器周期以上的高电平</b>有效。复位后 PC=0000H，单片机从程序存储器的 0000H 单元开始执行。</li>
+  <li><b>RST（9脚）</b> — 复位引脚。输入连续<b>两个机器周期以上的高电平</b>有效。复位后 PC=0000H、SP=07H、P0~P3 锁存器=0xFF，单片机从程序存储器的 0000H 单元开始执行。</li>
 </ul>
 
 <h3>💾 外部存储器控制（了解即可）</h3>
@@ -542,7 +559,7 @@ const CHAPTERS_51 = [
 
 <span class="cm">// 二进制：C51 不直接支持，通常用十六进制代替</span></pre>
 
-<h3>📋 0~15 三进制对照表（背熟！）</h3>
+<h3>📋 0~15 二进制对照表（背熟！）</h3>
 <table class="cmp">
 <tr><th>十进制</th><th>二进制</th><th>十六进制</th><th>十进制</th><th>二进制</th><th>十六进制</th></tr>
 <tr><td>0</td><td>0000</td><td>0</td><td>8</td><td>1000</td><td>8</td></tr>
@@ -641,7 +658,7 @@ const CHAPTERS_51 = [
   quiz:[
     {type:"single", text:"C51 中 unsigned char 的位数和范围是？", opts:["8位，0~127","8位，0~255","16位，0~255","8位，-128~127"], ans:1},
     {type:"single", text:"C51 中 10 / 3 的结果是？", opts:["3.333","3","1","3.0"], ans:1},
-    {type:"fill", text:"要使用 51 单片机特殊功能寄存器，需要引用的头文件是______。", ans:"reg51.h", hint:"reg开头，.h结尾；reg52.h也对"},
+    {type:"fill", text:"要使用 51 单片机特殊功能寄存器，需要引用的头文件是______。", ans:"reg51.h", alt:["reg52.h","REG51.H","REG52.H"], hint:"reg开头，.h结尾；reg52.h 也算对"},
     {type:"judge", text:"C51 中 = 和 == 的作用相同。", ans:false, reason:"= 是赋值，== 是比较相等，千万不能写错。"},
   ]
 },
@@ -878,8 +895,8 @@ sbit LED = P1^<span class="str">1</span>;
 }</pre>
   `,
   quiz:[
-    {type:"single", text:"LED 低电平点亮时，正确的操作是？", opts:["P1_0 = 1","P1_0 = 0","P1 = 0xFF","P1 = 0"], ans:1},
-    {type:"single", text:"P1~P3 口作为输入前要先做什么？", opts:["写 0","写 1","写 0xFF","不需要任何操作"], ans:1},
+    {type:"single", text:"LED 接在 P1.0，低电平点亮。若只想点亮这一只灯，正确的操作是？", opts:["P1_0 = 1","P1_0 = 0","P1 = 0xFF","P1 = 0"], ans:1, reason:"P1 = 0 会把 P1 口 8 个脚全拉低，8 只灯全亮；只想点亮 P1.0 这一只，就要用位操作 P1_0 = 0，其他位保持不变。"},
+    {type:"single", text:"P1~P3 口作为输入前要先做什么？", opts:["写 0","写 1","先清零再读","不需要任何操作"], ans:1},
     {type:"fill", text:"定义 sbit KEY = P1^0 中，符号 ^ 后面的数字 0 表示 ______。", ans:"第0位", hint:"P1口的某一位"},
     {type:"judge", text:"P0 口作为普通 IO 使用时必须外接上拉电阻。", ans:true, reason:"P0 是开漏结构，输出高电平呈高阻态，需要外接上拉。"},
   ]
@@ -959,10 +976,11 @@ sbit LED = P1^<span class="str">1</span>;
 <tr style="background:#fafafa"><td style="padding:6px;border:1px solid #ddd">定时器 T1</td><td style="text-align:center;border:1px solid #ddd">3</td><td style="text-align:center;border:1px solid #ddd">计数溢出 TF1=1</td><td style="text-align:center;border:1px solid #ddd">内部</td></tr>
 <tr><td style="padding:6px;border:1px solid #ddd">串口</td><td style="text-align:center;border:1px solid #ddd">4</td><td style="text-align:center;border:1px solid #ddd">发送/接收完成</td><td style="text-align:center;border:1px solid #ddd">内部</td></tr>
 </table>
+<div class="tip">📌 <b>优先级</b>（考试会考）：默认自然优先级从高到低：<b>外部中断 0 → T0 → 外部中断 1 → T1 → 串口</b>。想改变优先级就配置 <b>IP 寄存器</b>（把 PX0/PT0/PX1/PT1/PS 中某位 置 1，对应中断就升为高优先级）。</div>
 
 <h3>🎛️ 中断允许寄存器 IE</h3>
 <ul>
-  <li><b>EA</b>（IE.7）— 总中断开关，<b>必须先开 EA=1</b> 才能开各个中断</li>
+  <li><b>EA</b>（IE.7）— 总中断开关，要先开 EA=1 再开分允许位（考试标准写法）</li>
   <li><b>EX0</b>（IE.0）— 外部中断 0 允许</li>
   <li><b>ET0</b>（IE.1）— 定时器 T0 允许</li>
   <li><b>ES</b>（IE.4）— 串口中断允许</li>
@@ -1038,6 +1056,7 @@ sbit LED = P1^<span class="str">1</span>;
 <div class="tip">SM0 SM1 = 01（方式 1）、REN = 1（允许接收）→ 0101 0000 = <b>0x50</b>。</div>
 
 <h3>📐 波特率设置（常用 9600）</h3>
+<div class="tip">方式 1 波特率公式：<b>波特率 = 2<sup>SMOD</sup>/32 × fosc/(12 × (256−TH1))</b>。代入 11.0592MHz、SMOD=0、TH1=0xFD(=253)：11059200 ÷ 12 ÷ (256−253) ÷ 32 = <b>9600</b> ✓。换初值就能换波特率：0xFA→4800、0xE8→1200，变式题就这么算。</div>
 <p>11.0592MHz 晶振 + T1 方式 2 产生 9600 波特率：<b>TH1 = TL1 = 0xFD</b></p>
 
 <h3>💡 示例：串口初始化 + 发送 + 接收中断</h3>
@@ -1103,6 +1122,7 @@ sbit LED = P1^<span class="str">1</span>;
 
 <h3>3️⃣ 复位后 PC = ？</h3>
 <p>复位后 <b>PC = 0000H</b>，单片机从 0000H 单元开始执行。复位条件：RST 脚输入连续 <b>两个机器周期以上</b> 高电平。</p>
+<div class="tip">其他重要寄存器的复位值（选择/填空都考过）：<b>SP=07H</b>、<b>PSW=00H</b>、<b>DPTR=0000H</b>、<b>A=B=00H</b>、<b>P0~P3 锁存器=FFH</b>——所以复位后 IO 口默认全输出高电平，读输入前不用特意写 1。</div>
 
 <h3>4️⃣ P0 口需要什么？</h3>
 <p>P0 是<b>开漏结构</b>，输出高电平时需 <b>外接上拉电阻（通常 10kΩ）</b>。P1/P2/P3 内带上拉，不用外接。</p>
@@ -1181,7 +1201,7 @@ sbit LED = P1^<span class="str">1</span>;
     {type:"single", text:"0x55 & 0xAA 的结果是？", opts:["0xFF","0x00","0x55","0xAA"], ans:1, reason:"逐位与：每一位都是 1&0=0，结果全 0。"},
     {type:"judge", text:"10/3 和 10/3.0 的结果相同。", ans:false, reason:"10/3 整数除法得 3，10/3.0 浮点除法得约 3.333。"},
     {type:"judge", text:"中断服务函数可以有参数和返回值。", ans:false, reason:"中断函数必须声明为 void 函数名(void) interrupt N，没有返回值也不能带参数。"},
-    {type:"judge", text:"串口中断服务函数里需要软件清零 TI 或 RI 标志位。", ans:true, reason:"中断标志位不会自动清零，需要在 ISR 里手动 RI=0 或 TI=0。"},
+    {type:"judge", text:"串口中断服务函数里需要软件清零 TI 或 RI 标志位。", ans:true, reason:"串口的 TI/RI 不会自动清零，必须在 ISR 里软件清零；而定时器的 TF0/TF1 由硬件在响应中断时自动清零，外部中断边沿触发方式的 IE0/IE1 同样由硬件清零。"},
   ]
 },
 ];
@@ -1301,6 +1321,8 @@ const CHAPTERS_C = [
 <h3>⏫ 自增自减：i++ 与 ++i</h3>
 <pre><span class="kw">int</span> i = 3, j;
 j = i++;  <span class="cm">// 先用后加：j = 3，然后 i 变成 4</span>
+
+i = 3;    <span class="cm">// 把 i 重置回 3，再单独看 ++i（否则 i 已是 4）</span>
 j = ++i;  <span class="cm">// 先加后用：i 先变 4，j = 4</span></pre>
 <div class="tip">一句话记忆：++ 在前就先加，++ 在后就后加。i-- 和 --i 同理。</div>
 
@@ -1322,6 +1344,7 @@ j = ++i;  <span class="cm">// 先加后用：i 先变 4，j = 4</span></pre>
   <li><code>!</code>、<code>++</code>、<code>--</code> 单目运算符</li>
   <li><code>* / %</code> 高于 <code>+ -</code></li>
   <li>关系运算符高于逻辑运算符（<code>&gt;</code> 先算，<code>&amp;&amp;</code> 后算）</li>
+  <li><code>&amp;&amp;</code> 高于 <code>||</code>（所以 <code>a || b &amp;&amp; c</code> 先算 <code>b &amp;&amp; c</code>）</li>
   <li>赋值 <code>=</code> 几乎最低</li>
 </ol>
   `,
@@ -1341,6 +1364,7 @@ j = ++i;  <span class="cm">// 先加后用：i 先变 4，j = 4</span></pre>
 <pre><span class="fn">printf</span>(<span class="str">"姓名：%s，年龄：%d\\n"</span>, name, age);
 <span class="fn">printf</span>(<span class="str">"a=%d, b=%f\\n"</span>, a, b);</pre>
 <p><b>常用格式符</b>（%d 是考试核心，全都要认识）：</p>
+<div class="tip">进阶两个必背写法：<code>%5d</code> 占 5 列宽右对齐、不够补空格；<code>%.2f</code> 保留 2 位小数——printf 输出小数默认是 6 位，别记混。</div>
 <ul>
   <li><code>%d</code> — 十进制整数</li>
   <li><code>%f</code> — float 小数（默认 6 位小数）</li>
@@ -1427,7 +1451,8 @@ i = 0;
 <span class="kw">while</span> (i &lt; 5) { <span class="fn">printf</span>(<span class="str">"%d "</span>, i); i++; }
 
 <span class="cm">// 2. do-while：先执行一次，再判断（至少执行 1 次！）</span>
-<span class="kw">do</span> { <span class="fn">printf</span>(<span class="str">"%d "</span>, i); i++; } <span class="kw">while</span> (i &lt; 5);  <span class="cm">// 注意结尾分号</span>
+i = 0;  <span class="cm">// 先重置 i（上面 while 跑完后 i 已是 5，直接跑只会打印 5）</span>
+<span class="kw">do</span> { <span class="fn">printf</span>(<span class="str">"%d "</span>, i); i++; } <span class="kw">while</span> (i &lt; 5);  <span class="cm">// 输出 0 1 2 3 4，注意结尾分号</span>
 
 <span class="cm">// 3. for：初始; 条件; 更新 都写在括号里，最常用</span>
 <span class="kw">for</span> (i = 0; i &lt; 5; i++) { <span class="fn">printf</span>(<span class="str">"%d "</span>, i); }</pre>
@@ -1466,7 +1491,8 @@ i = 0;
   content:`
 <h3>🧩 为什么需要函数？</h3>
 <p>同一段代码要用 10 次，复制粘贴 10 遍太蠢了——把它<b>打包成函数</b>，起个名字，想用就「喊」它（调用）。</p>
-<pre><span class="cm">// 返回值类型 函数名(参数列表) { 函数体 }</span>
+<pre><span class="kw">#include</span> <span class="str">&lt;stdio.h&gt;</span>  <span class="cm">// 用 printf 必须包含</span>
+<span class="cm">// 返回值类型 函数名(参数列表) { 函数体 }</span>
 <span class="kw">int</span> <span class="fn">add</span>(<span class="kw">int</span> a, <span class="kw">int</span> b) {   <span class="cm">// a、b 是形参（形式参数）</span>
     <span class="kw">return</span> a + b;          <span class="cm">// return 返回结果并结束函数</span>
 }
@@ -1530,8 +1556,8 @@ a[0] = 100;                       <span class="cm">// 下标从 0 开始！最�
 <div class="warn"><b>下标从 0 开始</b>：<code>int a[5]</code> 的合法下标是 0～4，访问 <code>a[5]</code> 就是越界！编译器不报错但会踩坏别的内存——非常隐蔽的 bug。</div>
 
 <h3>🔁 遍历 + 求最大值（考试实操题）</h3>
-<pre><span class="kw">int</span> max = a[0];               <span class="cm">// 先假设第 0 个最大</span>
-<span class="kw">for</span> (<span class="kw">int</span> i = 1; i &lt; 5; i++) {
+<pre><span class="kw">int</span> i, max = a[0];            <span class="cm">// 先假设第 0 个最大（声明放前面，Keil C51 也兼容）</span>
+<span class="kw">for</span> (i = 1; i &lt; 5; i++) {
     <span class="kw">if</span> (a[i] &gt; max) max = a[i];  <span class="cm">// 谁更大就更新 max</span>
 }
 <span class="fn">printf</span>(<span class="str">"最大值=%d\\n"</span>, max);</pre>
@@ -1555,6 +1581,7 @@ m[1][2] = 9;                        <span class="cm">// 第 2 行第 3 列</span
   content:`
 <h3>✏️ C 语言的字符串真相</h3>
 <p>C 语言<b>没有</b>真正的字符串类型！所谓字符串，就是一个<b>字符数组</b> + 一个结束标志 <code>'\\0'</code>：</p>
+<div class="tip">顺带背 3 个 ASCII 值（大小写转换、串口显示都要用）：<code>'0'=48</code>、<code>'A'=65</code>、<code>'a'=97</code>；大小写字母相差 32；<code>'8'-'0'</code> 就得到数字 8。</div>
 <pre><span class="kw">char</span> s[] = <span class="str">"hello"</span>;
 <span class="cm">// 内存里实际是：h e l l o \\0 —— 一共 6 个字节！</span></pre>
 <svg viewBox="0 0 720 120" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:720px;display:block;margin:12px 0;background:#f9fafb;border:1px solid #e5e7eb;border-radius:8px">
@@ -1768,6 +1795,11 @@ let currentCourse = '51';
 try{ currentCourse = JSON.parse(localStorage.getItem('currentCourse')) || '51'; }catch(e){}
 function curChapters(){ return COURSES[currentCourse].chapters; }
 const esc = s => String(s==null?'':s).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;');
+// 填空判分：支持备选答案（q.alt 数组），大小写/首尾空格不敏感
+function fillOk(q, u){
+  const a = (u==null?'':String(u)).trim().toLowerCase();
+  return [q.ans].concat(q.alt||[]).some(x => String(x).toLowerCase() === a);
+}
 
 const Store = {
   get(key, def){ try{ const v = localStorage.getItem(key); return v===null?def:JSON.parse(v); }catch(e){ return def; } },
@@ -1895,6 +1927,7 @@ const Sync = {
     if(!this.configured()){ if(manual) this.msg('请先填入 GitHub 令牌并保存', 'err'); return; }
     if(!this.gist()){ await this.push(manual); return; }
     try{
+      const tsBefore = Store.get('sync_ts', 0);
       const r = await fetch('https://api.github.com/gists/'+this.gist(), {
         headers:{ 'Authorization':'Bearer '+this.token(), 'Accept':'application/vnd.github+json' }
       });
@@ -1904,6 +1937,7 @@ const Sync = {
       if(!f){ await this.push(true); return; }
       const remote = JSON.parse(f.content || '{}');
       const localTs = Store.get('sync_ts', 0);
+      if(localTs > tsBefore){ await this.push(true); return; }
       if((remote.ts || 0) > localTs){
         this.apply(remote);
         this.msg('已从云端恢复 ☁️', 'ok');
@@ -1979,13 +2013,18 @@ function openChapter(id){
   quizState = { submitted:false, answers:{} };
   const ch = curChapters().find(c => c.id === id);
   showPage('course');
+  renderChapterView(ch);
+}
+
+function renderChapterView(ch){
   renderChapterNav();
-  document.getElementById('fav-btn').textContent = Store.isFav(id) ? '★ 已收藏' : '⭐ 收藏';
-  document.getElementById('fav-btn').classList.toggle('faved', Store.isFav(id));
+  document.getElementById('fav-btn').textContent = Store.isFav(ch.id) ? '★ 已收藏' : '⭐ 收藏';
+  document.getElementById('fav-btn').classList.toggle('faved', Store.isFav(ch.id));
   document.getElementById('chapter-content').innerHTML = `<div style="font-size:48px;text-align:center;margin:10px 0">${ch.emoji}</div><h2 style="text-align:center;color:var(--pink-deep)">第 ${ch.id} 章 ${ch.title}</h2><p style="text-align:center;color:var(--ink-light);margin-bottom:14px">${ch.short}</p>${ch.content}`;
   renderQuiz(ch, false);
   document.getElementById('score-result').innerHTML = '';
-  document.getElementById('quiz-controls').style.display = 'block';
+  document.getElementById('submit-quiz').style.display = 'inline-block';
+  document.getElementById('quiz-controls').style.display = ch.quiz.length ? 'block' : 'none';
 }
 
 function renderChapterNav(){
@@ -1999,6 +2038,7 @@ let quizState = { submitted:false, answers:{} };
 
 function renderQuiz(ch, showResults){
   const block = document.getElementById('quiz-block');
+  if(!ch.quiz.length){ block.innerHTML = '<div class="tip">本章为纯复习内容，没有练习题～看完直接背就行！</div>'; return; }
   block.innerHTML = `<h3>✏️ 本章练习 · 共 ${ch.quiz.length} 题</h3>` + ch.quiz.map((q, i) => {
     const qid = currentCourse + '_' + ch.id + '_' + i;
     const saved = quizState.answers[qid];
@@ -2020,7 +2060,7 @@ function renderQuiz(ch, showResults){
       let cls = '';
       const userAns = saved || '';
       if(showResults){
-        cls = (userAns.trim().toLowerCase() === q.ans.toLowerCase()) ? 'correct' : 'wrong';
+        cls = fillOk(q, userAns) ? 'correct' : 'wrong';
       }
       body = `<input type="text" class="${cls}" placeholder="输入你的答案..." value="${esc(userAns)}" data-qid="${qid}">
         ${showResults && cls==='wrong' ? `<div class="ans-hint">正确答案：<b>${q.ans}</b></div>` : ''}`;
@@ -2035,7 +2075,7 @@ function renderQuiz(ch, showResults){
         </label>`;
       }).join('');
     }
-    if(showResults && q.reason && ((q.type==='single' && saved!==q.ans) || (q.type==='judge' && saved!==q.ans) || (q.type==='fill' && (saved||'').trim().toLowerCase()!==q.ans.toLowerCase()))){
+    if(showResults && q.reason && ((q.type==='single' && saved!==q.ans) || (q.type==='judge' && saved!==q.ans) || (q.type==='fill' && !fillOk(q, saved)))){
       feedback = `<div class="q-feedback no">💡 ${q.reason}</div>`;
     }
     return `<div class="q-item">
@@ -2077,20 +2117,19 @@ function renderQuiz(ch, showResults){
 /* ========== 提交判分 ========== */
 function submitQuiz(){
   const ch = curChapters().find(c => c.id === currentChapter);
-  if(!ch) return;
+  if(!ch || !ch.quiz.length) return;
   let correct = 0;
-  const wrongList = [];
   ch.quiz.forEach((q, i) => {
     const qid = currentCourse + '_' + ch.id + '_' + i;
     const user = quizState.answers[qid];
     let ok = false;
     if(q.type==='single') ok = (user === q.ans);
     else if(q.type==='judge') ok = (user === q.ans);
-    else if(q.type==='fill') ok = ((user||'').trim().toLowerCase() === q.ans.toLowerCase());
+    else if(q.type==='fill') ok = fillOk(q, user);
     if(ok) correct++;
     else {
-      wrongList.push({ qid, text:q.text, type:q.type, myAns: user==null?'（未答）':user, rightAns:q.ans });
-      Store.addWrong(qid, { chapterId: ch.id, chapterTitle: ch.title, text:q.text, myAns: user==null?'（未答）':String(user), rightAns:String(q.ans), type:q.type });
+      const ansText = v => q.type==='single' ? q.opts[v] : q.type==='judge' ? (v ? '正确' : '错误') : String(v);
+      Store.addWrong(qid, { chapterId: ch.id, chapterTitle: ch.title, text:q.text, myAns: user==null?'（未答）':ansText(user), rightAns:ansText(q.ans), type:q.type });
     }
   });
   quizState.submitted = true;
@@ -2108,7 +2147,7 @@ function submitQuiz(){
     <div class="label">本次得分（${correct}/${total}）</div>
     <div class="msg">${msg}</div>
   </div>`;
-  document.getElementById('quiz-controls').style.display = 'none';
+  document.getElementById('submit-quiz').style.display = 'none';
   document.getElementById('quiz-block').scrollIntoView({behavior:'smooth'});
 }
 
@@ -2117,6 +2156,7 @@ function resetQuiz(){
   quizState = { submitted:false, answers:{} };
   renderQuiz(ch, false);
   document.getElementById('score-result').innerHTML = '';
+  document.getElementById('submit-quiz').style.display = 'inline-block';
   document.getElementById('quiz-controls').style.display = 'block';
 }
 
@@ -2153,14 +2193,12 @@ function renderQuizPage(){
     currentChapter = parseInt(b.dataset.id);
     quizState = { submitted:false, answers:{} };
     renderQuizPage();
-    const area = document.getElementById('quiz-page-area');
-    const ch = curChapters().find(c => c.id===currentChapter);
-    area.innerHTML = `<div class="card pink"><div id="qp-quiz-block"></div><div class="quiz-controls">
-      <button class="btn-primary" id="qp-submit">提交答案</button>
-      <button class="btn-secondary" id="qp-reset">重做</button>
-    </div><div id="qp-result"></div></div>`;
-    renderQuizArea(ch);
+    renderChapterView(curChapters().find(c => c.id===currentChapter));
   }));
+  showQuizChapter();
+}
+
+function showQuizChapter(){
   const area = document.getElementById('quiz-page-area');
   const ch = curChapters().find(c => c.id===currentChapter);
   if(!ch) return;
@@ -2194,7 +2232,7 @@ function renderQuizArea(ch){
       let cls = '';
       const userAns = saved || '';
       if(quizState.submitted){
-        cls = (userAns.trim().toLowerCase() === q.ans.toLowerCase()) ? 'correct' : 'wrong';
+        cls = fillOk(q, userAns) ? 'correct' : 'wrong';
       }
       body = `<input type="text" class="${cls}" placeholder="输入你的答案..." value="${esc(userAns)}" data-qid="${qid}">
         ${quizState.submitted && cls==='wrong' ? `<div class="ans-hint">正确答案：<b>${q.ans}</b></div>` : ''}`;
@@ -2208,7 +2246,7 @@ function renderQuizArea(ch){
       }).join('');
     }
     if(quizState.submitted && q.reason){
-      const wrong = (q.type==='single' && saved!==q.ans) || (q.type==='judge' && saved!==q.ans) || (q.type==='fill' && (saved||'').trim().toLowerCase()!==q.ans.toLowerCase());
+      const wrong = (q.type==='single' && saved!==q.ans) || (q.type==='judge' && saved!==q.ans) || (q.type==='fill' && !fillOk(q, saved));
       if(wrong) feedback = `<div class="q-feedback no">💡 ${q.reason}</div>`;
     }
     return `<div class="q-item">
@@ -2243,6 +2281,7 @@ function renderQuizArea(ch){
 document.addEventListener('click', e => {
   if(e.target.id === 'qp-submit'){
     const ch = curChapters().find(c => c.id===currentChapter);
+    if(!ch || !ch.quiz.length) return;
     let correct = 0;
     ch.quiz.forEach((q,i) => {
       const qid = currentCourse+'_'+ch.id+'_'+i;
@@ -2250,10 +2289,11 @@ document.addEventListener('click', e => {
       let ok=false;
       if(q.type==='single') ok=(u===q.ans);
       else if(q.type==='judge') ok=(u===q.ans);
-      else if(q.type==='fill') ok=((u||'').trim().toLowerCase()===q.ans.toLowerCase());
+      else if(q.type==='fill') ok=fillOk(q, u);
       if(ok) correct++;
       else {
-        Store.addWrong(qid, { chapterId:ch.id, chapterTitle:ch.title, text:q.text, myAns:u==null?'（未答）':String(u), rightAns:String(q.ans), type:q.type });
+        const ansText = v => q.type==='single' ? q.opts[v] : q.type==='judge' ? (v ? '正确' : '错误') : String(v);
+        Store.addWrong(qid, { chapterId:ch.id, chapterTitle:ch.title, text:q.text, myAns:u==null?'（未答）':ansText(u), rightAns:ansText(q.ans), type:q.type });
       }
     });
     quizState.submitted = true;
